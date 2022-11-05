@@ -14,8 +14,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
   }
   
   validateToLogin(BuildContext context, String? username, String? password) {
-    print('KESINI $username');
     BlocProvider.of<AuthenticationBloc>(context).add(
       AuthLoginEvent(
         username: username ?? '', 
