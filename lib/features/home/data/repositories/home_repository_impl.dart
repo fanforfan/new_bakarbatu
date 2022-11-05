@@ -12,11 +12,11 @@ class HomeRepositoryImpl implements HomeRepository {
     required this.networkInfo});
 
   @override
-  Future goToWebView(String? urlWebView) async {
+  Future<Uri?> goToWebView() async {
     // TODO: implement validateRegister
     try{
-      final remoteValidateRegister = await remoteDatasource.goToWebView(urlWebView);
-      return remoteValidateRegister;
+      final remoteGotoWebview = await remoteDatasource.goToWebView();
+      return remoteGotoWebview;
     } on ServerException {
       return null;
     }

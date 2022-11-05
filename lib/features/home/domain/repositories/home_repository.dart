@@ -1,5 +1,5 @@
 abstract class HomeRepository {
 
-  Future goToWebView(String? urlWebView);
+  Future<Uri?> goToWebView();
   
 }

@@ -8,7 +8,7 @@ class HomeUsecase implements UsecaseHome {
   HomeUsecase(this.repository);
 
   @override
-  Future goToWebView(String? urlWebView) async {
-    return await repository.goToWebView(urlWebView);
+  Future<Uri?> goToWebView() async {
+    return await repository.goToWebView();
   }
 }
