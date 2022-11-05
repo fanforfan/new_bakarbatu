@@ -15,30 +15,27 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
-          create: (context) => di.sl<AuthenticationBloc>(),
-        ),
+              create: (context) => di.sl<AuthenticationBloc>(),
+            ),
         BlocProvider<HomeBloc>(
-          create: (context) => di.sl<HomeBloc>(),
-        ),
-      ],
+                create: (context) => di.sl<HomeBloc>(),
+              )
+      ], 
       child: MaterialApp(
         title: 'BAKAR BATU',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: const HomePage(),
-        initialRoute: Routes.homeRoute,
-        routes: {
-          Routes.loginRoute : (context) => const LoginPage()
-        },
-      ),
+        initialRoute: Routes.initialPage,
+        routes: CustomRoutes
+      )
     );
   }
 }

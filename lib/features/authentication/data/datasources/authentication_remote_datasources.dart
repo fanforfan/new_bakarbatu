@@ -44,7 +44,7 @@ class AuthenticationRemoteDatasourcesImpl implements AuthenticationRemoteDatasou
         password: response['password'],
         fullname: response['full_name'],
         error: false,
-        message: 'Login success'
+        message: 'Success'
       );
     }
 

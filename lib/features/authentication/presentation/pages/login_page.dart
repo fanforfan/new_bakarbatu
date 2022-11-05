@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/pages/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/pages/widgets/reguler_text_form_field.dart';
@@ -25,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   
   buildBoddy(BuildContext context) {
     return Container(
-      color: Colors.white,
+        color: Colors.white,
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: Column(
             children: [
@@ -107,26 +108,28 @@ class _LoginPageState extends State<LoginPage> {
   }
   
   Widget _createButtonLogin() {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state){
-                  if(state.status.isLoading){
-                    return const CircularProgressIndicator(color:Color.fromARGB(255, 254, 3, 3));
-                  }
-                  return RegulerButton(
-                    childWidget: MaterialButton(
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () => validateToLogin(
-                        context, 
-                        state.username, 
-                        state.password
-                    ),
-                    )
-                  );
-                }
-              );
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state.message == 'Success') {
+          Navigator.pushNamed(context, Routes.homeRoute);
+        }
+      }, 
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return const CircularProgressIndicator(
+              color: Color.fromARGB(255, 254, 3, 3));
+        }
+        return RegulerButton(
+            childWidget: MaterialButton(
+          child: const Text(
+            'Login',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () =>
+              validateToLogin(context, state.username, state.password),
+        ));
+      }
+    );
   }
   
   Widget _createRegisterTextButton() {
