@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:new_bakarbatu/features/authentication/domain/entities/authentication_login_request.dart';
@@ -33,6 +32,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
           message: response.message,
           status: AuthenticationStateStatus.success,
         ));
+        // Set value state to default
+        if(state.message == 'Success'){
+          emit(state.copyWith(
+            message: '',
+            status: AuthenticationStateStatus.initial,
+            username: '',
+            password: ''
+          ));
+        }
       }
     } catch(error) {
       emit(
