@@ -38,7 +38,8 @@ class _HomePageState extends State<HomePage> {
                       return Stack(
                         children: [
                           InAppWebView(
-                            initialUrlRequest: URLRequest(url: state.urlWebview),
+                            initialUrlRequest: URLRequest(url: Uri.parse('https://bakarbatu.id/')),
+                            // state.urlWebview),
                             onWebViewCreated: (controller) {
                               webViewController = controller;
                             },
