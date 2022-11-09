@@ -1,6 +1,4 @@
 PODS:
-  - audioplayers_darwin (0.0.1):
-    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
@@ -14,6 +12,10 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_sound (9.2.13):
+    - Flutter
+    - flutter_sound_core (= 9.2.13)
+  - flutter_sound_core (9.2.13)
   - image_picker_ios (0.0.1):
     - Flutter
   - OrderedSet (5.0.0)
@@ -34,11 +36,11 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - custom_floating_action_button (from `.symlinks/plugins/custom_floating_action_button/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - record_mp3 (from `.symlinks/plugins/record_mp3/ios`)
@@ -50,12 +52,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - flutter_sound_core
     - OrderedSet
     - ReachabilitySwift
 
 EXTERNAL SOURCES:
-  audioplayers_darwin:
-    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   custom_floating_action_button:
@@ -64,6 +65,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_sound:
+    :path: ".symlinks/plugins/flutter_sound/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_ios:
@@ -82,11 +85,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
-  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   custom_floating_action_button: d1676bb7a5380db43a9510dfa05c559d265e6c96
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  flutter_sound: c60effa2a350fb977885f0db2fbc4c1ad5160900
+  flutter_sound_core: 26c10e5832e76aaacfae252d8925232281c486ae
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
