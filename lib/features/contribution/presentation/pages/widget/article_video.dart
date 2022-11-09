@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_bakarbatu/features/authentication/presentation/pages/widgets/reguler_text_form_field.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
+import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
 import 'package:path/path.dart' as path;
 
 class ArticleVideo extends StatefulWidget {
