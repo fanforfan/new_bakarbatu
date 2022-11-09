@@ -78,13 +78,16 @@ class _ContributionPageState extends State<ContributionPage>
           ))
       ];
 
-    return SafeArea(
-        child: CustomFloatingActionButton(
+    return CustomFloatingActionButton(
       body: Scaffold(
         body: DefaultTabController(
           initialIndex: 0,
           length: 2,
           child: Column(children: [
+            Container(
+              color: Colors.black,
+              height: MediaQuery.of(context).viewPadding.top,
+            ),
             TabBar(
                 indicatorColor: const Color.fromARGB(255, 179, 1, 1),
                 labelColor: const Color.fromARGB(255, 179, 1, 1),
@@ -107,11 +110,11 @@ class _ContributionPageState extends State<ContributionPage>
       )).toList(),
       backgroundColor: Colors.transparent,
       spaceFromBottom: 20,
-      type: CustomFloatingActionButtonType.verticalUp,
+      type: CustomFloatingActionButtonType.horizontal,
       openFloatingActionButton: const Icon(Icons.edit, color: Colors.white),
       closeFloatingActionButton: const Icon(Icons.close, color: Colors.white),
       floatinButtonColor: Colors.black,
-    ));
+    );
   }
 
   Widget _buildTabPage() {

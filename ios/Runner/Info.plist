@@ -30,6 +30,8 @@
 	<string>Turning on Photo Gallery permission allows BAKARBATU to take picture for document submission.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Turning on Mic Recorder permission allows BAKARBATU to take picture for document submission.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>BAKARBATU would like to save Photos, Videos and Audios from the app to your storage</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
