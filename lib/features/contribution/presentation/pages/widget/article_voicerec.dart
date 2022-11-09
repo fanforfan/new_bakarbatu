@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:record_mp3/record_mp3.dart';
 
 class ArticleVoiceRec extends StatefulWidget {
   const ArticleVoiceRec({super.key});
@@ -60,9 +58,9 @@ class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
   Widget _createAudioPlaceHolder() {
     return MaterialButton(
       onPressed: () {
-        statusText == 'Click to record audio.' 
-        ? _startRecord() 
-        : _stopRecord();
+        // statusText == 'Click to record audio.'
+        // ? _startRecord()
+        // : _stopRecord();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -160,46 +158,46 @@ class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
     );
   }
   
-  void _startRecord() async {
-    setState(() {
-      statusText = "Recording...";
-    });
-    recordFilePath = await getFilePath();
-    isComplete = false;
-    RecordMp3.instance.start(
-      recordFilePath,
-      (type) {
-        statusText = "Record error--->$type";
-      }
-    );
-    setState(() {});
-  }
+  // void _startRecord() async {
+  //   setState(() {
+  //     statusText = "Recording...";
+  //   });
+  //   recordFilePath = await getFilePath();
+  //   isComplete = false;
+  //   RecordMp3.instance.start(
+  //     recordFilePath,
+  //     (type) {
+  //       statusText = "Record error--->$type";
+  //     }
+  //   );
+  //   setState(() {});
+  // }
 
-  void _stopRecord() {
-    bool s = RecordMp3.instance.stop();
+  // void _stopRecord() {
+  //   bool s = RecordMp3.instance.stop();
+  //
+  //   if (s) {
+  //     setState(() {
+  //       isComplete = true;
+  //       statusText = 'Click to record audio.';
+  //     });
+  //     // AssetsAudioPlayer.newPlayer().open(
+  //     //   Audio(recordFilePath),
+  //     //   autoStart: true,
+  //     //   showNotification: true,
+  //     // );
+  //   }
+  // }
 
-    if (s) {
-      setState(() {
-        isComplete = true;
-        statusText = 'Click to record audio.';
-      });
-      // AssetsAudioPlayer.newPlayer().open(
-      //   Audio(recordFilePath),
-      //   autoStart: true,
-      //   showNotification: true,
-      // );
-    }
-  }
-
-  int i = 0;
-  Future<String> getFilePath() async {
-    Directory storageDirectory = await getApplicationSupportDirectory();
-    String sdPath = '${storageDirectory.path}/record';
-    var d = Directory(sdPath);
-    if (!d.existsSync()) {
-      d.createSync(recursive: true);
-    }
-    return sdPath + '/test_${i++}.mp3';
-  }
+  // int i = 0;
+  // Future<String> getFilePath() async {
+  //   Directory storageDirectory = await getApplicationSupportDirectory();
+  //   String sdPath = '${storageDirectory.path}/record';
+  //   var d = Directory(sdPath);
+  //   if (!d.existsSync()) {
+  //     d.createSync(recursive: true);
+  //   }
+  //   return sdPath + '/test_${i++}.mp3';
+  // }
 
 }

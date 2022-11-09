@@ -51,8 +51,8 @@ dependencies:
   chewie: ^1.3.5
   video_compress: ^3.1.1
 # Audio Recorder
-  record_mp3: ^3.0.0
-  flutter_sound: ^9.2.13
+#  record_mp3: ^3.0.0
+#  flutter_sound: ^9.2.13
 
 dev_dependencies:
   flutter_test:
