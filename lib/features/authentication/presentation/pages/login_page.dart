@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
-import 'package:new_bakarbatu/features/authentication/presentation/pages/widgets/reguler_button.dart';
-import 'package:new_bakarbatu/features/authentication/presentation/pages/widgets/reguler_text_form_field.dart';
+import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
+import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

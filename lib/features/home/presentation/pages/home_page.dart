@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -21,7 +20,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     BlocProvider.of<HomeBloc>(context).add(HomeGotoWebview());
   }
@@ -38,13 +36,11 @@ class _HomePageState extends State<HomePage> {
                       return Stack(
                         children: [
                           InAppWebView(
-                            initialUrlRequest: URLRequest(url: Uri.parse('https://bakarbatu.id/')),
-                            // state.urlWebview),
+                            initialUrlRequest: URLRequest(url: state.urlWebview),
                             onWebViewCreated: (controller) {
                               webViewController = controller;
                             },
                             onLoadStart: (controller, url) {
-                              debugPrint('HALO');
                               setState(() {
                                 this.url = url.toString();
                                 urlController.text = this.url;

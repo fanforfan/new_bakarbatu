@@ -39,8 +39,6 @@ class _ContributionPageState extends State<ContributionPage>
 
   @override
   Widget build(BuildContext context) {
-
-
     List<PopUpFloating> subFloating = [
         PopUpFloating(Colors.blueGrey, 'assets/icons/ic_article.png', 19.0,
         () => showModalBottomSheet<void>(
@@ -109,7 +107,7 @@ class _ContributionPageState extends State<ContributionPage>
       )).toList(),
       backgroundColor: Colors.transparent,
       spaceFromBottom: 20,
-      type: CustomFloatingActionButtonType.horizontal,
+      type: CustomFloatingActionButtonType.verticalUp,
       openFloatingActionButton: const Icon(Icons.edit, color: Colors.white),
       closeFloatingActionButton: const Icon(Icons.close, color: Colors.white),
       floatinButtonColor: Colors.black,

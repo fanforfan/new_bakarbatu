@@ -13,7 +13,7 @@ class RegulerButton extends StatelessWidget {
       width: double.infinity,
       height: 60,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 254, 3, 3),
+        color: const Color.fromARGB(255, 133, 0, 0),
         borderRadius: BorderRadius.circular(50),
       ),
       child: childWidget
