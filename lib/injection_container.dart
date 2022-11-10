@@ -6,6 +6,10 @@ import 'package:new_bakarbatu/features/authentication/data/repositories/authenti
 import 'package:new_bakarbatu/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:new_bakarbatu/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/data/repositories/contribution_repository_impl.dart';
+import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
+import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/home/data/datasources/home_remote_datasources.dart';
 import 'package:new_bakarbatu/features/home/data/repositories/home_repository_impl.dart';
 import 'package:new_bakarbatu/features/home/domain/repositories/home_repository.dart';
@@ -27,10 +31,15 @@ Future<void> init() async {
   sl.registerFactory(() => AuthenticationBloc(
     authenticationUsecase: sl()
   ));
+//  ! features - Contributions
+  sl.registerFactory(() => SubmitArticleBloc(
+      contributionUsecase: sl()
+  ));
 
 //  ! Use cases
   sl.registerLazySingleton(() => AuthenticationUsecase(sl()));
   sl.registerLazySingleton(() => HomeUsecase(sl()));
+  sl.registerLazySingleton(() => ContributionUsecase(sl()));
 
 //  ! Repository
   sl.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(
@@ -42,6 +51,7 @@ Future<void> init() async {
     remoteDatasource: sl(), 
     networkInfo: sl()
   ));
+  sl.registerLazySingleton<ContributionRepository>(() => ContributionRepositoryImpl());
 
 //  ! Data sources
   sl.registerLazySingleton<AuthenticationRemoteDatasources>(() => AuthenticationRemoteDatasourcesImpl(client: sl()));

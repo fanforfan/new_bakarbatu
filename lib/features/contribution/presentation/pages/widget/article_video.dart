@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
-import 'package:path/path.dart' as path;
+import 'package:video_player/video_player.dart';
 
 class ArticleVideo extends StatefulWidget {
   const ArticleVideo({super.key});
@@ -16,6 +19,8 @@ class ArticleVideo extends StatefulWidget {
 
 class _ArticleVideoState extends State<ArticleVideo> {
   final _picker = ImagePicker();
+  VideoPlayerController? _videoPlayerController;
+  ChewieController? _chewieController;
 
   /// TAKE VIDEO
   Future _getVideoFromCamera(String title) async {
@@ -24,81 +29,80 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
 
     if (pickedVideoFile != null) {
-      if (File(pickedVideoFile.path).lengthSync().toInt() > 100000000) {
-        debugPrint('Ukuran video NF2F tidak boleh lebih dari 100MB');
-        // CustomSnackBar.showErrorNew(_scaffoldGlobalKey,
-        //     'Ukuran video NF2F tidak boleh lebih dari 100MB');
-      } else {
-        if (Platform.isIOS) {
-          debugPrint('Original path: ${File(pickedVideoFile.path).path}');
-          var dir = path.dirname(File(pickedVideoFile.path).path);
-          var newPath = path.join(dir, 'Video_Artikel.mp4');
-          debugPrint('NewPath: $newPath');
-          var videoFromRename = File(pickedVideoFile.path).renameSync(newPath);
-          debugPrint('VIDEO FILE : ${videoFromRename.path}');
-          // BlocProvider.of<CompressVideoBloc>(context).add(
-          //     StartCompressVideoEvent(
-          //         videoFromIOS: videoFromRename,
-          //         status: true,
-          //         message: 'Compressing video, please wait...'));
-          // context.read<CompressVideoBloc>().add(StartCompressVideoEvent(videoFromIOS: videoFromRename, status: true, message: 'Compressing video, please wait...'));
-        } else {
-          debugPrint('Compressing video, please wait...');
-          // BlocProvider.of<CompressVideoBloc>(context).add(
-          //     StartCompressVideoEvent(
-          //         videoNF2f: pickedVideoFile,
-          //         status: true,
-          //         message: 'Compressing video, please wait...'));
-          // context.read<CompressVideoBloc>().add(StartCompressVideoEvent(videoNF2f: pickedVideoFile, status: true, message: 'Compressing video, please wait...'));
-        }
-      }
+      BlocProvider.of<SubmitArticleBloc>(context)
+          .add(PickVideo(videoFile: File(pickedVideoFile.path)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-      height: MediaQuery.of(context).size.height - 150,
-      child: ListView(
-        children: [
-          const SizedBox(
-            height: 50.0,
+    return BlocBuilder<SubmitArticleBloc, SubmitArticleState>(
+      builder: (context, state){
+        return Container(
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+          height: MediaQuery.of(context).size.height - 150,
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 50.0,
+              ),
+              _createVideoPlaceHolder(state),
+              const SizedBox(
+                height: 16,
+              ),
+              _createTitleField(label: 'Judul laporan Video'),
+              const SizedBox(
+                height: 16,
+              ),
+              _createDescriptionField(label: 'Deskripsi'),
+              const SizedBox(
+                height: 16,
+              ),
+              _createShowHideAuthor(),
+              const SizedBox(
+                height: 16,
+              ),
+              _createButtonSubmit(),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
           ),
-          _createVideoPlaceHolder(),
-          const SizedBox(
-            height: 16,
-          ),
-          _createTitleField(label: 'Judul laporan Video'),
-          const SizedBox(
-            height: 16,
-          ),
-          _createDescriptionField(label: 'Deskripsi'),
-          const SizedBox(
-            height: 16,
-          ),
-          _createShowHideAuthor(),
-          const SizedBox(
-            height: 16,
-          ),
-          _createButtonSubmit(),
-          const SizedBox(
-            height: 16,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _createVideoPlaceHolder() {
+  Widget _createVideoPlaceHolder(SubmitArticleState state) {
     return MaterialButton(
       onPressed: () {
         _getVideoFromCamera('First Pick');
       },
-      child: Container(
+      child: state.videoFile != null
+          ? GestureDetector(
+        onTap: (){
+          _showDialogVideoPlay(context, state.chewieController, state.videoController);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
+              color: const Color.fromARGB(255, 250, 250, 250),
+              borderRadius: BorderRadius.circular(20)),
+          width: double.infinity,
+          child: Image.asset(state.thumbnailVideo!.path),
+        ),
+      )
+      // MaterialButton(
+      //   onPressed: (){
+      //     _showDialogVideoPlay(context);
+      //   },
+      //   child: Icon(Icons.play_arrow_outlined),
+      // )
+          : Container(
         decoration: BoxDecoration(
             border: Border.all(
                 width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
@@ -194,5 +198,65 @@ class _ArticleVideoState extends State<ArticleVideo> {
         )
       ],
     );
+  }
+
+  late BuildContext _dialogContext;
+  void _showDialogVideoPlay(BuildContext context, ChewieController? chewieController, VideoPlayerController? videoController) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          _dialogContext = context;
+          return WillPopScope(
+            onWillPop: () => _disposeVideo(),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(8)),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              child: Stack(
+                children: [
+                  Chewie(
+                    controller: chewieController!,
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: 100,
+                      child: MaterialButton(
+                        color: Colors.blueGrey,
+                        onPressed: () {
+                          videoController?.pause();
+                          chewieController.pause();
+                          Navigator.pop(_dialogContext);
+                        },
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.close_outlined,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            Text('Close',
+                                style: TextStyle(
+                                    color:
+                                    Colors.white))
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _disposeVideo() {
+    _videoPlayerController?.pause();
+    _chewieController?.pause();
+    Navigator.pop(_dialogContext);
   }
 }
