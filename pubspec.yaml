@@ -50,9 +50,21 @@ dependencies:
   video_player: ^2.4.7
   chewie: ^1.3.5
   video_compress: ^3.1.1
-# Audio Recorder
-#  record_mp3: ^3.0.0
-#  flutter_sound: ^9.2.13
+# Record Audio
+  flutter_audio_recorder2: ^0.0.2
+  path_provider: ^2.0.11
+  audioplayers: ^1.1.1
+# Icon APP
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  #  image_path: "assets/images/icon-128x128.png"
+  image_path_android: "assets/app_icon/logo.png"
+  image_path_ios: "assets/app_icon/logo.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
 
 dev_dependencies:
   flutter_test:

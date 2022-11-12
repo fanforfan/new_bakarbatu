@@ -96,12 +96,6 @@ class _ArticleVideoState extends State<ArticleVideo> {
           child: Image.asset(state.thumbnailVideo!.path),
         ),
       )
-      // MaterialButton(
-      //   onPressed: (){
-      //     _showDialogVideoPlay(context);
-      //   },
-      //   child: Icon(Icons.play_arrow_outlined),
-      // )
           : Container(
         decoration: BoxDecoration(
             border: Border.all(
@@ -113,7 +107,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
         child: Column(
           children: [
             Image.asset(
-              'assets/icons/ic_pick_video.png',
+              'assets/icons/ic_video_rec.png',
               width: 50,
             ),
             const Text(

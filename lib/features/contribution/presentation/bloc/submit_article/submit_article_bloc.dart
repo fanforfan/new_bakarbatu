@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
-import 'package:path/path.dart' as path;
 import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,6 +16,7 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
 
   SubmitArticleBloc({required this.contributionUsecase}) : super(const SubmitArticleState()) {
     on<PickVideo>(_getVideoCamera);
+    on<PickAudio>(_getAudioRecorder);
   }
 
 
@@ -60,4 +59,11 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
       debugPrint('ERROR PROSESS : $error');
     }
   }
+
+  _getAudioRecorder(PickAudio event, Emitter<SubmitArticleState> emit) async {
+    emit(state.copyWith(
+      audioFile: event.audioFile
+    ));
+  }
+
 }

@@ -42,3 +42,12 @@ class PickFoto extends SubmitArticleEvent {
   @override
   List<Object?> get props => [];
 }
+
+class PickAudio extends SubmitArticleEvent {
+  final File? audioFile;
+
+  PickAudio({this.audioFile});
+
+  @override
+  List<Object?> get props => [audioFile];
+}

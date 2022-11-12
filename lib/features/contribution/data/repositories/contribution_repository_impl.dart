@@ -15,4 +15,10 @@ class ContributionRepositoryImpl implements ContributionRepository {
     throw UnimplementedError();
   }
 
+  @override
+  Future<File?> getAudioFile() {
+    // TODO: implement getAudioFile
+    throw UnimplementedError();
+  }
+
 }

@@ -9,6 +9,7 @@ import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/aut
 import 'package:new_bakarbatu/features/contribution/data/repositories/contribution_repository_impl.dart';
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/home/data/datasources/home_remote_datasources.dart';
 import 'package:new_bakarbatu/features/home/data/repositories/home_repository_impl.dart';
@@ -35,6 +36,7 @@ Future<void> init() async {
   sl.registerFactory(() => SubmitArticleBloc(
       contributionUsecase: sl()
   ));
+  sl.registerFactory(() => BottomNavBloc());
 
 //  ! Use cases
   sl.registerLazySingleton(() => AuthenticationUsecase(sl()));

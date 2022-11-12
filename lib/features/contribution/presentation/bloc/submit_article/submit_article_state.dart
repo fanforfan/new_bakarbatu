@@ -19,7 +19,8 @@ class SubmitArticleState extends Equatable {
   final File? thumbnailVideo;
   final VideoPlayerController? videoController;
   final ChewieController? chewieController;
-
+  /// FOR AUDIO RECORDER
+  final File? audioFile;
 
   const SubmitArticleState({
     this.status = SubmitStateStatus.initial,
@@ -31,6 +32,7 @@ class SubmitArticleState extends Equatable {
     this.thumbnailVideo,
     this.chewieController,
     this.videoController,
+    this.audioFile
   });
 
   @override
@@ -43,7 +45,8 @@ class SubmitArticleState extends Equatable {
     hideAuthor,
     thumbnailVideo,
     chewieController,
-    videoController
+    videoController,
+    audioFile
   ];
 
   SubmitArticleState copyWith({
@@ -56,6 +59,7 @@ class SubmitArticleState extends Equatable {
     File? thumbnailVideo,
     ChewieController? chewieController,
     VideoPlayerController? videoController,
+    File? audioFile
   }) {
     return SubmitArticleState(
       status: status ?? this.status,
@@ -66,7 +70,8 @@ class SubmitArticleState extends Equatable {
       hideAuthor: hideAuthor ?? this.hideAuthor,
       thumbnailVideo: thumbnailVideo ?? this.thumbnailVideo,
       chewieController: chewieController ?? this.chewieController,
-      videoController: videoController ?? this.videoController
+      videoController: videoController ?? this.videoController,
+      audioFile: audioFile ?? this.audioFile
     );
   }
 }

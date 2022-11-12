@@ -18,4 +18,9 @@ class ContributionUsecase implements UsecaseContribution {
     return await repository.getVideoFile();
   }
 
+  @override
+  Future<File?> getAudioFile() async {
+    return await repository.getAudioFile();
+  }
+
 }

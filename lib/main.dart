@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/home/presentation/bloc/home_bloc.dart';
 import 'package:new_bakarbatu/features/home/presentation/pages/home_page.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
               ),
         BlocProvider<SubmitArticleBloc>(
             create: (context) => di.sl<SubmitArticleBloc>()
+        ),
+        BlocProvider<BottomNavBloc>(
+            create: (context) => di.sl<BottomNavBloc>()
         )
       ], 
       child: MaterialApp(

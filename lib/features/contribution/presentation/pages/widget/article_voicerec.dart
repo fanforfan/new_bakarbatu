@@ -1,6 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
+import 'package:new_bakarbatu/shared/common/audio_recording.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
@@ -13,79 +14,46 @@ class ArticleVoiceRec extends StatefulWidget {
 }
 
 class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
-  String statusText = 'Click to record audio.';
-  bool isComplete = false;
-  var recordFilePath;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
-      ),
-      height: MediaQuery.of(context).size.height - 150,
-      child: ListView(
-        children: [
-          const SizedBox(
-            height: 50.0,
+    return BlocBuilder<SubmitArticleBloc, SubmitArticleState>(
+      builder: (context, state){
+        return Container(
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
           ),
-          _createAudioPlaceHolder(),
-          const SizedBox(
-            height: 16,
+          height: MediaQuery.of(context).size.height - 150,
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 10.0,
+              ),
+              const AudioRecording(),
+              const SizedBox(
+                height: 16,
+              ),
+              _createTitleField(label: 'Judul laporan Audio'),
+              const SizedBox(
+                height: 16,
+              ),
+              _createDescriptionField(label: 'Deskripsi'),
+              const SizedBox(
+                height: 16,
+              ),
+              _createShowHideAuthor(),
+              const SizedBox(
+                height: 16,
+              ),
+              _createButtonSubmit(),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
           ),
-          _createTitleField(label: 'Judul laporan Audio'),
-          const SizedBox(
-            height: 16,
-          ),
-          _createDescriptionField(label: 'Deskripsi'),
-          const SizedBox(
-            height: 16,
-          ),
-          _createShowHideAuthor(),
-          const SizedBox(
-            height: 16,
-          ),
-          _createButtonSubmit(),
-          const SizedBox(
-            height: 16,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _createAudioPlaceHolder() {
-    return MaterialButton(
-      onPressed: () {
-        // statusText == 'Click to record audio.'
-        // ? _startRecord()
-        // : _stopRecord();
+        );
       },
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-                width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
-            color: const Color.fromARGB(255, 250, 250, 250),
-            borderRadius: BorderRadius.circular(20)),
-        padding: const EdgeInsets.only(top: 40, bottom: 40),
-        width: double.infinity,
-        child: Column(
-          children: [
-            statusText == 'Click to record audio.' 
-            ? Image.asset(
-              'assets/icons/ic_pick_audio.png',
-              width: 50,
-            ) 
-            : const Icon(Icons.stop_circle_outlined),
-            Text(
-              statusText,
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 154, 0, 0), fontSize: 11),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -157,47 +125,5 @@ class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
       ],
     );
   }
-  
-  // void _startRecord() async {
-  //   setState(() {
-  //     statusText = "Recording...";
-  //   });
-  //   recordFilePath = await getFilePath();
-  //   isComplete = false;
-  //   RecordMp3.instance.start(
-  //     recordFilePath,
-  //     (type) {
-  //       statusText = "Record error--->$type";
-  //     }
-  //   );
-  //   setState(() {});
-  // }
-
-  // void _stopRecord() {
-  //   bool s = RecordMp3.instance.stop();
-  //
-  //   if (s) {
-  //     setState(() {
-  //       isComplete = true;
-  //       statusText = 'Click to record audio.';
-  //     });
-  //     // AssetsAudioPlayer.newPlayer().open(
-  //     //   Audio(recordFilePath),
-  //     //   autoStart: true,
-  //     //   showNotification: true,
-  //     // );
-  //   }
-  // }
-
-  // int i = 0;
-  // Future<String> getFilePath() async {
-  //   Directory storageDirectory = await getApplicationSupportDirectory();
-  //   String sdPath = '${storageDirectory.path}/record';
-  //   var d = Directory(sdPath);
-  //   if (!d.existsSync()) {
-  //     d.createSync(recursive: true);
-  //   }
-  //   return sdPath + '/test_${i++}.mp3';
-  // }
 
 }

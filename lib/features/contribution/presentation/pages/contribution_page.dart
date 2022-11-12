@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_basic.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_foto.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_video.dart';
@@ -18,15 +20,6 @@ class HeaderTab {
   HeaderTab(this.title, this.image);
 }
 
-class PopUpFloating {
-  final Color floatColor;
-  final String image;
-  final double icSize;
-  final Function() onPress;
-
-  PopUpFloating(this.floatColor, this.image, this.icSize, this.onPress);
-}
-
 class _ContributionPageState extends State<ContributionPage>
     with SingleTickerProviderStateMixin {
 
@@ -36,167 +29,70 @@ class _ContributionPageState extends State<ContributionPage>
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: DefaultTabController(
-        initialIndex: 0,
-        length: 2,
-        child: Column(children: [
-          Container(
-            color: Colors.black,
-            height: MediaQuery.of(context).viewPadding.top,
-          ),
-          const SizedBox(height: 35,),
-          _createCardProfile(),
-          const SizedBox(height: 35,),
-          Container(
-            padding: const EdgeInsets.only(left: 50),
-            alignment: Alignment.centerLeft,
-            child: const Text('Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),),
-          ),
-          const SizedBox(height: 16,),
-          _createMainMenu(),
-          const SizedBox(height: 35,),
-          Container(
-            padding: const EdgeInsets.only(left: 50),
-            alignment: Alignment.centerLeft,
-            child: const Text('Your Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),),
-          ),
-          const SizedBox(height: 16,),
-          TabBar(
-              indicatorColor: const Color.fromARGB(255, 179, 1, 1),
-              labelColor: const Color.fromARGB(255, 179, 1, 1),
-              tabs: headTabs.map((e) => Tab(
-                icon: Image.asset(e.image, width: 30, color: const Color.fromARGB(
-                    255, 121, 121, 121),),
-              )).toList()
-          ),
-          Expanded(
-            child: _buildTabPage(),
-          )
-        ]),
-      ),
-    );
+  void initState() {
+    BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+      statusMenu: true,
+      idMenu: 2
+    ));
+    super.initState();
+  }
 
-    // return CustomFloatingActionButton(
-    //   body: Scaffold(
-    //     body: Column(
-    //       children: [
-    //         DefaultTabController(
-    //           initialIndex: 0,
-    //           length: 2,
-    //           child: Column(children: [
-    //             Container(
-    //               color: Colors.black,
-    //               height: MediaQuery.of(context).viewPadding.top,
-    //             ),
-    //             TabBar(
-    //                 indicatorColor: const Color.fromARGB(255, 179, 1, 1),
-    //                 labelColor: const Color.fromARGB(255, 179, 1, 1),
-    //                 tabs: headTabs.map((e) => Tab(
-    //                   icon: Image.asset(e.image, width: 30,),
-    //                 )).toList()
-    //             ),
-    //             Expanded(
-    //               child: _buildTabPage(),
-    //             )
-    //           ]),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   options: subFloating.map((e) => GestureDetector(
-    //     onTap: e.onPress,
-    //     child: CircleAvatar(
-    //       backgroundColor: e.floatColor,
-    //       child: Image.asset(e.image, width: e.icSize,),
-    //     ),
-    //   )).toList(),
-    //   backgroundColor: Colors.transparent,
-    //   spaceFromBottom: 20,
-    //   type: CustomFloatingActionButtonType.horizontal,
-    //   openFloatingActionButton: const Icon(Icons.edit, color: Colors.white),
-    //   closeFloatingActionButton: const Icon(Icons.close, color: Colors.white),
-    //   floatinButtonColor: Colors.black,
-    // );
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BottomNavBloc, BottomNavState>(
+      builder: (context, state){
+        return Scaffold(
+          backgroundColor: const Color.fromARGB(255, 142, 0, 0),
+          body: DefaultTabController(
+            initialIndex: 0,
+            length: 2,
+            child: Column(children: [
+              Container(
+                color: Colors.black,
+                height: MediaQuery.of(context).viewPadding.top,
+              ),
+              const SizedBox(height: 35,),
+              _createCardProfile(),
+              const SizedBox(height: 35,),
+              state.idMenu == 2 ? Container(
+                padding: const EdgeInsets.only(left: 50),
+                alignment: Alignment.centerLeft,
+                child: const Text('Your Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Color(
+                    0xFFC6C6C6)),),
+              ) : const SizedBox(),
+              state.idMenu == 2 ? const SizedBox(height: 16,) : const SizedBox(),
+              state.idMenu == 2 ? _createTabBar() : const SizedBox(),
+              Expanded(
+                child: state.idMenu == 0 ? const ArticleBasic()
+                    : state.idMenu == 1 ? const ArticleVoiceRec()
+                    : state.idMenu == 2 ? _buildTabPage()
+                    : state.idMenu == 3 ? const ArticleFoto()
+                    : const ArticleVideo(),
+              )
+            ]),
+          ),
+          bottomNavigationBar: _createBottomNavBar(state),
+        );
+      },
+    );
   }
 
   Widget _buildTabPage() {
-    return const TabBarView(
+    return TabBarView(
       children: <Widget>[
-        Center(
-          child: Text("It's cloudy here"),
+        Container(
+          color: const Color(0xFF800000),
+          child: const Center(
+            child: Text("It's cloudy here"),
+          ),
         ),
-        Center(
-          child: Text("It's rainy here"),
+        Container(
+          color: const Color(0xFF800000),
+          child: const Center(
+            child: Text("It's rainy here"),
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _createMainMenu() {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _itemMenus(
-            colors: Colors.blueGrey,
-            image: 'assets/icons/ic_article.png',
-            size: 19.0,
-            pressed: () => showModalBottomSheet<void>(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (BuildContext context) {
-                return const ArticleBasic();
-              },
-            )
-          ),
-          const SizedBox(width: 16,),
-          _itemMenus(
-            colors: Colors.pink,
-            image: 'assets/icons/ic_mic.png',
-            size: 20.0,
-            pressed: () => showModalBottomSheet<void>(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (BuildContext context) {
-                return const ArticleVoiceRec();
-              },
-            )
-          ),
-          const SizedBox(width: 16,),
-          _itemMenus(
-              colors: Colors.orange,
-              image: 'assets/icons/ic_fotoimage.png',
-              size: 20.0,
-            pressed: () => showModalBottomSheet<void>(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (BuildContext context) {
-                return const ArticleFoto();
-              },
-            )
-          ),
-          const SizedBox(width: 16,),
-          _itemMenus(
-              colors: Colors.deepPurple,
-              image: 'assets/icons/ic_video.png',
-              size: 20.0,
-            pressed: () => showModalBottomSheet<void>(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (BuildContext context) {
-                return const ArticleVideo();
-              },
-            )
-          ),
-        ],
-      ),
     );
   }
 
@@ -274,8 +170,134 @@ class _ContributionPageState extends State<ContributionPage>
         ),
         width: 50,
         child: Center(
-          child: Image.asset(image, width: size,),
+          child: Image.asset(image, width: size, color: const Color.fromARGB(255, 142, 0, 0),),
         ),
+      ),
+    );
+  }
+
+  Widget _createBottomNavBar(BottomNavState state) {
+    return Container(
+      color: state.idMenu == 2 ? const Color(0xFF800000) : Colors.white,
+      height: 96,
+      child: Stack(
+        children: [
+          /// UNACTIVE MENU
+          Column(
+            children: [
+              const SizedBox(height: 30,),
+              Container(
+                height: 66,
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                    color: Colors.grey
+                ),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _itemMenus(
+                          colors: state.idMenu == 0 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                          image: 'assets/icons/ic_article.png',
+                          size: 19.0,
+                          pressed: () {
+                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                                statusMenu: true,
+                                idMenu: 0
+                            ));
+                          }
+                      ),
+                      const SizedBox(width: 16,),
+                      _itemMenus(
+                          colors: state.idMenu == 1 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                          image: 'assets/icons/ic_mic.png',
+                          size: 20.0,
+                          pressed: () {
+                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                                statusMenu: true,
+                                idMenu: 1
+                            ));
+                          }
+                      ),
+                      const SizedBox(width: 16,),
+                      const SizedBox(width: 50,),
+                      const SizedBox(width: 16,),
+                      _itemMenus(
+                          colors: state.idMenu == 3 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                          image: 'assets/icons/ic_fotoimage.png',
+                          size: 20.0,
+                          pressed: () {
+                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                                statusMenu: true,
+                                idMenu: 3
+                            ));
+                          }
+                      ),
+                      const SizedBox(width: 16,),
+                      _itemMenus(
+                          colors: state.idMenu == 4 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                          image: 'assets/icons/ic_video.png',
+                          size: 20.0,
+                          pressed: () {
+                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                                statusMenu: true,
+                                idMenu: 4
+                            ));
+                          }
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          /// ACTIVE MENU
+          Container(
+              padding: const EdgeInsets.only(bottom: 26),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: (){
+                  BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                      statusMenu: true,
+                      idMenu: 2
+                  ));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                      border: Border.all(width: 5, color: state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
+                  ),
+                  width: 70,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/ic_home.png',
+                      width: 40,
+                      color: const Color(0xFF800000),
+                    ),
+                  ),
+                ),
+              )
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _createTabBar() {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        color: Color(0xFF800000),
+      ),
+      child: TabBar(
+          indicatorColor: const Color.fromARGB(255, 255, 255, 255),
+          labelColor: const Color.fromARGB(255, 255, 255, 255),
+          tabs: headTabs.map((e) => Tab(
+            icon: Image.asset(e.image, width: 30, color: const Color.fromARGB(
+                255, 255, 255, 255),),
+          )).toList()
       ),
     );
   }
