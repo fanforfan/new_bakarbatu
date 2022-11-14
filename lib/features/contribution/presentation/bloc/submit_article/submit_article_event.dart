@@ -32,10 +32,22 @@ class ChangeDescriptionArticle extends SubmitArticleEvent {
 class ChangeHideShowAuthor extends SubmitArticleEvent {
   final bool? value;
 
-  ChangeHideShowAuthor(this.value);
+  ChangeHideShowAuthor({this.value});
 
   @override
   List<Object?> get props => [value];
+}
+
+class SubmitArticleBasic extends SubmitArticleEvent {
+  final Article article;
+
+  SubmitArticleBasic({required this.article});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [article];
+
+
 }
 
 class PickFoto extends SubmitArticleEvent {

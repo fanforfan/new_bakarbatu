@@ -4,6 +4,8 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
@@ -17,6 +19,17 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
   SubmitArticleBloc({required this.contributionUsecase}) : super(const SubmitArticleState()) {
     on<PickVideo>(_getVideoCamera);
     on<PickAudio>(_getAudioRecorder);
+  /// Basic Article
+    on<ChangeTitleArticle>((event, emit) => emit(state.copyWith(
+      titleArticle: event.value
+    )));
+    on<ChangeDescriptionArticle>((event, emit) => emit(state.copyWith(
+        descriptionArticle: event.value
+    )));
+    on<ChangeHideShowAuthor>((event, emit) => emit(state.copyWith(
+        hideAuthor: event.value
+    )));
+    on<SubmitArticleBasic>(_submitArticleBasic);
   }
 
 
@@ -66,4 +79,21 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     ));
   }
 
+
+  _submitArticleBasic(SubmitArticleBasic event, Emitter<SubmitArticleState> emit) async {
+    emit(state.copyWith(
+        status: SubmitStateStatus.loading
+    ));
+    try{
+      await contributionUsecase.localSubmitArtikel(event.article);
+      emit(state.copyWith(
+        status: SubmitStateStatus.success
+      ));
+    }catch (error) {
+      debugPrint('ERROR PROSESS : $error');
+      emit(state.copyWith(
+          status: SubmitStateStatus.error
+      ));
+    }
+  }
 }

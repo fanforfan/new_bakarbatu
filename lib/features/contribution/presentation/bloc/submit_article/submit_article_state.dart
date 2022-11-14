@@ -28,7 +28,7 @@ class SubmitArticleState extends Equatable {
     this.photoFile,
     this.titleArticle,
     this.descriptionArticle,
-    this.hideAuthor = false,
+    this.hideAuthor,
     this.thumbnailVideo,
     this.chewieController,
     this.videoController,
