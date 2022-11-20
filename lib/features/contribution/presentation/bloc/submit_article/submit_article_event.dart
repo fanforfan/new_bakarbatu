@@ -50,9 +50,17 @@ class SubmitArticleBasic extends SubmitArticleEvent {
 
 }
 
-class PickFoto extends SubmitArticleEvent {
+class GetImageArticle extends SubmitArticleEvent {
+  final XFile imageFile;
+
+  GetImageArticle({
+    required this.imageFile
+  });
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+    imageFile
+  ];
 }
 
 class PickAudio extends SubmitArticleEvent {
@@ -63,3 +71,84 @@ class PickAudio extends SubmitArticleEvent {
   @override
   List<Object?> get props => [audioFile];
 }
+
+class ChangeTimeSchedule extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeTimeSchedule({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeJudulIndonesia extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeJudulIndonesia({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeCaptionIndonesia extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeCaptionIndonesia({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeDeskripsiIndonesia extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeDeskripsiIndonesia({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeKabutapen extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeKabutapen({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeKampung extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeKampung({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeDistrik extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeDistrik({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeHideAuthor extends SubmitArticleEvent {
+  final bool? value;
+
+  ChangeHideAuthor({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ValidateToSubmitArticle extends SubmitArticleEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+
+
+

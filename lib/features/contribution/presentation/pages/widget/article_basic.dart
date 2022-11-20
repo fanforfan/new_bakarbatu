@@ -33,7 +33,7 @@ class _ArticleBasicState extends State<ArticleBasic> {
               const SizedBox(
                 height: 16,
               ),
-              _createDescriptionField(label: 'Deskripsi'),
+              _createDescriptionField(label: 'Deskripsi',  maxLines: 7),
               const SizedBox(
                 height: 16,
               ),
@@ -70,7 +70,7 @@ class _ArticleBasicState extends State<ArticleBasic> {
     );
   }
 
-  Widget _createDescriptionField({required String label}) {
+  Widget _createDescriptionField({required String label, required int maxLines}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextArea(
@@ -84,7 +84,9 @@ class _ArticleBasicState extends State<ArticleBasic> {
           onChanged: (value) {
             debugPrint('$value');
             BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDescriptionArticle(value: value));
-          }),
+          },
+          maxLines: maxLines,
+      ),
     );
   }
 

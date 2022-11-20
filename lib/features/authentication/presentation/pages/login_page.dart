@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
 
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,18 +81,30 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _ctreatePasswordField() {
-    return RegulerTextFormField(
-        obsecure: true,
-        inputDecoration: InputDecoration(
-            prefixIcon: const Icon(Icons.key),
-            labelText: 'Password',
-            suffixIcon: const Icon(Icons.visibility_off),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-        onChanged: (value) {
-          BlocProvider.of<AuthenticationBloc>(context)
-              .add(TextFieldChanged(keyField: 'Password', value: value));
-        });
+    return BlocBuilder<ObsecurePasswordCubit, ObsecurePasswordState>(
+        bloc: BlocProvider.of<ObsecurePasswordCubit>(context)..changeObsecurePassword(val: false),
+        builder: (context, state){
+          if(state is ChangeObsecureStatus){
+            return RegulerTextFormField(
+                obsecure: state.isObsecure,
+                inputDecoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.key),
+                    labelText: 'Password',
+                    suffixIcon: GestureDetector(
+                      onTap: (){
+                        BlocProvider.of<ObsecurePasswordCubit>(context).changeObsecurePassword(val: state.isObsecure);
+                      },
+                      child: Icon(state.isObsecure ? Icons.visibility_off : Icons.visibility),
+                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
+                ),
+                onChanged: (value) {
+                  BlocProvider.of<AuthenticationBloc>(context).add(TextFieldChanged(keyField: 'Password', value: value));
+                });
+          }
+          return SizedBox();
+        }
+    );
   }
 
   Widget _createForgotPasswordAction() {

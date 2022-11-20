@@ -58,6 +58,8 @@ dependencies:
   audioplayers: ^1.1.1
 # Icon APP
   flutter_launcher_icons: ^0.10.0
+# Datepicker
+  date_time_picker: ^2.1.0
 
 
 flutter_icons:

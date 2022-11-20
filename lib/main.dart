@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
+import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/home/presentation/bloc/home_bloc.dart';
@@ -16,6 +19,7 @@ void main() async {
   await di.init();
   await Hive.initFlutter();
   Hive.registerAdapter(ArticleAdapter());
+  Hive.registerAdapter(ContributionArticleAdapter());
   // await Hive.openBox('articleBakarbatu');
   runApp(const MyApp());
 }
@@ -38,6 +42,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<BottomNavBloc>(
             create: (context) => di.sl<BottomNavBloc>()
+        ),
+        BlocProvider<ObsecurePasswordCubit>(
+          create: (context) => di.sl<ObsecurePasswordCubit>(),
+        ),
+        BlocProvider<ArticleBloc>(
+          create: (context) => di.sl<ArticleBloc>(),
         )
       ], 
       child: MaterialApp(

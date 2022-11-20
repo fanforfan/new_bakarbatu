@@ -6,10 +6,12 @@ import 'package:new_bakarbatu/features/authentication/data/repositories/authenti
 import 'package:new_bakarbatu/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:new_bakarbatu/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/data/datasources/submit_local_datasources.dart';
 import 'package:new_bakarbatu/features/contribution/data/repositories/contribution_repository_impl.dart';
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/home/data/datasources/home_remote_datasources.dart';
@@ -38,6 +40,11 @@ Future<void> init() async {
       contributionUsecase: sl()
   ));
   sl.registerFactory(() => BottomNavBloc());
+  sl.registerFactory(() => ArticleBloc(
+      contributionUsecase: sl()
+  ));
+//  cubit obsecure
+  sl.registerFactory(() => ObsecurePasswordCubit());
 
 //  ! Use cases
   sl.registerLazySingleton(() => AuthenticationUsecase(sl()));

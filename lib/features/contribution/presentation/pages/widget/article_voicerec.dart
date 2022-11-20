@@ -38,7 +38,7 @@ class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
               const SizedBox(
                 height: 16,
               ),
-              _createDescriptionField(label: 'Deskripsi'),
+              _createDescriptionField(label: 'Deskripsi',  maxLines: 7),
               const SizedBox(
                 height: 16,
               ),
@@ -74,7 +74,7 @@ class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
     );
   }
 
-  Widget _createDescriptionField({required String label}) {
+  Widget _createDescriptionField({required String label, required int maxLines}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextArea(
@@ -87,7 +87,9 @@ class _ArticleVoiceRecState extends State<ArticleVoiceRec> {
           obsecure: false,
           onChanged: (value) {
             debugPrint('$value');
-          }),
+          },
+          maxLines: maxLines,
+      ),
     );
   }
 

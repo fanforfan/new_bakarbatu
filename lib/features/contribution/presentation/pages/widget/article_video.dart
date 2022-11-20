@@ -57,7 +57,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
               const SizedBox(
                 height: 16,
               ),
-              _createDescriptionField(label: 'Deskripsi'),
+              _createDescriptionField(label: 'Deskripsi', maxLines: 7),
               const SizedBox(
                 height: 16,
               ),
@@ -140,7 +140,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
   }
   
-  Widget _createDescriptionField({required String label}) {
+  Widget _createDescriptionField({required String label, required int maxLines}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextArea(
@@ -154,7 +154,8 @@ class _ArticleVideoState extends State<ArticleVideo> {
         obsecure: false, 
         onChanged: (value){
           debugPrint('$value');
-        }
+        },
+        maxLines: maxLines,
       ),
     );
   }

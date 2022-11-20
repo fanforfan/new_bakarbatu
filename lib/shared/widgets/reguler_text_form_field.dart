@@ -4,12 +4,15 @@ class RegulerTextFormField extends StatelessWidget {
   final InputDecoration inputDecoration;
   final bool obsecure;
   final Function(dynamic value) onChanged;
+  final String? value;
 
   const RegulerTextFormField({
     super.key, 
     required this.inputDecoration, 
     required this.obsecure, 
-    required this.onChanged});
+    required this.onChanged,
+    this.value
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class RegulerTextFormField extends StatelessWidget {
       obscureText: obsecure,
       decoration: inputDecoration,
       onChanged: onChanged,
+      initialValue: value,
     );
   }
 }

@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_basic.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_foto.dart';
@@ -28,12 +33,15 @@ class _ContributionPageState extends State<ContributionPage>
     HeaderTab('', 'assets/icons/ic_folder.png'),
   ];
 
+  var isiList;
+
   @override
   void initState() {
     BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
       statusMenu: true,
       idMenu: 2
     ));
+    // BlocProvider.of<ArticleBloc>(context).add(GetArticle(statusArticle: 0));
     super.initState();
   }
 
@@ -77,15 +85,10 @@ class _ContributionPageState extends State<ContributionPage>
     );
   }
 
-  Widget _buildTabPage() {
+  _buildTabPage() {
     return TabBarView(
       children: <Widget>[
-        Container(
-          color: const Color(0xFF800000),
-          child: const Center(
-            child: Text("It's cloudy here"),
-          ),
-        ),
+        _pageOne(),
         Container(
           color: const Color(0xFF800000),
           child: const Center(
@@ -299,6 +302,76 @@ class _ContributionPageState extends State<ContributionPage>
                 255, 255, 255, 255),),
           )).toList()
       ),
+    );
+  }
+
+  Widget _pageOne() {
+    return BlocBuilder<ArticleBloc, ArticleState>(
+      bloc: BlocProvider.of<ArticleBloc>(context)..add(GetArticle(statusArticle: 0)),
+      builder: (context, state){
+        if(state.status.isLoading){
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }else{
+          if(state.article != null && state.article!.isNotEmpty){
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              itemCount: state.article!.length,
+              itemBuilder: (context, index){
+                debugPrint('${state.article![index].filename}');
+                return Container(
+                  color: const Color(0xFF800000),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                          child: Image.file(File('${state.article![index].filename}'))
+                      ),
+                      const SizedBox(height: 15,),
+                      Text('${state.article![index].judulIndonesia}', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
+                      Text(state.article![index].hideAuthor! ? 'Publish Author' : 'Private Author', style: TextStyle(color: Colors.white),),
+                      Row(
+                        children: [
+                          Text('${state.article![index].timeSchedule}', style: TextStyle(color: Color(0xFFC7C7C7)),),
+                          const SizedBox(width: 8,),
+                          Text('${state.article![index].captionIndonesia}', style: TextStyle(color: Color(0xFFC7C7C7)),),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text('${state.article![index].tagDistrik} - ${state.article![index].tagKampung} - ${state.article![index].tagKabupaten}', style: TextStyle(color: Color(0xFFC7C7C7)),),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 10,),
+                      Text('${state.article![index].deskripsiIndonesia}', style: const TextStyle(color: Colors.white),),
+                      SizedBox(height: 8,),
+                      Container(
+                        height: 0.5,
+                        width: double.infinity,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 20,)
+                    ],
+                  ),
+                );
+              },
+            );
+          }else{
+            return Container(
+              color: const Color(0xFF800000),
+              child: const Center(
+                child: Text("Empty Data"),
+              ),
+            );
+          }
+        }
+      },
     );
   }
 }
