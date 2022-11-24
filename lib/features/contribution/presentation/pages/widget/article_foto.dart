@@ -7,8 +7,9 @@ import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_art
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
-import 'package:path/path.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/bottom_nav/bottom_nav_bloc.dart';
 
 class ArticleFoto extends StatefulWidget {
   const ArticleFoto({super.key});
@@ -18,10 +19,14 @@ class ArticleFoto extends StatefulWidget {
 }
 
 class _ArticleFotoState extends State<ArticleFoto> {
-  final _picker = ImagePicker();
-
   Future _getFotoFromCamera(String title) async {
-    final pickedFotoFile = await _picker.pickImage(source: ImageSource.camera);
+    var pickedFotoFile;
+
+    if(title == '0'){
+      pickedFotoFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    }else{
+      pickedFotoFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    }
 
     if (pickedFotoFile != null) {
       BlocProvider.of<SubmitArticleBloc>(context).add(
@@ -35,7 +40,15 @@ class _ArticleFotoState extends State<ArticleFoto> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SubmitArticleBloc, SubmitArticleState>(
-        listener: (context, state){},
+        listener: (context, state){
+          if(state.status.isSuccess){
+            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                statusMenu: true,
+                idMenu: 2
+            ));
+            BlocProvider.of<SubmitArticleBloc>(context).add(ClearFormIMG());
+          }
+        },
         builder: (context, state){
           return Container(
             decoration: const BoxDecoration(
@@ -105,7 +118,10 @@ class _ArticleFotoState extends State<ArticleFoto> {
                 const SizedBox(
                   height: 16,
                 ),
-                _createButtonSubmit(state),
+                state.status.isError ? Text('${state.warningMessage}') : const SizedBox(),
+                state.status.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _createButtonSubmit(state),
                 const SizedBox(
                   height: 16,
                 ),
@@ -121,17 +137,17 @@ class _ArticleFotoState extends State<ArticleFoto> {
         ?
     MaterialButton(
       onPressed: (){
-        _getFotoFromCamera('First Pick');
+        _showDialogPickImage();
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Image.asset(state.photoFile!.path),
+        child: Image.file(File(state.photoFile!.path)),
       ),
     )
         :
     MaterialButton(
       onPressed: () {
-        _getFotoFromCamera('First Pick');
+        _showDialogPickImage();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -154,54 +170,6 @@ class _ArticleFotoState extends State<ArticleFoto> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _createTitleField({required String label, required String key, required SubmitArticleState stateValidator}) {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: RegulerTextFormField(
-          inputDecoration: InputDecoration(
-              labelText: label,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
-          obsecure: false,
-          onChanged: (value) {
-            if(key == 'field_img_0'){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeJudulIndonesia(value: value));
-            }else if(key == 'field_img_3'){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKabutapen(value: value));
-            }else if(key == 'field_img_4'){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKampung(value: value));
-            }else if(key == 'field_img_5'){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDistrik(value: value));
-            }
-          }),
-    );
-  }
-
-  Widget _createDescriptionField({required String label, required int maxLines, required String key}) {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: RegulerTextArea(
-          inputDecoration: InputDecoration(
-              labelText: label,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
-          obsecure: false,
-          onChanged: (value) {
-            if(key == 'field_img_1'){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeCaptionIndonesia(value: value));
-            }else if(key == 'field_img_2'){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDeskripsiIndonesia(value: value));
-            }
-          },
-          maxLines: maxLines,
       ),
     );
   }
@@ -397,5 +365,53 @@ class _ArticleFotoState extends State<ArticleFoto> {
         maxLines: maxLines,
       ),
     );
+  }
+
+  _showDialogPickImage() {
+    showDialog(context: context, builder: (_){
+      return Dialog(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: MaterialButton(
+                    onPressed: (){
+                      _getFotoFromCamera('0');
+                      Navigator.pop(context);
+                    },
+                    child: Column(
+                      children: const [
+                        Icon(Icons.photo_camera_back, color: Color.fromARGB(255, 154, 0, 0)),
+                        Text('Gallery', style: TextStyle(color: Color.fromARGB(255, 154, 0, 0), fontSize: 10, fontWeight: FontWeight.normal))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: MaterialButton(
+                    onPressed: (){
+                      _getFotoFromCamera('1');
+                      Navigator.pop(context);
+                    },
+                    child: Column(
+                      children: const [
+                        Icon(Icons.camera_alt_outlined, color: Color.fromARGB(255, 154, 0, 0)),
+                        Text('Camera', style: TextStyle(color: Color.fromARGB(255, 154, 0, 0), fontSize: 10, fontWeight: FontWeight.normal),)
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_basic.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_foto.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_video.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_voicerec.dart';
+
+import '../bloc/submit_article/submit_article_bloc.dart';
 
 class ContributionPage extends StatefulWidget {
   const ContributionPage({super.key});

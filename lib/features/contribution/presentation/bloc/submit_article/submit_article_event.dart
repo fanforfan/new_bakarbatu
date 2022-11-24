@@ -71,7 +71,7 @@ class PickAudio extends SubmitArticleEvent {
   @override
   List<Object?> get props => [audioFile];
 }
-
+/// FOR IMAGE
 class ChangeTimeSchedule extends SubmitArticleEvent {
   final String? value;
 
@@ -144,11 +144,100 @@ class ChangeHideAuthor extends SubmitArticleEvent {
   List<Object?> get props => [value];
 }
 
-class ValidateToSubmitArticle extends SubmitArticleEvent {
+class ClearFormIMG extends SubmitArticleEvent {
   @override
   List<Object?> get props => [];
 }
 
+class ValidateToSubmitArticle extends SubmitArticleEvent {
+  @override
+  List<Object?> get props => [];
+}
+/// END FOR IMAGE
+
+/// FOR VIDEO
+class ChangeTimeScheduleVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeTimeScheduleVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeJudulIndonesiaVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeJudulIndonesiaVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeCaptionIndonesiaVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeCaptionIndonesiaVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeDeskripsiIndonesiaVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeDeskripsiIndonesiaVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeKabutapenVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeKabutapenVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeKampungVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeKampungVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeDistrikVid extends SubmitArticleEvent {
+  final String? value;
+
+  ChangeDistrikVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ChangeHideAuthorVid extends SubmitArticleEvent {
+  final bool? value;
+
+  ChangeHideAuthorVid({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class ClearFormVid extends SubmitArticleEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class ValidateToSubmitArticleVid extends SubmitArticleEvent {
+  @override
+  List<Object?> get props => [];
+}
+/// END FOR VIDEO
 
 
 

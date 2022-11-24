@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
@@ -78,6 +77,23 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
           hideAuthor: event.value,
         )
     ));
+    on<ClearFormIMG>((event, emit) {
+      emit(
+          state.copyWith(
+              photoFile: null,
+              status: SubmitStateStatus.initial,
+              timeSchedule: null,
+              judulIndonesiaIMG: null,
+              captionIndonesiaIMG: null,
+              deskripsiIndonesiaIMG: null,
+              tagKabupatenIMG: null,
+              tagKampungIMG: null,
+              tagDistrikIMG: null,
+              hideAuthor: null
+          )
+      );
+    });
+    
     on<ValidateToSubmitArticle>(_submitArticle);
     on<SubmitArticleBasic>(_submitArticleBasic);
   }
@@ -207,19 +223,25 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
             tagKabupaten: state.tagKabupatenIMG,
             tagKampung: state.tagKampungIMG,
             tagDistrik: state.tagDistrikIMG,
-            hideAuthor: state.hideAuthor
+            hideAuthor: state.hideAuthor ?? true
         );
 
-        var response = await contributionUsecase.saveToLocalArticle(data: data);
-        if(response!){
-          emit(state.copyWith(
-            status: SubmitStateStatus.success
-          ));
-        }else{
-          emit(state.copyWith(
-              status: SubmitStateStatus.error
-          ));
-        }
+        var connectivityResult = await (Connectivity().checkConnectivity());
+
+        // if(connectivityResult == ConnectivityResult.none){
+          var response = await contributionUsecase.saveToLocalArticle(data: data);
+          if(response!){
+            emit(state.copyWith(
+                status: SubmitStateStatus.success
+            ));
+          }else{
+            emit(state.copyWith(
+                status: SubmitStateStatus.error
+            ));
+          }
+        // }else{
+        //   print('MASUKAN KE SERVER');
+        // }
       }
     }catch (error){
       debugPrint('ERROR PROSESS : $error');

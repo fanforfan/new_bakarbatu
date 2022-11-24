@@ -29,8 +29,18 @@ class SubmitArticleState extends Equatable {
   final String? tagKabupatenIMG;
   final String? tagKampungIMG;
   final String? tagDistrikIMG;
-  /// FOR WARNING
+  /// FOR WARNING IMAGE
   final String? warningMessage;
+  /// FOR VIDEO
+  final String? timeScheduleVid;
+  final String? judulIndonesiaVid;
+  final String? captionIndonesiaVid;
+  final String? deskripsiIndonesiaVid;
+  final String? tagKabupatenVid;
+  final String? tagKampungVid;
+  final String? tagDistrikVid;
+  /// FOR WARNING IMAGE
+  final String? warningMessageVid;
 
 
   const SubmitArticleState({
@@ -52,6 +62,14 @@ class SubmitArticleState extends Equatable {
     this.tagKampungIMG,
     this.tagDistrikIMG,
     this.warningMessage,
+    this.timeScheduleVid,
+    this.judulIndonesiaVid,
+    this.captionIndonesiaVid,
+    this.deskripsiIndonesiaVid,
+    this.tagKabupatenVid,
+    this.tagKampungVid,
+    this.tagDistrikVid,
+    this.warningMessageVid,
   });
 
   @override
@@ -73,7 +91,15 @@ class SubmitArticleState extends Equatable {
     tagKabupatenIMG,
     tagKampungIMG,
     tagDistrikIMG,
-    warningMessage
+    warningMessage,
+    timeScheduleVid,
+    judulIndonesiaVid,
+    captionIndonesiaVid,
+    deskripsiIndonesiaVid,
+    tagKabupatenVid,
+    tagKampungVid,
+    tagDistrikVid,
+    warningMessageVid,
   ];
 
   SubmitArticleState copyWith({
@@ -94,7 +120,16 @@ class SubmitArticleState extends Equatable {
     String? tagKabupatenIMG,
     String? tagKampungIMG,
     String? tagDistrikIMG,
-    String? warningMessage
+    String? warningMessage,
+    String? timeScheduleVid,
+    String? judulIndonesiaVid,
+    String? captionIndonesiaVid,
+    String? deskripsiIndonesiaVid,
+    String? tagKabupatenVid,
+    String? tagKampungVid,
+    String? tagDistrikVid,
+    /// FOR WARNING IMAGE
+    String? warningMessageVid
   }) {
     return SubmitArticleState(
         status: status ?? this.status,
@@ -114,7 +149,15 @@ class SubmitArticleState extends Equatable {
         tagKabupatenIMG: tagKabupatenIMG ?? this.tagKabupatenIMG,
         tagKampungIMG: tagKampungIMG ?? this.tagKampungIMG,
         tagDistrikIMG: tagDistrikIMG ?? this.tagDistrikIMG,
-        warningMessage: warningMessage ?? this.warningMessage
+        warningMessage: warningMessage ?? this.warningMessage,
+        timeScheduleVid: timeScheduleVid ?? this.timeScheduleVid,
+        judulIndonesiaVid: judulIndonesiaVid ?? this.judulIndonesiaVid,
+        captionIndonesiaVid: captionIndonesiaVid ?? this.captionIndonesiaVid,
+        deskripsiIndonesiaVid: deskripsiIndonesiaVid ?? this.deskripsiIndonesiaVid,
+        tagKabupatenVid: tagKabupatenVid ?? this.tagKabupatenVid,
+        tagKampungVid: tagKampungVid ?? this.tagKampungVid,
+        tagDistrikVid: tagDistrikVid ?? this.tagDistrikVid,
+        warningMessageVid: warningMessageVid ?? this.warningMessageVid,
     );
   }
 }

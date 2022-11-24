@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,26 +47,70 @@ class _ArticleVideoState extends State<ArticleVideo> {
           height: MediaQuery.of(context).size.height - 150,
           child: ListView(
             children: [
-              const SizedBox(
-                height: 50.0,
-              ),
               _createVideoPlaceHolder(state),
               const SizedBox(
                 height: 16,
               ),
-              _createTitleField(label: 'Judul laporan Video'),
+              _createDateField(state),
               const SizedBox(
                 height: 16,
               ),
-              _createDescriptionField(label: 'Deskripsi', maxLines: 7),
+              _createTitleFieldJudul(
+                  label: 'Judul Indonesia',
+                  stateValidator: state
+              ),
               const SizedBox(
                 height: 16,
               ),
-              _createShowHideAuthor(),
+              _createDescriptionFieldCaption(
+                  label: 'Caption Indonesia',
+                  maxLines: 3,
+                  stateValidator: state
+              ),
               const SizedBox(
                 height: 16,
               ),
-              _createButtonSubmit(),
+              _createDescriptionFieldDeskripsi(
+                  label: 'Deskripsi/Detail Indonesia',
+                  maxLines: 7,
+                  stateValidator: state
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: Text('Tag Lokasi', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              _createTitleFieldKabupaten(
+                  label: 'Kabupaten',
+                  stateValidator: state
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _createTitleFieldKampung(
+                  label: 'Kampung',
+                  stateValidator: state
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _createTitleFieldDistik(
+                  label: 'Distrik',
+                  stateValidator: state
+              ),
+              _createShowHideAuthor(state),
+              const SizedBox(
+                height: 16,
+              ),
+              state.status.isError ? Text('${state.warningMessageVid}') : const SizedBox(),
+              state.status.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _createButtonSubmit(state),
               const SizedBox(
                 height: 16,
               ),
@@ -120,79 +165,198 @@ class _ArticleVideoState extends State<ArticleVideo> {
       ),
     );
   }
-  
-  Widget _createTitleField({required String label}) {
-    return Container(
+
+  Widget _createDateField(SubmitArticleState state) {
+    return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
-      child: RegulerTextFormField(
-        inputDecoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: const Border(
+              left: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+              right: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+              top: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+              bottom: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+            ),
           ),
-          labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)
-        ), 
-        obsecure: false, 
-        onChanged: (value){
-          debugPrint('$value');
-        }
+          padding: const EdgeInsets.only(left: 10, right: 20),
+          child: DateTimePicker(
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              label: Text('Time Schedule'),
+            ),
+            style: const TextStyle(fontSize: 15),
+            initialValue: state.timeSchedule ?? '',
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            onChanged: (val){
+              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeScheduleVid(value: val));
+            },
+            validator: (val){
+              return null;
+            },
+            onSaved: (val){
+              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeScheduleVid(value: val));
+            },
+          )
       ),
     );
   }
-  
-  Widget _createDescriptionField({required String label, required int maxLines}) {
+
+  Widget _createTitleFieldJudul({required String label, required SubmitArticleState stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator.judulIndonesiaIMG,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeJudulIndonesiaVid(value: value));
+          }),
+    );
+  }
+
+  Widget _createDescriptionFieldCaption({required String label, required int maxLines, required SubmitArticleState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextArea(
         inputDecoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)
-        ), 
-        obsecure: false, 
-        onChanged: (value){
-          debugPrint('$value');
+            labelText: label,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+        obsecure: false,
+        value: stateValidator.captionIndonesiaIMG,
+        onChanged: (value) {
+          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeCaptionIndonesiaVid(value: value));
         },
         maxLines: maxLines,
       ),
     );
   }
-  
-  Widget _createButtonSubmit() {
+
+  Widget _createDescriptionFieldDeskripsi({required String label, required int maxLines, required SubmitArticleState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
-      child: const RegulerButton(
-        childWidget: MaterialButton(
-          onPressed: null,
-          child: Text(
-            'Submit',
-            style: TextStyle(color: Colors.white),
-          ),
-        )
-      )
+      child: RegulerTextArea(
+        inputDecoration: InputDecoration(
+            labelText: label,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+        obsecure: false,
+        value: stateValidator.deskripsiIndonesiaIMG,
+        onChanged: (value) {
+          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDeskripsiIndonesiaVid(value: value));
+        },
+        maxLines: maxLines,
+      ),
     );
   }
-  
-  Widget _createShowHideAuthor() {
+
+  Widget _createTitleFieldKabupaten({required String label, required SubmitArticleState stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator.tagKabupatenIMG,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKabutapenVid(value: value));
+          }),
+    );
+  }
+
+  Widget _createTitleFieldKampung({required String label, required SubmitArticleState stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator.tagKampungIMG,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKampungVid(value: value));
+          }),
+    );
+  }
+
+  Widget _createTitleFieldDistik({required String label, required SubmitArticleState stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator.tagDistrikIMG,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDistrikVid(value: value));
+          }),
+    );
+  }
+
+  Widget _createShowHideAuthor(SubmitArticleState state) {
     return Row(
       children: [
-        const SizedBox(width: 30,),
+        const SizedBox(
+          width: 30,
+        ),
         Switch(
-          value: true,
-          onChanged: (value) {},
-          activeTrackColor: Color.fromARGB(255, 188, 0, 0),
+          value: state.hideAuthor ?? false,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeHideAuthorVid(value: value));
+          },
+          activeTrackColor: const Color.fromARGB(255, 188, 0, 0),
           activeColor: const Color.fromARGB(255, 133, 0, 0),
         ),
         const Text(
-          'Hide Author', 
+          'Sembuyikan Kepemilikan',
           style: TextStyle(
             color: Color.fromARGB(255, 133, 0, 0),
           ),
         )
       ],
     );
+  }
+
+  Widget _createButtonSubmit(SubmitArticleState state) {
+    return Container(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: state.status.isLoading
+            ? const CircularProgressIndicator()
+            : RegulerButton(
+            childWidget: MaterialButton(
+              onPressed: () => validateToSubmit(state),
+              child: const Text(
+                'Submit',
+                style: TextStyle(color: Colors.white),
+              ),
+            ))
+    );
+  }
+
+  validateToSubmit(SubmitArticleState state) {
+    BlocProvider.of<SubmitArticleBloc>(context).add(ValidateToSubmitArticleVid());
   }
 
   late BuildContext _dialogContext;
