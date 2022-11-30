@@ -2,6 +2,7 @@ import 'dart:io';
 
 class ArticleRequestEntity {
   final File? articleFile;
+  final int? jenisFile;
   final String? timeSchedule;
   final String? judulIndonesia;
   final String? captionIndonesia;
@@ -13,6 +14,7 @@ class ArticleRequestEntity {
 
   ArticleRequestEntity({
     this.articleFile,
+    this.jenisFile,
     this.timeSchedule,
     this.judulIndonesia,
     this.captionIndonesia,

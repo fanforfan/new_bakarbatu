@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_bakarbatu/core/usecases/usecase_contribution.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
+import 'package:new_bakarbatu/features/contribution/data/models/article_response.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
 
@@ -39,6 +40,10 @@ class ContributionUsecase implements UsecaseContribution {
 
   Future<Box<ContributionArticle>?> getArticleLocal() async {
     return await repository.getArticleLocal();
+  }
+
+  Future<List<DataNewsroom>?> getArticleOnline() async {
+    return await repository.getArticleOnline();
   }
 
 }

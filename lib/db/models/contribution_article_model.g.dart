@@ -26,13 +26,14 @@ class ContributionArticleAdapter extends TypeAdapter<ContributionArticle> {
       tagKampung: fields[6] as String?,
       tagDistrik: fields[7] as String?,
       hideAuthor: fields[8] as bool?,
+      jenisFile: fields[9] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ContributionArticle obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.filename)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class ContributionArticleAdapter extends TypeAdapter<ContributionArticle> {
       ..writeByte(7)
       ..write(obj.tagDistrik)
       ..writeByte(8)
-      ..write(obj.hideAuthor);
+      ..write(obj.hideAuthor)
+      ..writeByte(9)
+      ..write(obj.jenisFile);
   }
 
   @override

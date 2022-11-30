@@ -7,6 +7,7 @@ import 'package:new_bakarbatu/features/authentication/domain/repositories/authen
 import 'package:new_bakarbatu/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
+import 'package:new_bakarbatu/features/contribution/data/datasources/contribution_remote_datasources.dart';
 import 'package:new_bakarbatu/features/contribution/data/datasources/submit_local_datasources.dart';
 import 'package:new_bakarbatu/features/contribution/data/repositories/contribution_repository_impl.dart';
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
@@ -14,6 +15,7 @@ import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article_video/submit_artikel_video_bloc.dart';
 import 'package:new_bakarbatu/features/home/data/datasources/home_remote_datasources.dart';
 import 'package:new_bakarbatu/features/home/data/repositories/home_repository_impl.dart';
 import 'package:new_bakarbatu/features/home/domain/repositories/home_repository.dart';
@@ -39,6 +41,9 @@ Future<void> init() async {
   sl.registerFactory(() => SubmitArticleBloc(
       contributionUsecase: sl()
   ));
+  sl.registerFactory(() => SubmitArtikelVideoBloc(
+      contributionUsecase: sl()
+  ));
   sl.registerFactory(() => BottomNavBloc());
   sl.registerFactory(() => ArticleBloc(
       contributionUsecase: sl()
@@ -62,7 +67,8 @@ Future<void> init() async {
     networkInfo: sl()
   ));
   sl.registerLazySingleton<ContributionRepository>(() => ContributionRepositoryImpl(
-    submitLocalDatasources: sl()
+    submitLocalDatasources: sl(),
+    contributionRemoteDatasources: sl()
   ));
 
 //  ! Data sources
@@ -70,6 +76,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthenticationLocalDatasources>(() => AuthenticationLocalDatasourcesImpl(sharedPreferences: sl()));
   sl.registerLazySingleton<HomeRemoteDatasources>(() => HomeRemoteDatasourcesImpl(client: sl()));
   sl.registerLazySingleton<SubmitLocalDatasources>(() => SubmitLocalDatasourcesImpl());
+  sl.registerLazySingleton<ContributuionRemoteDatasources>(() => ContributuionRemoteRepositoryImpl(client: sl()));
 
 //  ! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());

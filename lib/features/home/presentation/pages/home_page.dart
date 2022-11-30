@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/home/presentation/bloc/home_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,11 +18,17 @@ class _HomePageState extends State<HomePage> {
   String url = '';
   double progress = 0;
   final urlController = TextEditingController();
+  SharedPreferences? prefs;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<HomeBloc>(context).add(HomeGotoWebview());
+    setPrefs();
+  }
+
+  void setPrefs() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -131,7 +138,11 @@ class _HomePageState extends State<HomePage> {
             ])),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Navigator.pushNamed(context, Routes.loginRoute);
+            if(prefs?.getBool('isLogin') == true){
+              Navigator.pushNamed(context, Routes.contributionRoute);
+            }else{
+              Navigator.pushNamed(context, Routes.loginRoute);
+            }
           },
           backgroundColor: const Color.fromARGB(255, 203, 0, 0),
           child: const Icon(Icons.camera_alt),

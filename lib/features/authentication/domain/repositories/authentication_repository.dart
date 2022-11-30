@@ -7,5 +7,7 @@ abstract class AuthenticationRepository {
   Future<AuthenticationDataEntity?> validateLogin(AuthenticationLoginRequest paramLogin);
 
   Future<AuthenticationDataEntity?> validateRegister(AuthenticationregisterRequest paramsRegister);
+
+  Future<bool?> authLogout();
   
 }

@@ -1,27 +1,19 @@
-import 'package:new_bakarbatu/features/authentication/domain/entities/authentication.dart';
+import '../../domain/entities/authentication.dart';
 
-class AuthLoginModel extends AuthenticationDataEntity {
-  const AuthLoginModel({
-    String? username,
-    String? password,
-    String? fullname
-  }) : super(
-    username: username, 
-    password: password, 
-    fullname: fullname);
+class AuthLoginModel {
+  AuthenticationDataEntity? dataUser;
+  String? token;
+  String? message;
+  String? rc;
 
-  factory AuthLoginModel.fromJson(Map<String, dynamic> json){
-    return AuthLoginModel(
-      username: json['username'], 
-      password: json['password'], 
-      fullname: json['fullname']);
-  }
+  AuthLoginModel({this.dataUser, this.token, this.message, this.rc});
 
-  Map<String, dynamic> toJson(){
-    return {
-          "username" : username,
-          "password" : password,
-          "fullname" : fullname
-        };
+  AuthLoginModel.fromJson(Map<String, dynamic> json) {
+    dataUser = json['data_user'] != null
+        ? AuthenticationDataEntity.fromJson(json['data_user'])
+        : null;
+    token = json['token'];
+    message = json['message'];
+    rc = json['rc'];
   }
 }

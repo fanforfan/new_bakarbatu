@@ -50,3 +50,5 @@ class TextFieldChanged extends AuthenticationEvent {
     value
   ];
 }
+
+class AuthLogout extends AuthenticationEvent {}

@@ -5,7 +5,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article_video/submit_artikel_video_bloc.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
@@ -30,14 +30,14 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
 
     if (pickedVideoFile != null) {
-      BlocProvider.of<SubmitArticleBloc>(context)
-          .add(PickVideo(videoFile: File(pickedVideoFile.path)));
+      BlocProvider.of<SubmitArtikelVideoBloc>(context)
+          .add(PickVideoFile(videoFile: File(pickedVideoFile.path)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SubmitArticleBloc, SubmitArticleState>(
+    return BlocBuilder<SubmitArtikelVideoBloc, SubmitArticleVideoState>(
       builder: (context, state){
         return Container(
           decoration: const BoxDecoration(
@@ -121,7 +121,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
   }
 
-  Widget _createVideoPlaceHolder(SubmitArticleState state) {
+  Widget _createVideoPlaceHolder(SubmitArticleVideoState state) {
     return MaterialButton(
       onPressed: () {
         _getVideoFromCamera('First Pick');
@@ -131,15 +131,10 @@ class _ArticleVideoState extends State<ArticleVideo> {
         onTap: (){
           _showDialogVideoPlay(context, state.chewieController, state.videoController);
         },
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-                  width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
-              color: const Color.fromARGB(255, 250, 250, 250),
-              borderRadius: BorderRadius.circular(20)),
-          width: double.infinity,
-          child: Image.asset(state.thumbnailVideo!.path),
-        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.file(File(state.thumbnailVideo!.path)),
+        )
       )
           : Container(
         decoration: BoxDecoration(
@@ -166,7 +161,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
   }
 
-  Widget _createDateField(SubmitArticleState state) {
+  Widget _createDateField(SubmitArticleVideoState state) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Container(
@@ -186,24 +181,24 @@ class _ArticleVideoState extends State<ArticleVideo> {
               label: Text('Time Schedule'),
             ),
             style: const TextStyle(fontSize: 15),
-            initialValue: state.timeSchedule ?? '',
+            initialValue: state.timeScheduleVid ?? '',
             firstDate: DateTime(2000),
             lastDate: DateTime(2100),
             onChanged: (val){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeScheduleVid(value: val));
+              BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeTimeScheduleVid(value: val));
             },
             validator: (val){
               return null;
             },
             onSaved: (val){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeScheduleVid(value: val));
+              BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeTimeScheduleVid(value: val));
             },
           )
       ),
     );
   }
 
-  Widget _createTitleFieldJudul({required String label, required SubmitArticleState stateValidator}) {
+  Widget _createTitleFieldJudul({required String label, required SubmitArticleVideoState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextFormField(
@@ -214,14 +209,14 @@ class _ArticleVideoState extends State<ArticleVideo> {
               ),
               labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
           obsecure: false,
-          value: stateValidator.judulIndonesiaIMG,
+          value: stateValidator.judulIndonesiaVid,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeJudulIndonesiaVid(value: value));
+            BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeJudulIndonesiaVid(value: value));
           }),
     );
   }
 
-  Widget _createDescriptionFieldCaption({required String label, required int maxLines, required SubmitArticleState stateValidator}) {
+  Widget _createDescriptionFieldCaption({required String label, required int maxLines, required SubmitArticleVideoState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextArea(
@@ -232,16 +227,16 @@ class _ArticleVideoState extends State<ArticleVideo> {
             ),
             labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
         obsecure: false,
-        value: stateValidator.captionIndonesiaIMG,
+        value: stateValidator.captionIndonesiaVid,
         onChanged: (value) {
-          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeCaptionIndonesiaVid(value: value));
+          BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeCaptionIndonesiaVid(value: value));
         },
         maxLines: maxLines,
       ),
     );
   }
 
-  Widget _createDescriptionFieldDeskripsi({required String label, required int maxLines, required SubmitArticleState stateValidator}) {
+  Widget _createDescriptionFieldDeskripsi({required String label, required int maxLines, required SubmitArticleVideoState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextArea(
@@ -252,16 +247,16 @@ class _ArticleVideoState extends State<ArticleVideo> {
             ),
             labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
         obsecure: false,
-        value: stateValidator.deskripsiIndonesiaIMG,
+        value: stateValidator.deskripsiIndonesiaVid,
         onChanged: (value) {
-          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDeskripsiIndonesiaVid(value: value));
+          BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeDeskripsiIndonesiaVid(value: value));
         },
         maxLines: maxLines,
       ),
     );
   }
 
-  Widget _createTitleFieldKabupaten({required String label, required SubmitArticleState stateValidator}) {
+  Widget _createTitleFieldKabupaten({required String label, required SubmitArticleVideoState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextFormField(
@@ -272,14 +267,14 @@ class _ArticleVideoState extends State<ArticleVideo> {
               ),
               labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
           obsecure: false,
-          value: stateValidator.tagKabupatenIMG,
+          value: stateValidator.tagKabupatenVid,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKabutapenVid(value: value));
+            BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeKabutapenVid(value: value));
           }),
     );
   }
 
-  Widget _createTitleFieldKampung({required String label, required SubmitArticleState stateValidator}) {
+  Widget _createTitleFieldKampung({required String label, required SubmitArticleVideoState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextFormField(
@@ -290,14 +285,14 @@ class _ArticleVideoState extends State<ArticleVideo> {
               ),
               labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
           obsecure: false,
-          value: stateValidator.tagKampungIMG,
+          value: stateValidator.tagKampungVid,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKampungVid(value: value));
+            BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeKampungVid(value: value));
           }),
     );
   }
 
-  Widget _createTitleFieldDistik({required String label, required SubmitArticleState stateValidator}) {
+  Widget _createTitleFieldDistik({required String label, required SubmitArticleVideoState stateValidator}) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: RegulerTextFormField(
@@ -308,14 +303,14 @@ class _ArticleVideoState extends State<ArticleVideo> {
               ),
               labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
           obsecure: false,
-          value: stateValidator.tagDistrikIMG,
+          value: stateValidator.tagDistrikVid,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDistrikVid(value: value));
+            BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeDistrikVid(value: value));
           }),
     );
   }
 
-  Widget _createShowHideAuthor(SubmitArticleState state) {
+  Widget _createShowHideAuthor(SubmitArticleVideoState state) {
     return Row(
       children: [
         const SizedBox(
@@ -324,7 +319,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
         Switch(
           value: state.hideAuthor ?? false,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeHideAuthorVid(value: value));
+            BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ChangeHideAuthorVid(value: value));
           },
           activeTrackColor: const Color.fromARGB(255, 188, 0, 0),
           activeColor: const Color.fromARGB(255, 133, 0, 0),
@@ -339,7 +334,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
   }
 
-  Widget _createButtonSubmit(SubmitArticleState state) {
+  Widget _createButtonSubmit(SubmitArticleVideoState state) {
     return Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: state.status.isLoading
@@ -355,8 +350,8 @@ class _ArticleVideoState extends State<ArticleVideo> {
     );
   }
 
-  validateToSubmit(SubmitArticleState state) {
-    BlocProvider.of<SubmitArticleBloc>(context).add(ValidateToSubmitArticleVid());
+  validateToSubmit(SubmitArticleVideoState state) {
+    BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ValidateToSubmitArticleVid());
   }
 
   late BuildContext _dialogContext;

@@ -14,12 +14,14 @@ class AuthenticationState extends Equatable {
   final String? password;
   final AuthenticationStateStatus status;
   final String? message;
+  final bool? logoutSuccess;
 
   const AuthenticationState({
     this.username,
     this.password,
     this.status = AuthenticationStateStatus.initial,
-    this.message
+    this.message,
+    this.logoutSuccess
   });
 
   @override
@@ -27,20 +29,23 @@ class AuthenticationState extends Equatable {
     username,
     password,
     status,
-    message
+    message,
+    logoutSuccess
   ];
 
   AuthenticationState copyWith({
     String? username,
     String? password,
     AuthenticationStateStatus? status,
-    String? message
+    String? message,
+    bool? logoutSuccess
   }) {
     return AuthenticationState(
         username: username ?? this.username ,
         password: password ?? this.password,
         status: status ?? this.status,
-        message: message ?? this.message
+        message: message ?? this.message,
+        logoutSuccess: logoutSuccess ?? this.logoutSuccess
     );
   }
 }

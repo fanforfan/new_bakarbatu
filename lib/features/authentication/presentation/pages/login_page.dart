@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   buildBoddy(BuildContext context) {
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
-        if(state.message == 'Success'){
+        if(state.message?.trim() == 'Login Berhasil'){
           Navigator.pushReplacementNamed(context, Routes.contributionRoute);
         }
       },
@@ -158,13 +158,11 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state.status.isError) {
+          print('SINI 1');
           return Text(
             '${state.message}',
             style: const TextStyle(color: Colors.red, fontSize: 10),
           );
-        } else if (state.status.isSuccess) {
-          return Text('${state.message}',
-              style: const TextStyle(color: Colors.red, fontSize: 10));
         }
         return const SizedBox();
       },

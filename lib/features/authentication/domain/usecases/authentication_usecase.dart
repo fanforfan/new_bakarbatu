@@ -22,4 +22,9 @@ class AuthenticationUsecase implements Usecase {
       ) async {
     return await repository.validateRegister(paramsRegister);
   }
+
+  @override
+  Future<bool?> authLogout() async {
+    return await repository.authLogout();
+  }
 }

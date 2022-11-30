@@ -31,6 +31,9 @@ class ContributionArticle {
   @HiveField(8)
   final bool? hideAuthor;
 
+  @HiveField(9)
+  final int? jenisFile;
+
   ContributionArticle({
     this.filename,
     this.timeSchedule,
@@ -41,5 +44,6 @@ class ContributionArticle {
     this.tagKampung,
     this.tagDistrik,
     this.hideAuthor,
+    this.jenisFile
   });
 }

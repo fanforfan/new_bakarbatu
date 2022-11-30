@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:new_bakarbatu/core/error/exceptions.dart';
 import 'package:new_bakarbatu/features/authentication/data/models/auth_login_model.dart';
+import 'package:new_bakarbatu/features/authentication/data/models/login/LoginResponse.dart';
 import 'package:new_bakarbatu/features/authentication/domain/entities/authentication.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,9 +10,11 @@ import '../../domain/entities/authentication_login_request.dart';
 import '../../domain/entities/authentication_register_request.dart';
 
 abstract class AuthenticationRemoteDatasources {
-  Future<AuthenticationDataEntity>? validateRegister(AuthenticationregisterRequest paramsRegister);
+  Future<LoginResponse>? validateLogin(AuthenticationLoginRequest paramLogin);
 
-  Future<AuthenticationDataEntity>? validateLogin(AuthenticationLoginRequest paramLogin);
+  Future<LoginResponse>? validateRegister(AuthenticationregisterRequest paramsRegister);
+
+  Future<bool?> authLogout(String? string);
 }
 
 class AuthenticationRemoteDatasourcesImpl implements AuthenticationRemoteDatasources {
@@ -20,49 +23,33 @@ class AuthenticationRemoteDatasourcesImpl implements AuthenticationRemoteDatasou
   AuthenticationRemoteDatasourcesImpl({required this.client});
 
   @override
-  Future<AuthenticationDataEntity>? validateLogin(AuthenticationLoginRequest paramLogin) async {
-
-    var response = {
-      'username' : 'fandis',
-      'password' : 'test',
-      'full_name' : 'Fandi Sujatmiko'
+  Future<LoginResponse>? validateLogin(AuthenticationLoginRequest paramLogin) async {
+    var headers = {
+      'Accept': 'application/json'
     };
 
-    if(response['username'] != paramLogin.username){
-      return const AuthenticationDataEntity(
-        message: 'Username salah',
-        error: true
-      );
-    }else if(response['password'] != paramLogin.password){
-      return const AuthenticationDataEntity(
-        message: 'Password salah',
-        error: true
-      );
-    }else{
-      return AuthenticationDataEntity(
-        username: response['username'],
-        password: response['password'],
-        fullname: response['full_name'],
-        error: false,
-        message: 'Success'
-      );
-    }
+    final request = await client.post(
+      Uri.parse('http://api.bakarbatu.id/api/login'),
+      headers: headers,
+      body: {
+        'email':  paramLogin.username,
+        'password': paramLogin.password
+      }
+    );
 
-    // TODO: implement validateLogin
-    // final response = await client.post(
-    //   Uri.parse('http://url_login.com'), 
-    //   body: paramLogin
-    // );
+    var response = LoginResponse.fromJson(json.decode(request.body));
+    return response;
 
-    // if(response.statusCode == 200){
-    //   return AuthLoginModel.fromJson(json.decode(response.body));
+    // if(request.statusCode == 200){
+    //   var response = LoginResponse.fromJson(json.decode(request.body));
+    //   return response;
     // }else{
     //   throw ServerException();
     // }
   }
 
   @override
-  Future<AuthenticationDataEntity>? validateRegister(AuthenticationregisterRequest paramsRegister) async {
+  Future<LoginResponse>? validateRegister(AuthenticationregisterRequest paramsRegister) async {
     // TODO: implement validateRegister
     final response = await client.post(
       Uri.parse('http://url_register.com'), 
@@ -70,9 +57,30 @@ class AuthenticationRemoteDatasourcesImpl implements AuthenticationRemoteDatasou
     );
 
     if(response.statusCode == 200){
-      return AuthLoginModel.fromJson(json.decode(response.body));
+      return LoginResponse.fromJson(json.decode(response.body));
     }else{
       throw ServerException();
+    }
+  }
+
+  @override
+  Future<bool?> authLogout(String? token) async {
+    // TODO: implement authLogout
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    final request = await client.post(
+        Uri.parse('http://api.bakarbatu.id/api/logout'),
+        headers: headers
+    );
+
+    var response = LoginResponse.fromJson(json.decode(request.body));
+    if(response.message == 'Logged out'){
+      return true;
+    }else{
+      return false;
     }
   }
 

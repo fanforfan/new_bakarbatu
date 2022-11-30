@@ -32,11 +32,11 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     on<ChangeHideShowAuthor>((event, emit) => emit(state.copyWith(
         hideAuthor: event.value
     )));
-    on<GetImageArticle>((event, emit) => emit(
-      state.copyWith(
-        photoFile: event.imageFile,
-      )
-    ));
+    on<GetImageArticle>((event, emit) =>
+        emit(state.copyWith(
+          photoFile: event.imageFile,
+        ))
+    );
     on<ChangeTimeSchedule>((event, emit) => emit(
         state.copyWith(
           timeSchedule: event.value,
@@ -80,16 +80,14 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     on<ClearFormIMG>((event, emit) {
       emit(
           state.copyWith(
-              photoFile: null,
               status: SubmitStateStatus.initial,
-              timeSchedule: null,
-              judulIndonesiaIMG: null,
-              captionIndonesiaIMG: null,
-              deskripsiIndonesiaIMG: null,
-              tagKabupatenIMG: null,
-              tagKampungIMG: null,
-              tagDistrikIMG: null,
-              hideAuthor: null
+              timeSchedule: '',
+              judulIndonesiaIMG: '',
+              captionIndonesiaIMG: '',
+              deskripsiIndonesiaIMG: '',
+              tagKabupatenIMG: '',
+              tagKampungIMG: '',
+              tagDistrikIMG: ''
           )
       );
     });
@@ -98,14 +96,9 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     on<SubmitArticleBasic>(_submitArticleBasic);
   }
 
-
   _getVideoCamera(PickVideo event, Emitter<SubmitArticleState> emit) async {
-    emit(state.copyWith(
-      status: SubmitStateStatus.loading
-    ));
-
     try{
-      var thumbnailFile = await VideoCompress.getFileThumbnail(event.videoFile!.path, quality: 50, position: -1);
+      var thumbnailFile = await VideoCompress.getFileThumbnail(event.videoFile!.path, quality: 100, position: -1);
       var video = File(event.videoFile!.path);
 
       var videoPlayerController = VideoPlayerController.file(video);
@@ -210,12 +203,14 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
         ));
       }else{
         var date = DateTime.now();
-        var mainDirectory = await getApplicationSupportDirectory();
+        var mainDirectory = await getApplicationDocumentsDirectory();
         var path = mainDirectory.path;
-        var newImage = await File(state.photoFile!.path).copy("$path/Bakar_Batu_${state.judulIndonesiaIMG!.replaceAll(' ', '_')}_${date.toString().replaceAll(' ', '').replaceAll('.', '').replaceAll('-', '').replaceAll('/', '').replaceAll(':', '')}.jpg");
+        var fileName = "Bakar_Batu_${state.judulIndonesiaIMG!.replaceAll(' ', '_')}_${date.toString().replaceAll(' ', '').replaceAll('.', '').replaceAll('-', '').replaceAll('/', '').replaceAll(':', '')}";
+        var newImage = await File(state.photoFile!.path).copy("$path/$fileName");
 
         var data = ArticleRequestEntity(
             articleFile: newImage,
+            jenisFile: 1,
             timeSchedule: state.timeSchedule,
             judulIndonesia: state.judulIndonesiaIMG,
             captionIndonesia: state.captionIndonesiaIMG,

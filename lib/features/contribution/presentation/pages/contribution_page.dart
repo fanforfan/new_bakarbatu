@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_bakarbatu/core/util/routes.dart';
+import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/data/models/article_response.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/pages/detail_video.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_basic.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_foto.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_video.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_voicerec.dart';
-
-import '../bloc/submit_article/submit_article_bloc.dart';
 
 class ContributionPage extends StatefulWidget {
   const ContributionPage({super.key});
@@ -41,47 +44,60 @@ class _ContributionPageState extends State<ContributionPage>
       statusMenu: true,
       idMenu: 2
     ));
-    // BlocProvider.of<ArticleBloc>(context).add(GetArticle(statusArticle: 0));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavBloc, BottomNavState>(
-      builder: (context, state){
-        return Scaffold(
-          backgroundColor: const Color.fromARGB(255, 142, 0, 0),
-          body: DefaultTabController(
-            initialIndex: 0,
-            length: 2,
-            child: Column(children: [
-              Container(
-                color: Colors.black,
-                height: MediaQuery.of(context).viewPadding.top,
+    return MultiBlocListener(
+        listeners: [
+          BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                if(state.logoutSuccess != null){
+                  if(state.logoutSuccess!){
+                    Navigator.pushNamedAndRemoveUntil(context, Routes.initialPage, (route) => false);
+                  }else{
+                    debugPrint('Logout gagal');
+                  }
+                }
+              })
+        ],
+        child: BlocBuilder<BottomNavBloc, BottomNavState>(
+          builder: (context, state){
+            return Scaffold(
+              backgroundColor: const Color.fromARGB(255, 142, 0, 0),
+              body: DefaultTabController(
+                initialIndex: 0,
+                length: 2,
+                child: Column(children: [
+                  Container(
+                    color: Colors.black,
+                    height: MediaQuery.of(context).viewPadding.top,
+                  ),
+                  const SizedBox(height: 35,),
+                  _createCardProfile(),
+                  const SizedBox(height: 35,),
+                  state.idMenu == 2 ? Container(
+                    padding: const EdgeInsets.only(left: 50),
+                    alignment: Alignment.centerLeft,
+                    child: const Text('Your Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Color(
+                        0xFFC6C6C6)),),
+                  ) : const SizedBox(),
+                  state.idMenu == 2 ? const SizedBox(height: 16,) : const SizedBox(),
+                  state.idMenu == 2 ? _createTabBar() : const SizedBox(),
+                  Expanded(
+                    child: state.idMenu == 0 ? const ArticleBasic()
+                        : state.idMenu == 1 ? const ArticleVoiceRec()
+                        : state.idMenu == 2 ? _buildTabPage()
+                        : state.idMenu == 3 ? const ArticleFoto()
+                        : const ArticleVideo(),
+                  )
+                ]),
               ),
-              const SizedBox(height: 35,),
-              _createCardProfile(),
-              const SizedBox(height: 35,),
-              state.idMenu == 2 ? Container(
-                padding: const EdgeInsets.only(left: 50),
-                alignment: Alignment.centerLeft,
-                child: const Text('Your Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Color(
-                    0xFFC6C6C6)),),
-              ) : const SizedBox(),
-              state.idMenu == 2 ? const SizedBox(height: 16,) : const SizedBox(),
-              state.idMenu == 2 ? _createTabBar() : const SizedBox(),
-              Expanded(
-                child: state.idMenu == 0 ? const ArticleBasic()
-                    : state.idMenu == 1 ? const ArticleVoiceRec()
-                    : state.idMenu == 2 ? _buildTabPage()
-                    : state.idMenu == 3 ? const ArticleFoto()
-                    : const ArticleVideo(),
-              )
-            ]),
-          ),
-          bottomNavigationBar: _createBottomNavBar(state),
-        );
-      },
+              bottomNavigationBar: _createBottomNavBar(state),
+            );
+          },
+        )
     );
   }
 
@@ -89,12 +105,7 @@ class _ContributionPageState extends State<ContributionPage>
     return TabBarView(
       children: <Widget>[
         _pageOne(),
-        Container(
-          color: const Color(0xFF800000),
-          child: const Center(
-            child: Text("It's rainy here"),
-          ),
-        ),
+        _pageTwo()
       ],
     );
   }
@@ -122,13 +133,13 @@ class _ContributionPageState extends State<ContributionPage>
               const SizedBox(width: 10,),
               Expanded(
                 child: Column(
-                  children: const [
-                    Align(
+                  children: [
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text('Nama Lengkap'),
                     ),
-                    SizedBox(height: 6),
-                    Align(
+                    const SizedBox(height: 6),
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Jl. Kawi Raya No.18, RT.6/RW.2, Guntur, Kecamatan Setiabudi, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12980',
@@ -138,6 +149,18 @@ class _ContributionPageState extends State<ContributionPage>
                         ),
                       ),
                     ),
+                    MaterialButton(
+                      onPressed: (){
+                        print('PRESSED');
+                        BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(Icons.exit_to_app),
+                          Text('Logout')
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -320,46 +343,7 @@ class _ContributionPageState extends State<ContributionPage>
               physics: const ClampingScrollPhysics(),
               itemCount: state.article!.length,
               itemBuilder: (context, index){
-                debugPrint('${state.article![index].filename}');
-                return Container(
-                  color: const Color(0xFF800000),
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                          child: Image.file(File('${state.article![index].filename}'))
-                      ),
-                      const SizedBox(height: 15,),
-                      Text('${state.article![index].judulIndonesia}', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
-                      Text(state.article![index].hideAuthor! ? 'Publish Author' : 'Private Author', style: TextStyle(color: Colors.white),),
-                      Row(
-                        children: [
-                          Text('${state.article![index].timeSchedule}', style: TextStyle(color: Color(0xFFC7C7C7)),),
-                          const SizedBox(width: 8,),
-                          Text('${state.article![index].captionIndonesia}', style: TextStyle(color: Color(0xFFC7C7C7)),),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text('${state.article![index].tagDistrik} - ${state.article![index].tagKampung} - ${state.article![index].tagKabupaten}', style: TextStyle(color: Color(0xFFC7C7C7)),),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10,),
-                      Text('${state.article![index].deskripsiIndonesia}', style: const TextStyle(color: Colors.white),),
-                      SizedBox(height: 8,),
-                      Container(
-                        height: 0.5,
-                        width: double.infinity,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 20,)
-                    ],
-                  ),
-                );
+                return _boxItemArticle(state.article![index]);
               },
             );
           }else{
@@ -374,4 +358,184 @@ class _ContributionPageState extends State<ContributionPage>
       },
     );
   }
+
+  Widget _boxItemArticle(ContributionArticle contributionArticle) {
+    return Container(
+      color: const Color(0xFF800000),
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          contributionArticle.jenisFile == 1
+              ?
+          ClipRRect(
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+              child: Image.file(File('${contributionArticle.filename}'))
+          )
+              :
+          Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
+            ),
+            child: MaterialButton(
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailVideo(fileName: contributionArticle.filename,)
+                    )
+                );
+              },
+              child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
+            ),
+          ),
+          const SizedBox(height: 1),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 8),
+                  child: Text('${contributionArticle.judulIndonesia} ${contributionArticle.jenisFile}', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                  child: Text(contributionArticle.hideAuthor! ? 'Publish Author' : 'Private Author', style: const TextStyle(color: Colors.black54),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                  child: Row(
+                    children: [
+                      Text('${contributionArticle.timeSchedule}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                      const SizedBox(width: 8,),
+                      Text('${contributionArticle.captionIndonesia}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                    ],
+                  )
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text('${contributionArticle.tagDistrik} - ${contributionArticle.tagKampung} - ${contributionArticle.tagKabupaten}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                        )
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                    child: Text('${contributionArticle.deskripsiIndonesia}', style: const TextStyle(color: Colors.black54)),
+                ),
+                const SizedBox(height: 8,),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20,)
+        ],
+      ),
+    );
+  }
+
+  Widget _boxItemArticleOnline(DataNewsroom dataNewsroom) {
+    return Container(
+      color: const Color(0xFF800000),
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+              child: Image.network('${dataNewsroom.articleUrl}')
+          ),
+          const SizedBox(height: 1),
+          Container(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 8),
+                  child: Text('${dataNewsroom.title}', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                  child: Text(dataNewsroom.nameEditor ?? 'Private Author', style: const TextStyle(color: Colors.black54),),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                    child: Row(
+                      children: [
+                        Text('${dataNewsroom.saved}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                        const SizedBox(width: 8,),
+                        Text('${dataNewsroom.categoryName}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                      ],
+                    )
+                ),
+                // Padding(
+                //     padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                //     child: Row(
+                //       children: [
+                //         Expanded(
+                //           child: Text('${dataNewsroom.} - ${contributionArticle.tagKampung} - ${contributionArticle.tagKabupaten}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                //         )
+                //       ],
+                //     )
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+                  child: Text('${dataNewsroom.description}', style: const TextStyle(color: Colors.black54)),
+                ),
+                const SizedBox(height: 8,),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20,)
+        ],
+      ),
+    );
+  }
+
+  Widget _pageTwo() {
+    return BlocBuilder<ArticleBloc, ArticleState>(
+      bloc: BlocProvider.of<ArticleBloc>(context)..add(GetArticle(statusArticle: 1)),
+      builder: (context, state){
+        if(state.status.isLoading){
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }else{
+          if(state.articleOnline != null && state.articleOnline!.isNotEmpty){
+            return Container(
+              color: const Color(0xFF800000),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                itemCount: state.articleOnline!.length,
+                itemBuilder: (context, index){
+                  return _boxItemArticleOnline(state.articleOnline![index]);
+                },
+              ),
+            );
+          }else{
+            return Container(
+              color: const Color(0xFF800000),
+              child: const Center(
+                child: Text("Empty Data"),
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
+
 }

@@ -28,6 +28,7 @@ class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
   Future<bool?> saveToLocalArticle(ArticleRequestEntity data) async {
     try{
       var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
+      print("ANJEEENG : ${data.jenisFile}");
       await tblContributionBoxx.add(ContributionArticle(
         filename: data.articleFile?.path,
         timeSchedule: data.timeSchedule,
@@ -37,7 +38,8 @@ class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
         tagKabupaten: data.tagKabupaten,
         tagKampung: data.tagKampung,
         tagDistrik: data.tagDistrik,
-        hideAuthor: data.hideAuthor
+        hideAuthor: data.hideAuthor,
+        jenisFile: data.jenisFile
       ));
       return true;
     }catch (error){

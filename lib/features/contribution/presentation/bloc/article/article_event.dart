@@ -11,5 +11,10 @@ class GetArticle extends ArticleEvent {
   @override
   // TODO: implement props
   List<Object?> get props => [statusArticle];
+}
 
+class GetArticleOnline extends ArticleEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
 }
