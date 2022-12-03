@@ -46,4 +46,8 @@ class ContributionUsecase implements UsecaseContribution {
     return await repository.getArticleOnline();
   }
 
+  Future<bool?> saveToServerArticle({required ArticleRequestEntity data}) async {
+    return await repository.saveToServerArticle(data);
+  }
+
 }

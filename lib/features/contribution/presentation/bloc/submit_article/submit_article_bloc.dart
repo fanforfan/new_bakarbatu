@@ -223,7 +223,7 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
 
         var connectivityResult = await (Connectivity().checkConnectivity());
 
-        // if(connectivityResult == ConnectivityResult.none){
+        if(connectivityResult == ConnectivityResult.none){
           var response = await contributionUsecase.saveToLocalArticle(data: data);
           if(response!){
             emit(state.copyWith(
@@ -234,9 +234,10 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
                 status: SubmitStateStatus.error
             ));
           }
-        // }else{
-        //   print('MASUKAN KE SERVER');
-        // }
+        }else{
+          var response = await contributionUsecase.saveToServerArticle(data: data);
+          print('MASUKAN KE SERVER');
+        }
       }
     }catch (error){
       debugPrint('ERROR PROSESS : $error');

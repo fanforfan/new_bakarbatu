@@ -15,4 +15,6 @@ abstract class ContributionRepository {
   Future<Box<ContributionArticle>?> getArticleLocal();
 
   Future<List<DataNewsroom>?> getArticleOnline();
+
+  Future<bool?> saveToServerArticle(ArticleRequestEntity data);
 }
