@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
@@ -101,6 +102,18 @@ class ContributionRepositoryImpl implements ContributionRepository {
       return listData;
     }catch (error){
       return null;
+    }
+  }
+
+  @override
+  Future<bool?> saveToServerArticle(ArticleRequestEntity data) async {
+    // TODO: implement saveToServerArticle
+    try{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final response = await contributionRemoteDatasources.saveToServerArticle(data, prefs);
+    }catch (error){
+      debugPrint('$error');
+      return false;
     }
   }
 

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:new_bakarbatu/core/error/exceptions.dart';
 import 'package:new_bakarbatu/core/network/network_info.dart';
 import 'package:new_bakarbatu/features/authentication/data/datasources/authentication_local_datasources.dart';
@@ -8,6 +6,7 @@ import 'package:new_bakarbatu/features/authentication/domain/entities/authentica
 import 'package:new_bakarbatu/features/authentication/domain/entities/authentication_login_request.dart';
 import 'package:new_bakarbatu/features/authentication/domain/entities/authentication.dart';
 import 'package:new_bakarbatu/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:new_bakarbatu/shared/common/key_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
@@ -24,7 +23,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   Future<AuthenticationDataEntity?> validateLogin(AuthenticationLoginRequest paramLogin) async {
     // TODO: implement validateLogin
       try{
-        print('NYAMPE SINI GAK SIH?');
         SharedPreferences prefs = await SharedPreferences.getInstance();
         final remoteValidateLogin = await remoteDatasource.validateLogin(paramLogin);
         var data = AuthenticationDataEntity(
@@ -50,25 +48,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
             token: remoteValidateLogin?.token
         );
 
-        prefs.setInt('id', data.id!);
-        prefs.setString('username', data.username!);
-        prefs.setString('email', data.email!);
-        prefs.setString('photo', data.phone!);
-        prefs.setString('ttl', data.ttl!);
-        prefs.setString('gender', data.gender!);
-        prefs.setString('provinsi', data.provinsi!);
-        prefs.setString('kabupaten', data.kabupaten!);
-        prefs.setString('kecamatan', data.kecamatan!);
-        prefs.setString('kelurahan', data.kelurahan!);
-        prefs.setString('alamat', data.alamat!);
-        prefs.setString('savedDate', data.savedDate!);
-        prefs.setInt('userRegisterBy', data.userRegisterBy!);
-        prefs.setInt('status', data.status!);
-        prefs.setString('lastLogin', data.lastLogin!);
-        prefs.setInt('komunitasId', data.komunitasId!);
-        prefs.setString('nameKomunitas', data.nameKomunitas!);
-        prefs.setString('token', data.token!);
-        prefs.setBool('isLogin', true);
+        prefs.setInt(KeyPreferenches.idUser, data.id!);
+        prefs.setString(KeyPreferenches.username, data.username!);
+        prefs.setString(KeyPreferenches.email, data.email!);
+        prefs.setString(KeyPreferenches.phone, data.phone!);
+        prefs.setString(KeyPreferenches.ttl, data.ttl!);
+        prefs.setString(KeyPreferenches.gender, data.gender!);
+        prefs.setString(KeyPreferenches.provinsi, data.provinsi!);
+        prefs.setString(KeyPreferenches.kabupaten, data.kabupaten!);
+        prefs.setString(KeyPreferenches.kecamatan, data.kecamatan!);
+        prefs.setString(KeyPreferenches.kelurahan, data.kelurahan!);
+        prefs.setString(KeyPreferenches.alamat, data.alamat!);
+        prefs.setString(KeyPreferenches.savedData, data.savedDate!);
+        prefs.setInt(KeyPreferenches.userRergisterBy, data.userRegisterBy!);
+        prefs.setInt(KeyPreferenches.status, data.status!);
+        prefs.setString(KeyPreferenches.lastLogin, data.lastLogin!);
+        prefs.setInt(KeyPreferenches.komunitasId, data.komunitasId!);
+        prefs.setString(KeyPreferenches.nameKomunitas, data.nameKomunitas!);
+        prefs.setString(KeyPreferenches.token, data.token!);
+        prefs.setBool(KeyPreferenches.isLogin, true);
 
         return data;
       } on ServerException {

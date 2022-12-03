@@ -20,7 +20,7 @@ class ArticleFoto extends StatefulWidget {
 
 class _ArticleFotoState extends State<ArticleFoto> {
   Future _getFotoFromCamera(String title) async {
-    var pickedFotoFile;
+    XFile? pickedFotoFile;
 
     if(title == '0'){
       pickedFotoFile = await ImagePicker().pickImage(source: ImageSource.gallery);
