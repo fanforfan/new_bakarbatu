@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
+import 'package:new_bakarbatu/shared/common/key_language.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
@@ -164,42 +165,42 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
       if(state.photoFile == null){
         emit(state.copyWith(
           status: SubmitStateStatus.error,
-          warningMessage: 'Pick an image please.'
+          warningMessage: KeyLanguage.warningMsgImage
         ));
       }else if(state.timeSchedule == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Time schedule belum terisi.'
+            warningMessage: KeyLanguage.warningMsgTime
         ));
       }else if(state.judulIndonesiaIMG == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Judul Indonesia belum terisi.'
+            warningMessage: KeyLanguage.warningMsgJudul
         ));
       }else if(state.captionIndonesiaIMG == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Caption Indonesia belum terisi.'
+            warningMessage: KeyLanguage.warningMsgJudul
         ));
       }else if(state.deskripsiIndonesiaIMG == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Deskripsi/Detail Indonesa belum terisi.'
+            warningMessage: KeyLanguage.warningMsgDeskripsi
         ));
       }else if(state.tagKabupatenIMG == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Tag Kabupaten belum terisi.'
+            warningMessage: KeyLanguage.warningMsgKabupaten
         ));
       }else if(state.tagKampungIMG == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Tag Kampung belum terisi.'
+            warningMessage: KeyLanguage.warningMsgKampung
         ));
       }else if(state.tagDistrikIMG == null){
         emit(state.copyWith(
             status: SubmitStateStatus.error,
-            warningMessage: 'Tag distrik belum terisi.'
+            warningMessage: KeyLanguage.warningMsgDistrik
         ));
       }else{
         var date = DateTime.now();
@@ -236,7 +237,6 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
           }
         }else{
           var response = await contributionUsecase.saveToServerArticle(data: data);
-          print('MASUKAN KE SERVER');
         }
       }
     }catch (error){

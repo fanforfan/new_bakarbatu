@@ -36,9 +36,7 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
-        // debugPrint('HALOO : ${await response.stream.bytesToString()}');
         var data = await response.stream.bytesToString();
-        debugPrint('HALOONJEWNG : $data');
         dataArticle = ArticleResponse.fromJson(json.decode(data));
       }
       else {
@@ -75,7 +73,10 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
       request.fields['time_publish'] = '${data.timeSchedule}';
       request.fields['hidden_article'] = '${data.hideAuthor! ? 1 : 0}';
 
-      var response = await http.Response.fromStream(await request.send());
+      http.StreamedResponse response = await request.send();
+
+      print('DATA : $response');
+      // var response = await http.Response.fromStream(await request.send());
 
     }catch (error){
       debugPrint('DATASOURCES : $error');
