@@ -4,6 +4,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
+import 'package:new_bakarbatu/shared/common/key_language.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
@@ -67,14 +68,14 @@ class _ArticleFotoState extends State<ArticleFoto> {
                   height: 16,
                 ),
                 _createTitleFieldJudul(
-                  label: 'Judul Indonesia',
+                  label: KeyLanguage.labelJudul,
                   stateValidator: state
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 _createDescriptionFieldCaption(
-                    label: 'Caption Indonesia',
+                    label: KeyLanguage.labelCaptipn,
                     maxLines: 3,
                     stateValidator: state
                 ),
@@ -82,7 +83,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
                   height: 16,
                 ),
                 _createDescriptionFieldDeskripsi(
-                    label: 'Deskripsi/Detail Indonesia',
+                    label: KeyLanguage.labelDeskripsi,
                     maxLines: 7,
                     stateValidator: state
                 ),
@@ -91,27 +92,27 @@ class _ArticleFotoState extends State<ArticleFoto> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 30),
-                  child: Text('Tag Lokasi', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
+                  child: Text(KeyLanguage.labelLokasi, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 _createTitleFieldKabupaten(
-                    label: 'Kabupaten',
+                    label: KeyLanguage.labelKabupaten,
                     stateValidator: state
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 _createTitleFieldKampung(
-                    label: 'Kampung',
+                    label: KeyLanguage.labelKampung,
                     stateValidator: state
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 _createTitleFieldDistik(
-                    label: 'Distrik',
+                    label: KeyLanguage.labelDistrik,
                     stateValidator: state
                 ),
                 _createShowHideAuthor(state),
@@ -164,7 +165,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
               width: 50,
             ),
             const Text(
-              'Take foto',
+              KeyLanguage.labelTakePhoto,
               style: TextStyle(
                   color: Color.fromARGB(255, 154, 0, 0), fontSize: 11),
             ),
@@ -183,7 +184,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
             childWidget: MaterialButton(
               onPressed: () => validateToSubmit(state),
               child: const Text(
-                'Submit',
+                KeyLanguage.labelButtonSubmit,
                 style: TextStyle(color: Colors.white),
               ),
             ))
@@ -205,7 +206,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
           activeColor: const Color.fromARGB(255, 133, 0, 0),
         ),
         const Text(
-          'Sembuyikan Kepemilikan',
+          KeyLanguage.labelHideAutor,
           style: TextStyle(
             color: Color.fromARGB(255, 133, 0, 0),
           ),
@@ -231,7 +232,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
         child: DateTimePicker(
           decoration: const InputDecoration(
             border: InputBorder.none,
-            label: Text('Time Schedule'),
+            label: Text(KeyLanguage.labelTimeSchedule),
           ),
           style: const TextStyle(fontSize: 15),
           initialValue: state.timeSchedule ?? '',

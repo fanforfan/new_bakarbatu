@@ -72,9 +72,7 @@ class ContributionRepositoryImpl implements ContributionRepository {
       var listData = <DataNewsroom>[];
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final response = await contributionRemoteDatasources.getArticleOnline(prefs.getInt('id'), prefs.getString('token'));
-      print('HALO CUK : ${response}');
       if(response != null){
-        print('HALO CUK : ${response.rc}');
         if(response.rc == '0000'){
           if(response.dataNewsroom != null){
             for(var i=0; i<response.dataNewsroom!.length; i++){
