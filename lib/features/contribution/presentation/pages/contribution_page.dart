@@ -339,6 +339,7 @@ class _ContributionPageState extends State<ContributionPage>
         }else{
           if(state.article != null && state.article!.isNotEmpty){
             return ListView.builder(
+              padding: EdgeInsets.zero,
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               itemCount: state.article!.length,
@@ -362,7 +363,7 @@ class _ContributionPageState extends State<ContributionPage>
   Widget _boxItemArticle(ContributionArticle contributionArticle) {
     return Container(
       color: const Color(0xFF800000),
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
