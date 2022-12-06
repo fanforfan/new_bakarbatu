@@ -11,6 +11,8 @@ import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav
 import 'package:new_bakarbatu/features/contribution/presentation/pages/detail_video.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_basic.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_foto.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_local.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_online.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_video.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/article_voicerec.dart';
 
@@ -102,10 +104,10 @@ class _ContributionPageState extends State<ContributionPage>
   }
 
   _buildTabPage() {
-    return TabBarView(
+    return const TabBarView(
       children: <Widget>[
-        _pageOne(),
-        _pageTwo()
+        ArticleLocal(),
+        ArticleOnline()
       ],
     );
   }
@@ -324,121 +326,6 @@ class _ContributionPageState extends State<ContributionPage>
             icon: Image.asset(e.image, width: 30, color: const Color.fromARGB(
                 255, 255, 255, 255),),
           )).toList()
-      ),
-    );
-  }
-
-  Widget _pageOne() {
-    return BlocBuilder<ArticleBloc, ArticleState>(
-      bloc: BlocProvider.of<ArticleBloc>(context)..add(GetArticle(statusArticle: 0)),
-      builder: (context, state){
-        if(state.status.isLoading){
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }else{
-          if(state.article != null && state.article!.isNotEmpty){
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              itemCount: state.article!.length,
-              itemBuilder: (context, index){
-                return _boxItemArticle(state.article![index]);
-              },
-            );
-          }else{
-            return Container(
-              color: const Color(0xFF800000),
-              child: const Center(
-                child: Text("Empty Data"),
-              ),
-            );
-          }
-        }
-      },
-    );
-  }
-
-  Widget _boxItemArticle(ContributionArticle contributionArticle) {
-    return Container(
-      color: const Color(0xFF800000),
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          contributionArticle.jenisFile == 1
-              ?
-          ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
-              child: Image.file(File('${contributionArticle.filename}'))
-          )
-              :
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
-            ),
-            child: MaterialButton(
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailVideo(fileName: contributionArticle.filename,)
-                    )
-                );
-              },
-              child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
-            ),
-          ),
-          const SizedBox(height: 1),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 8),
-                  child: Text('${contributionArticle.judulIndonesia} ${contributionArticle.jenisFile}', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                  child: Text(contributionArticle.hideAuthor! ? 'Publish Author' : 'Private Author', style: const TextStyle(color: Colors.black54),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                  child: Row(
-                    children: [
-                      Text('${contributionArticle.timeSchedule}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
-                      const SizedBox(width: 8,),
-                      Text('${contributionArticle.captionIndonesia}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
-                    ],
-                  )
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text('${contributionArticle.tagDistrik} - ${contributionArticle.tagKampung} - ${contributionArticle.tagKabupaten}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
-                        )
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                    child: Text('${contributionArticle.deskripsiIndonesia}', style: const TextStyle(color: Colors.black54)),
-                ),
-                const SizedBox(height: 8,),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20,)
-        ],
       ),
     );
   }
