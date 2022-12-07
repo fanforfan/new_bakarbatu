@@ -15,6 +15,8 @@ class CardProfile extends StatefulWidget {
 class _CardProfileState extends State<CardProfile> {
 
   SharedPreferences? prefs;
+  var nama;
+  var alamat;
 
   @override
   void initState() {
@@ -25,6 +27,10 @@ class _CardProfileState extends State<CardProfile> {
 
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
+    setState(() {
+      nama = prefs?.getString(KeyPreferenches.username);
+      alamat = '${prefs?.getString(KeyPreferenches.kelurahan)}-${prefs?.getString(KeyPreferenches.kecamatan)}-${prefs?.getString(KeyPreferenches.kabupaten)}-${prefs?.getString(KeyPreferenches.provinsi)}';
+    });
   }
 
   @override
@@ -54,13 +60,13 @@ class _CardProfileState extends State<CardProfile> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('${prefs?.getString(KeyPreferenches.username)}'),
+                      child: Text('$nama'),
                     ),
                     const SizedBox(height: 6),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '${prefs?.getString(KeyPreferenches.alamat)}',
+                        '$alamat',
                         style: const TextStyle(
                             fontSize: 10,
                             color: Colors.grey
@@ -71,11 +77,21 @@ class _CardProfileState extends State<CardProfile> {
                       onPressed: (){
                         BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
                       },
-                      child: Row(
-                        children: const [
-                          Icon(Icons.exit_to_app),
-                          Text('Logout')
-                        ],
+                      child: Container(
+                        padding: EdgeInsets.only(top: 6, bottom: 6),
+                        margin: EdgeInsets.only(right: 30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.deepOrange
+                        ),
+                        child: Row(
+                          children: const [
+                            SizedBox(width: 20,),
+                            Icon(Icons.exit_to_app, size: 15, color: Colors.white,),
+                            SizedBox(width: 6,),
+                            Text('Logout', style: TextStyle(color: Colors.white, fontSize: 10),)
+                          ],
+                        ),
                       ),
                     )
                   ],

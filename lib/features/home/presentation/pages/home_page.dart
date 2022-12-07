@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/home/presentation/bloc/home_bloc.dart';
+import 'package:new_bakarbatu/shared/common/key_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -138,7 +139,7 @@ class _HomePageState extends State<HomePage> {
             ])),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
-            if(prefs?.getBool('isLogin') == true){
+            if(prefs?.getBool(KeyPreferenches.isLogin) == true){
               Navigator.pushNamed(context, Routes.contributionRoute);
             }else{
               Navigator.pushNamed(context, Routes.loginRoute);

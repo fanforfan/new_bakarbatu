@@ -1,8 +1,16 @@
 import 'dart:io';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../db/models/contribution_article_model.dart';
+import '../../../../../shared/common/key_language.dart';
+import '../../../../../shared/widgets/reguler_button.dart';
+import '../../../../../shared/widgets/reguler_text_area.dart';
+import '../../../../../shared/widgets/reguler_text_form_field.dart';
+import '../../bloc/submit_article/submit_article_bloc.dart';
 import '../detail_video.dart';
 
 class ItemArticleLocal extends StatelessWidget {
@@ -18,6 +26,7 @@ class ItemArticleLocal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          /// cek apakan dia video atau image
           contributionArticle.jenisFile == 1
               ?
           ClipRRect(
@@ -54,11 +63,34 @@ class ItemArticleLocal extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 8),
-                  child: Text('${contributionArticle.judulIndonesia} ${contributionArticle.jenisFile}', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                  child: Text('${contributionArticle.judulIndonesia}', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                  child: Text(contributionArticle.hideAuthor! ? 'Publish Author' : 'Private Author', style: const TextStyle(color: Colors.black54),),
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(contributionArticle.hideAuthor! ? 'Publish Author' : 'Private Author', style: const TextStyle(color: Colors.black54),)),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.deepOrange
+                        ),
+                        alignment: Alignment.centerRight,
+                        child: MaterialButton(
+                          onPressed: (){
+                            _showDialogEdit(context, contributionArticle);
+                          },
+                          child: Row(
+                            children: [
+                              Text('Edit', style: TextStyle(color: Colors.white),),
+                              SizedBox(width: 6,),
+                              Icon(Icons.edit, size: 15, color: Colors.white,)
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
@@ -93,4 +125,377 @@ class ItemArticleLocal extends StatelessWidget {
       ),
     );
   }
+
+  void _showDialogEdit(BuildContext context, ContributionArticle contributionArticle) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 16,
+          child: Container(
+            // decoration: const BoxDecoration(
+            //     color: Colors.white,
+            //     borderRadius: BorderRadius.only(
+            //         topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+            height: MediaQuery.of(context).size.height - 150,
+            child: ListView(
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                _createFotoPlaceHolder(context, contributionArticle.filename),
+                const SizedBox(
+                  height: 16,
+                ),
+                _createDateField(context, contributionArticle.timeSchedule),
+                const SizedBox(
+                  height: 16,
+                ),
+                _createTitleFieldJudul(
+                    context: context,
+                    label: KeyLanguage.labelJudul,
+                    stateValidator: contributionArticle.judulIndonesia
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                _createDescriptionFieldCaption(
+                    context: context,
+                    label: KeyLanguage.labelCaptipn,
+                    maxLines: 3,
+                    stateValidator: contributionArticle.captionIndonesia
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                _createDescriptionFieldDeskripsi(
+                    context: context,
+                    label: KeyLanguage.labelDeskripsi,
+                    maxLines: 7,
+                    stateValidator: contributionArticle.deskripsiIndonesia
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Text(KeyLanguage.labelLokasi, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                _createTitleFieldKabupaten(
+                    context: context,
+                    label: KeyLanguage.labelKabupaten,
+                    stateValidator: contributionArticle.tagKabupaten
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _createTitleFieldKampung(
+                    context: context,
+                    label: KeyLanguage.labelKampung,
+                    stateValidator: contributionArticle.tagKampung
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _createTitleFieldDistik(
+                    context: context,
+                    label: KeyLanguage.labelDistrik,
+                    stateValidator: contributionArticle.tagDistrik
+                ),
+                _createShowHideAuthor(context, contributionArticle.hideAuthor),
+                const SizedBox(
+                  height: 16,
+                ),
+                // state.status.isError ? Text('${state.warningMessage}') : const SizedBox(),
+                // state.status.isLoading
+                //     ? const Center(child: CircularProgressIndicator())
+                //     :
+                _createButtonSubmit(),
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _createFotoPlaceHolder(BuildContext context, String? filename) {
+    return MaterialButton(
+      onPressed: (){
+        _showDialogPickImage(context);
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.file(File(filename ?? '')),
+      ),
+    );
+  }
+
+  Widget _createButtonSubmit() {
+    return Container(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child:
+        // state.status.isLoading
+        //     ? const CircularProgressIndicator()
+        //     :
+        RegulerButton(
+            childWidget: MaterialButton(
+              onPressed: () {
+                // => validateToSubmit(state)
+              },
+              child: const Text(
+                KeyLanguage.labelButtonSubmit,
+                style: TextStyle(color: Colors.white),
+              ),
+            ))
+    );
+  }
+
+  Widget _createShowHideAuthor(BuildContext context, bool? hideAuthor) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 30,
+        ),
+        Switch(
+          value: hideAuthor ?? false,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeHideAuthor(value: value));
+          },
+          activeTrackColor: const Color.fromARGB(255, 188, 0, 0),
+          activeColor: const Color.fromARGB(255, 133, 0, 0),
+        ),
+        const Text(
+          KeyLanguage.labelHideAutor,
+          style: TextStyle(
+            color: Color.fromARGB(255, 133, 0, 0),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _createDateField(BuildContext context, String? timeSchedule) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: const Border(
+              left: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+              right: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+              top: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+              bottom: BorderSide(width: 1, color: Color(0xFFC4C4C4)),
+            ),
+          ),
+          padding: const EdgeInsets.only(left: 10, right: 20),
+          child: DateTimePicker(
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              label: Text(KeyLanguage.labelTimeSchedule),
+            ),
+            style: const TextStyle(fontSize: 15),
+            initialValue: timeSchedule ?? '',
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            onChanged: (val){
+              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeSchedule(value: val));
+            },
+            validator: (val){
+              return null;
+            },
+            onSaved: (val){
+              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeSchedule(value: val));
+            },
+          )
+      ),
+    );
+  }
+
+
+  _showDialogPickImage(BuildContext context) {
+    showDialog(context: context, builder: (_){
+      return Dialog(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: MaterialButton(
+                    onPressed: (){
+                      _getFotoFromCamera(context, '0');
+                      Navigator.pop(context);
+                    },
+                    child: Column(
+                      children: const [
+                        Icon(Icons.photo_camera_back, color: Color.fromARGB(255, 154, 0, 0)),
+                        Text('Gallery', style: TextStyle(color: Color.fromARGB(255, 154, 0, 0), fontSize: 10, fontWeight: FontWeight.normal))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: MaterialButton(
+                    onPressed: (){
+                      _getFotoFromCamera(context, '1');
+                      Navigator.pop(context);
+                    },
+                    child: Column(
+                      children: const [
+                        Icon(Icons.camera_alt_outlined, color: Color.fromARGB(255, 154, 0, 0)),
+                        Text('Camera', style: TextStyle(color: Color.fromARGB(255, 154, 0, 0), fontSize: 10, fontWeight: FontWeight.normal),)
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  Future _getFotoFromCamera(BuildContext context, String title) async {
+    XFile? pickedFotoFile;
+
+    if(title == '0'){
+      pickedFotoFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    }else{
+      pickedFotoFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    }
+
+    if (pickedFotoFile != null) {
+      BlocProvider.of<SubmitArticleBloc>(context).add(
+          GetImageArticle(
+            imageFile: pickedFotoFile,
+          )
+      );
+    }
+  }
+
+  Widget _createTitleFieldJudul({required BuildContext context, required String label, String? stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeJudulIndonesia(value: value));
+          }),
+    );
+  }
+
+  Widget _createTitleFieldKabupaten({required BuildContext context, required String label, String? stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKabutapen(value: value));
+          }),
+    );
+  }
+
+  Widget _createTitleFieldKampung({required BuildContext context, required String label, String? stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKampung(value: value));
+          }),
+    );
+  }
+
+  Widget _createTitleFieldDistik({required BuildContext context, required String label, String? stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextFormField(
+          inputDecoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+          obsecure: false,
+          value: stateValidator,
+          onChanged: (value) {
+            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDistrik(value: value));
+          }),
+    );
+  }
+
+  Widget _createDescriptionFieldCaption({required BuildContext context, required String label, required int maxLines, String? stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextArea(
+        inputDecoration: InputDecoration(
+            labelText: label,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+        obsecure: false,
+        value: stateValidator,
+        onChanged: (value) {
+          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeCaptionIndonesia(value: value));
+        },
+        maxLines: maxLines,
+      ),
+    );
+  }
+
+  Widget _createDescriptionFieldDeskripsi({required BuildContext context, required String label, required int maxLines, String? stateValidator}) {
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: RegulerTextArea(
+        inputDecoration: InputDecoration(
+            labelText: label,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            labelStyle: const TextStyle(color: Colors.grey, fontSize: 12)),
+        obsecure: false,
+        value: stateValidator,
+        onChanged: (value) {
+          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDeskripsiIndonesia(value: value));
+        },
+        maxLines: maxLines,
+      ),
+    );
+  }
+
 }

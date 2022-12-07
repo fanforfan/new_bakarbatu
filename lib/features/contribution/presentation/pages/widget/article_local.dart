@@ -23,14 +23,19 @@ class _ArticleLocalState extends State<ArticleLocal> {
           );
         }else{
           if(state.article != null && state.article!.isNotEmpty){
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              itemCount: state.article!.length,
-              itemBuilder: (context, index){
-                return ItemArticleLocal(contributionArticle: state.article![index]);
-              },
+            return SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(bottom: 50),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.article!.length,
+                  itemBuilder: (context, index){
+                    return ItemArticleLocal(contributionArticle: state.article![index]);
+                  },
+                ),
+              ),
             );
           }else{
             return Container(

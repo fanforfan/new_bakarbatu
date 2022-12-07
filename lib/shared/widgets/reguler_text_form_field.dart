@@ -5,13 +5,15 @@ class RegulerTextFormField extends StatelessWidget {
   final bool obsecure;
   final Function(dynamic value) onChanged;
   final String? value;
+  final TextEditingController? controller;
 
   const RegulerTextFormField({
     super.key, 
     required this.inputDecoration, 
     required this.obsecure, 
     required this.onChanged,
-    this.value
+    this.value,
+    this.controller
   });
 
   @override
@@ -21,6 +23,7 @@ class RegulerTextFormField extends StatelessWidget {
       decoration: inputDecoration,
       onChanged: onChanged,
       initialValue: value,
+      controller: controller,
     );
   }
 }

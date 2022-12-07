@@ -124,7 +124,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
                     ? const Center(child: CircularProgressIndicator())
                     : _createButtonSubmit(state),
                 const SizedBox(
-                  height: 16,
+                  height: 100,
                 ),
               ],
             ),
