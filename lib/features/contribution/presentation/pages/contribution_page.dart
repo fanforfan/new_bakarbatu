@@ -67,32 +67,40 @@ class _ContributionPageState extends State<ContributionPage>
               body: DefaultTabController(
                 initialIndex: 0,
                 length: 2,
-                child: Column(children: [
-                  Container(
-                    color: Colors.black,
-                    height: MediaQuery.of(context).viewPadding.top,
-                  ),
-                  const SizedBox(height: 35,),
-                  const CardProfile(),
-                  const SizedBox(height: 35,),
-                  state.idMenu == 2 ? Container(
-                    padding: const EdgeInsets.only(left: 50),
-                    alignment: Alignment.centerLeft,
-                    child: const Text('Your Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Color(
-                        0xFFC6C6C6)),),
-                  ) : const SizedBox(),
-                  state.idMenu == 2 ? const SizedBox(height: 16,) : const SizedBox(),
-                  state.idMenu == 2 ? _createTabBar() : const SizedBox(),
-                  Expanded(
-                    child: state.idMenu == 0 ? const ArticleBasic()
-                        : state.idMenu == 1 ? const ArticleVoiceRec()
-                        : state.idMenu == 2 ? _buildTabPage()
-                        : state.idMenu == 3 ? const ArticleFoto()
-                        : const ArticleVideo(),
-                  )
-                ]),
+                child: Stack(
+                  children: [
+                    Column(children: [
+                      Container(
+                        color: Colors.black,
+                        height: MediaQuery.of(context).viewPadding.top,
+                      ),
+                      const SizedBox(height: 35,),
+                      const CardProfile(),
+                      const SizedBox(height: 35,),
+                      state.idMenu == 2 ? Container(
+                        padding: const EdgeInsets.only(left: 50),
+                        alignment: Alignment.centerLeft,
+                        child: const Text('Your Contribution', style: TextStyle(fontWeight: FontWeight.bold, color: Color(
+                            0xFFC6C6C6)),),
+                      ) : const SizedBox(),
+                      state.idMenu == 2 ? const SizedBox(height: 16,) : const SizedBox(),
+                      state.idMenu == 2 ? _createTabBar() : const SizedBox(),
+                      Expanded(
+                        child: state.idMenu == 0 ? const ArticleBasic()
+                            : state.idMenu == 1 ? const ArticleVoiceRec()
+                            : state.idMenu == 2 ? _buildTabPage()
+                            : state.idMenu == 3 ? const ArticleFoto()
+                            : const ArticleVideo(),
+                      ),
+                    ]),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: BottomNavbar(state: state),
+                    )
+                  ],
+                ),
               ),
-              bottomNavigationBar: BottomNavbar(state: state),
+              // bottomNavigationBar: BottomNavbar(state: state),
             );
           },
         )

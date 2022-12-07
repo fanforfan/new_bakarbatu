@@ -48,25 +48,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
             token: remoteValidateLogin?.token
         );
 
-        prefs.setInt(KeyPreferenches.idUser, data.id!);
-        prefs.setString(KeyPreferenches.username, data.username!);
-        prefs.setString(KeyPreferenches.email, data.email!);
-        prefs.setString(KeyPreferenches.phone, data.phone!);
-        prefs.setString(KeyPreferenches.ttl, data.ttl!);
-        prefs.setString(KeyPreferenches.gender, data.gender!);
-        prefs.setString(KeyPreferenches.provinsi, data.provinsi!);
-        prefs.setString(KeyPreferenches.kabupaten, data.kabupaten!);
-        prefs.setString(KeyPreferenches.kecamatan, data.kecamatan!);
-        prefs.setString(KeyPreferenches.kelurahan, data.kelurahan!);
-        prefs.setString(KeyPreferenches.alamat, data.alamat!);
-        prefs.setString(KeyPreferenches.savedData, data.savedDate!);
-        prefs.setInt(KeyPreferenches.userRergisterBy, data.userRegisterBy!);
-        prefs.setInt(KeyPreferenches.status, data.status!);
-        prefs.setString(KeyPreferenches.lastLogin, data.lastLogin!);
-        prefs.setInt(KeyPreferenches.komunitasId, data.komunitasId!);
-        prefs.setString(KeyPreferenches.nameKomunitas, data.nameKomunitas!);
-        prefs.setString(KeyPreferenches.token, data.token!);
-        prefs.setBool(KeyPreferenches.isLogin, true);
+        await prefs.setInt(KeyPreferenches.idUser, data.id!);
+        await prefs.setString(KeyPreferenches.username, data.username!);
+        await prefs.setString(KeyPreferenches.email, data.email!);
+        await prefs.setString(KeyPreferenches.phone, data.phone!);
+        await prefs.setString(KeyPreferenches.ttl, data.ttl!);
+        await prefs.setString(KeyPreferenches.gender, data.gender!);
+        await prefs.setString(KeyPreferenches.provinsi, data.provinsi!);
+        await prefs.setString(KeyPreferenches.kabupaten, data.kabupaten!);
+        await prefs.setString(KeyPreferenches.kecamatan, data.kecamatan!);
+        await prefs.setString(KeyPreferenches.kelurahan, data.kelurahan!);
+        await prefs.setString(KeyPreferenches.alamat, data.alamat!);
+        await prefs.setString(KeyPreferenches.savedData, data.savedDate!);
+        await prefs.setInt(KeyPreferenches.userRergisterBy, data.userRegisterBy!);
+        await prefs.setInt(KeyPreferenches.status, data.status!);
+        await prefs.setString(KeyPreferenches.lastLogin, data.lastLogin!);
+        await prefs.setInt(KeyPreferenches.komunitasId, data.komunitasId!);
+        await prefs.setString(KeyPreferenches.nameKomunitas, data.nameKomunitas!);
+        await prefs.setString(KeyPreferenches.token, data.token!);
+        await prefs.setBool(KeyPreferenches.isLogin, true);
 
         return data;
       } on ServerException {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/pages/contribution_page.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
 
@@ -15,57 +16,63 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<AuthenticationBloc>(context).stream.listen((state) {
+      if (state.status.isSuccess) {
+        print('BERAPA');
+        Navigator.pushReplacementNamed(context, Routes.contributionRoute);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: buildBoddy(context),
+        body: buildBoddy(context)
     );
   }
 
   buildBoddy(BuildContext context) {
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if(state.message?.trim() == 'Login Berhasil'){
-          Navigator.pushReplacementNamed(context, Routes.contributionRoute);
-        }
-      },
-      builder: (context, state) {
-        return SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.only(left: 30, right: 30),
-            child: Column(
-              children: [
-                const SizedBox(height: 100),
-                Image.asset(
-                  'assets/images/login_illustration.png',
-                  width: 300,
-                ),
-                _createStatementError(),
-                const SizedBox(height: 16),
-                _createUsernameField(),
-                const SizedBox(height: 16),
-                _ctreatePasswordField(),
-                _createForgotPasswordAction(),
-                const SizedBox(height: 18),
-                _createButtonLogin(state),
-                const SizedBox(height: 18),
-                _createRegisterTextButton()
-              ],
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  Image.asset(
+                    'assets/images/login_illustration.png',
+                    width: 300,
+                  ),
+                  // _createStatementError(),
+                  const SizedBox(height: 16),
+                  _createUsernameField(),
+                  const SizedBox(height: 16),
+                  _ctreatePasswordField(),
+                  _createForgotPasswordAction(),
+                  const SizedBox(height: 18),
+                  _createButtonLogin(state),
+                  const SizedBox(height: 18),
+                  _createRegisterTextButton()
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        }
     );
-  }
-
-  validateToLogin(BuildContext context, String? username, String? password) {
-    BlocProvider.of<AuthenticationBloc>(context).add(
-        AuthLoginEvent(username: username ?? '', password: password ?? ''));
   }
 
   Widget _createUsernameField() {
     return RegulerTextFormField(
+        controller: usernameController,
         obsecure: false,
         inputDecoration: InputDecoration(
           prefixIcon: const Icon(Icons.account_circle),
@@ -74,10 +81,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        onChanged: (value) {
-          BlocProvider.of<AuthenticationBloc>(context)
-              .add(TextFieldChanged(keyField: 'Username', value: value));
-        });
+        onChanged: (value) {});
   }
 
   Widget _ctreatePasswordField() {
@@ -86,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, state){
           if(state is ChangeObsecureStatus){
             return RegulerTextFormField(
+                controller: passwordController,
                 obsecure: state.isObsecure,
                 inputDecoration: InputDecoration(
                     prefixIcon: const Icon(Icons.key),
@@ -98,9 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))
                 ),
-                onChanged: (value) {
-                  BlocProvider.of<AuthenticationBloc>(context).add(TextFieldChanged(keyField: 'Password', value: value));
-                });
+                onChanged: (value) {});
           }
           return SizedBox();
         }
@@ -131,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
         'Login',
         style: TextStyle(color: Colors.white),
       ),
-      onPressed: () => validateToLogin(context, state.username, state.password),
+      onPressed: () => BlocProvider.of<AuthenticationBloc>(context).add(AuthLoginEvent(username: usernameController.text ?? '', password: passwordController.text ?? '')),
     ));
   }
 
@@ -154,18 +157,18 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _createStatementError() {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        if (state.status.isError) {
-          print('SINI 1');
-          return Text(
-            '${state.message}',
-            style: const TextStyle(color: Colors.red, fontSize: 10),
-          );
-        }
-        return const SizedBox();
-      },
-    );
-  }
+  // Widget _createStatementError() {
+  //   return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+  //     builder: (context, state) {
+  //       if (state.status.isError) {
+  //         print('SINI 1');
+  //         return Text(
+  //           '${state.message}',
+  //           style: const TextStyle(color: Colors.red, fontSize: 10),
+  //         );
+  //       }
+  //       return const SizedBox();
+  //     },
+  //   );
+  // }
 }

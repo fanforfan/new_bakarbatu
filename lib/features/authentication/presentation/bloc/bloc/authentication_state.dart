@@ -15,13 +15,15 @@ class AuthenticationState extends Equatable {
   final AuthenticationStateStatus status;
   final String? message;
   final bool? logoutSuccess;
+  final bool? isLogin;
 
   const AuthenticationState({
     this.username,
     this.password,
     this.status = AuthenticationStateStatus.initial,
     this.message,
-    this.logoutSuccess
+    this.logoutSuccess,
+    this.isLogin
   });
 
   @override
@@ -30,7 +32,8 @@ class AuthenticationState extends Equatable {
     password,
     status,
     message,
-    logoutSuccess
+    logoutSuccess,
+    isLogin
   ];
 
   AuthenticationState copyWith({
@@ -38,14 +41,16 @@ class AuthenticationState extends Equatable {
     String? password,
     AuthenticationStateStatus? status,
     String? message,
-    bool? logoutSuccess
+    bool? logoutSuccess,
+    bool? isLogin
   }) {
     return AuthenticationState(
         username: username ?? this.username ,
         password: password ?? this.password,
         status: status ?? this.status,
         message: message ?? this.message,
-        logoutSuccess: logoutSuccess ?? this.logoutSuccess
+        logoutSuccess: logoutSuccess ?? this.logoutSuccess,
+        isLogin: isLogin ?? this.isLogin
     );
   }
 }

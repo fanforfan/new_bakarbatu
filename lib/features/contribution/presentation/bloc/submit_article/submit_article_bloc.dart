@@ -222,9 +222,9 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
             hideAuthor: state.hideAuthor ?? true
         );
 
-        var connectivityResult = await (Connectivity().checkConnectivity());
-
-        if(connectivityResult == ConnectivityResult.none){
+        // var connectivityResult = await (Connectivity().checkConnectivity());
+        //
+        // if(connectivityResult == ConnectivityResult.none){
           var response = await contributionUsecase.saveToLocalArticle(data: data);
           if(response!){
             emit(state.copyWith(
@@ -235,9 +235,9 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
                 status: SubmitStateStatus.error
             ));
           }
-        }else{
-          var response = await contributionUsecase.saveToServerArticle(data: data);
-        }
+        // }else{
+        //   var response = await contributionUsecase.saveToServerArticle(data: data);
+        // }
       }
     }catch (error){
       debugPrint('ERROR PROSESS : $error');

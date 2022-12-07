@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:new_bakarbatu/core/error/exceptions.dart';
-import 'package:new_bakarbatu/features/authentication/data/models/auth_login_model.dart';
 import 'package:new_bakarbatu/features/authentication/data/models/login/LoginResponse.dart';
-import 'package:new_bakarbatu/features/authentication/domain/entities/authentication.dart';
 import 'package:http/http.dart' as http;
 
 import '../../domain/entities/authentication_login_request.dart';
@@ -38,14 +36,8 @@ class AuthenticationRemoteDatasourcesImpl implements AuthenticationRemoteDatasou
     );
 
     var response = LoginResponse.fromJson(json.decode(request.body));
-    return response;
 
-    // if(request.statusCode == 200){
-    //   var response = LoginResponse.fromJson(json.decode(request.body));
-    //   return response;
-    // }else{
-    //   throw ServerException();
-    // }
+    return response;
   }
 
   @override

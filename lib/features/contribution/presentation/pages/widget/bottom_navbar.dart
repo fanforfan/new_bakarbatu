@@ -16,7 +16,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white,
+      color: Colors.transparent,
       height: 96,
       child: Stack(
         children: [
