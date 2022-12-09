@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../db/models/contribution_article_model.dart';
@@ -81,7 +82,7 @@ class ItemArticleLocal extends StatelessWidget {
                             _showDialogEdit(context, contributionArticle);
                           },
                           child: Row(
-                            children: [
+                            children: const [
                               Text('Edit', style: TextStyle(color: Colors.white),),
                               SizedBox(width: 6,),
                               Icon(Icons.edit, size: 15, color: Colors.white,)
@@ -133,11 +134,7 @@ class ItemArticleLocal extends StatelessWidget {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 16,
-          child: Container(
-            // decoration: const BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.only(
-            //         topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+          child: SizedBox(
             height: MediaQuery.of(context).size.height - 150,
             child: ListView(
               children: [
@@ -210,13 +207,9 @@ class ItemArticleLocal extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                // state.status.isError ? Text('${state.warningMessage}') : const SizedBox(),
-                // state.status.isLoading
-                //     ? const Center(child: CircularProgressIndicator())
-                //     :
                 _createButtonSubmit(),
                 const SizedBox(
-                  height: 100,
+                  height: 20,
                 ),
               ],
             ),
@@ -249,6 +242,7 @@ class ItemArticleLocal extends StatelessWidget {
             childWidget: MaterialButton(
               onPressed: () {
                 // => validateToSubmit(state)
+                cobaDelete(contributionArticle.collectionKey);
               },
               child: const Text(
                 KeyLanguage.labelButtonSubmit,
@@ -496,6 +490,12 @@ class ItemArticleLocal extends StatelessWidget {
         maxLines: maxLines,
       ),
     );
+  }
+
+  void cobaDelete(String? collectionKey) async {
+    print('HALOO $collectionKey');
+    var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
+    await tblContributionBoxx.delete('$collectionKey');
   }
 
 }

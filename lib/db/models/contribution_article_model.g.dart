@@ -17,42 +17,45 @@ class ContributionArticleAdapter extends TypeAdapter<ContributionArticle> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ContributionArticle(
-      filename: fields[0] as String?,
-      timeSchedule: fields[1] as String?,
-      judulIndonesia: fields[2] as String?,
-      captionIndonesia: fields[3] as String?,
-      deskripsiIndonesia: fields[4] as String?,
-      tagKabupaten: fields[5] as String?,
-      tagKampung: fields[6] as String?,
-      tagDistrik: fields[7] as String?,
-      hideAuthor: fields[8] as bool?,
-      jenisFile: fields[9] as int?,
+      collectionKey: fields[0] as String?,
+      filename: fields[1] as String?,
+      timeSchedule: fields[2] as String?,
+      judulIndonesia: fields[3] as String?,
+      captionIndonesia: fields[4] as String?,
+      deskripsiIndonesia: fields[5] as String?,
+      tagKabupaten: fields[6] as String?,
+      tagKampung: fields[7] as String?,
+      tagDistrik: fields[8] as String?,
+      hideAuthor: fields[9] as bool?,
+      jenisFile: fields[10] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ContributionArticle obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
-      ..write(obj.filename)
+      ..write(obj.collectionKey)
       ..writeByte(1)
-      ..write(obj.timeSchedule)
+      ..write(obj.filename)
       ..writeByte(2)
-      ..write(obj.judulIndonesia)
+      ..write(obj.timeSchedule)
       ..writeByte(3)
-      ..write(obj.captionIndonesia)
+      ..write(obj.judulIndonesia)
       ..writeByte(4)
-      ..write(obj.deskripsiIndonesia)
+      ..write(obj.captionIndonesia)
       ..writeByte(5)
-      ..write(obj.tagKabupaten)
+      ..write(obj.deskripsiIndonesia)
       ..writeByte(6)
-      ..write(obj.tagKampung)
+      ..write(obj.tagKabupaten)
       ..writeByte(7)
-      ..write(obj.tagDistrik)
+      ..write(obj.tagKampung)
       ..writeByte(8)
-      ..write(obj.hideAuthor)
+      ..write(obj.tagDistrik)
       ..writeByte(9)
+      ..write(obj.hideAuthor)
+      ..writeByte(10)
       ..write(obj.jenisFile);
   }
 
