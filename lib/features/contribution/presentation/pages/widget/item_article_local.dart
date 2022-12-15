@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 
 import '../../../../../db/models/contribution_article_model.dart';
 import '../../../../../shared/common/key_language.dart';
@@ -71,25 +72,9 @@ class ItemArticleLocal extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(child: Text(contributionArticle.hideAuthor! ? 'Publish Author' : 'Private Author', style: const TextStyle(color: Colors.black54),)),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.deepOrange
-                        ),
-                        alignment: Alignment.centerRight,
-                        child: MaterialButton(
-                          onPressed: (){
-                            _showDialogEdit(context, contributionArticle);
-                          },
-                          child: Row(
-                            children: const [
-                              Text('Edit', style: TextStyle(color: Colors.white),),
-                              SizedBox(width: 6,),
-                              Icon(Icons.edit, size: 15, color: Colors.white,)
-                            ],
-                          ),
-                        ),
-                      )
+                      _buttonEdit(context),
+                      SizedBox(width: 6,),
+                      _buttonUpToServer(context),
                     ],
                   ),
                 ),
@@ -134,115 +119,126 @@ class ItemArticleLocal extends StatelessWidget {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 16,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height - 150,
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 16,
+          child: BlocConsumer<SubmitArticleBloc, SubmitArticleState>(
+            listener: (context, state){
+              if(state.status.isSuccess){
+                Navigator.of(context).pop();
+                BlocProvider.of<ArticleBloc>(context).add(GetArticle(statusArticle: 0));
+                BlocProvider.of<SubmitArticleBloc>(context).add(ClearFormIMG());
+              }
+            },
+            builder: (context, state){
+              return SizedBox(
+                height: MediaQuery.of(context).size.height - 150,
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createFotoPlaceHolder(context, contributionArticle.filename, state.photoFileEdited),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createDateField(context, contributionArticle.timeSchedule),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createTitleFieldJudul(
+                        context: context,
+                        label: KeyLanguage.labelJudul,
+                        stateValidator: contributionArticle.judulIndonesia
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createDescriptionFieldCaption(
+                        context: context,
+                        label: KeyLanguage.labelCaptipn,
+                        maxLines: 3,
+                        stateValidator: contributionArticle.captionIndonesia
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createDescriptionFieldDeskripsi(
+                        context: context,
+                        label: KeyLanguage.labelDeskripsi,
+                        maxLines: 7,
+                        stateValidator: contributionArticle.deskripsiIndonesia
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 30),
+                      child: Text(KeyLanguage.labelLokasi, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createTitleFieldKabupaten(
+                        context: context,
+                        label: KeyLanguage.labelKabupaten,
+                        stateValidator: contributionArticle.tagKabupaten
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _createTitleFieldKampung(
+                        context: context,
+                        label: KeyLanguage.labelKampung,
+                        stateValidator: contributionArticle.tagKampung
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _createTitleFieldDistik(
+                        context: context,
+                        label: KeyLanguage.labelDistrik,
+                        stateValidator: contributionArticle.tagDistrik
+                    ),
+                    _createShowHideAuthor(context, contributionArticle.hideAuthor),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _createButtonSubmit(context),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-                _createFotoPlaceHolder(context, contributionArticle.filename),
-                const SizedBox(
-                  height: 16,
-                ),
-                _createDateField(context, contributionArticle.timeSchedule),
-                const SizedBox(
-                  height: 16,
-                ),
-                _createTitleFieldJudul(
-                    context: context,
-                    label: KeyLanguage.labelJudul,
-                    stateValidator: contributionArticle.judulIndonesia
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                _createDescriptionFieldCaption(
-                    context: context,
-                    label: KeyLanguage.labelCaptipn,
-                    maxLines: 3,
-                    stateValidator: contributionArticle.captionIndonesia
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                _createDescriptionFieldDeskripsi(
-                    context: context,
-                    label: KeyLanguage.labelDeskripsi,
-                    maxLines: 7,
-                    stateValidator: contributionArticle.deskripsiIndonesia
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text(KeyLanguage.labelLokasi, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                _createTitleFieldKabupaten(
-                    context: context,
-                    label: KeyLanguage.labelKabupaten,
-                    stateValidator: contributionArticle.tagKabupaten
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                _createTitleFieldKampung(
-                    context: context,
-                    label: KeyLanguage.labelKampung,
-                    stateValidator: contributionArticle.tagKampung
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                _createTitleFieldDistik(
-                    context: context,
-                    label: KeyLanguage.labelDistrik,
-                    stateValidator: contributionArticle.tagDistrik
-                ),
-                _createShowHideAuthor(context, contributionArticle.hideAuthor),
-                const SizedBox(
-                  height: 16,
-                ),
-                _createButtonSubmit(),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+              );
+            },
           ),
         );
       },
     );
   }
 
-  Widget _createFotoPlaceHolder(BuildContext context, String? filename) {
+  Widget _createFotoPlaceHolder(BuildContext context, String? filename, XFile? photoFileEdited) {
     return MaterialButton(
       onPressed: (){
         _showDialogPickImage(context);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Image.file(File(filename ?? '')),
+        child: photoFileEdited != null
+            ? photoFileEdited.path != ''
+            ? Image.file(File(photoFileEdited.path ?? ''))
+            : Image.file(File(filename ?? ''))
+            : Image.file(File(filename ?? '')),
       ),
     );
   }
 
-  Widget _createButtonSubmit() {
+  Widget _createButtonSubmit(BuildContext context) {
     return Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child:
-        // state.status.isLoading
-        //     ? const CircularProgressIndicator()
-        //     :
         RegulerButton(
             childWidget: MaterialButton(
               onPressed: () {
-                // => validateToSubmit(state)
-                cobaDelete(contributionArticle.collectionKey);
+                updateArticleLocal(context, contributionArticle.collectionKey, contributionArticle.filename);
               },
               child: const Text(
                 KeyLanguage.labelButtonSubmit,
@@ -373,7 +369,7 @@ class ItemArticleLocal extends StatelessWidget {
 
     if (pickedFotoFile != null) {
       BlocProvider.of<SubmitArticleBloc>(context).add(
-          GetImageArticle(
+          GetImageArticleEdited(
             imageFile: pickedFotoFile,
           )
       );
@@ -492,10 +488,54 @@ class ItemArticleLocal extends StatelessWidget {
     );
   }
 
-  void cobaDelete(String? collectionKey) async {
-    print('HALOO $collectionKey');
-    var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
-    await tblContributionBoxx.delete('$collectionKey');
+  void updateArticleLocal(BuildContext context, String? collectionKey, String? filename) {
+    BlocProvider.of<SubmitArticleBloc>(context).add(SaveUpdateToLocalArticle(
+        collectionKey: collectionKey,
+        fileExisting: filename
+    ));
+  }
+
+  _buttonUpToServer(BuildContext context) {
+    return Container(
+      height: 35,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.deepOrange
+      ),
+      child: MaterialButton(
+        onPressed: (){},
+        child: Row(
+          children: [
+            Text('Upload ke server', style: TextStyle(color: Colors.white),),
+            SizedBox(width: 6,),
+            Icon(Icons.upload, size: 16, color: Colors.white,)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buttonEdit(BuildContext context) {
+    return Container(
+      height: 35,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.green  
+      ),
+      alignment: Alignment.centerRight,
+      child: MaterialButton(
+        onPressed: (){
+          _showDialogEdit(context, contributionArticle);
+        },
+        child: Row(
+          children: const [
+            Text('Edit', style: TextStyle(color: Colors.white),),
+            SizedBox(width: 6,),
+            Icon(Icons.edit, size: 15, color: Colors.white,)
+          ],
+        ),
+      ),
+    );
   }
 
 }

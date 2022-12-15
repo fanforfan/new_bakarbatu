@@ -63,6 +63,19 @@ class GetImageArticle extends SubmitArticleEvent {
   ];
 }
 
+class GetImageArticleEdited extends SubmitArticleEvent {
+  final XFile imageFile;
+
+  GetImageArticleEdited({
+    required this.imageFile
+  });
+
+  @override
+  List<Object?> get props => [
+    imageFile
+  ];
+}
+
 class PickAudio extends SubmitArticleEvent {
   final File? audioFile;
 
@@ -152,6 +165,17 @@ class ClearFormIMG extends SubmitArticleEvent {
 class ValidateToSubmitArticle extends SubmitArticleEvent {
   @override
   List<Object?> get props => [];
+}
+
+class SaveUpdateToLocalArticle extends SubmitArticleEvent {
+  final String? collectionKey;
+  final String? fileExisting;
+
+  SaveUpdateToLocalArticle({this.collectionKey, this.fileExisting});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [collectionKey, fileExisting];
+
 }
 /// END FOR IMAGE
 

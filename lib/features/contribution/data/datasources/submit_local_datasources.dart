@@ -12,6 +12,8 @@ abstract class SubmitLocalDatasources {
   Future<bool?> saveToLocalArticle(ArticleRequestEntity data);
 
   Future<Box<ContributionArticle>?> getArticleLocal();
+
+  Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey});
 }
 
 class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
@@ -73,6 +75,33 @@ class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
       //   hideAuthor: data.hideAuthor,
       //   jenisFile: data.jenisFile
       // ));
+      return true;
+    }catch (error){
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey}) async {
+    try{
+      var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
+
+      await tblContributionBoxx.put(
+          collectionKey,
+          ContributionArticle(
+              collectionKey: collectionKey,
+              filename: data.articleFile?.path,
+              timeSchedule: data.timeSchedule,
+              judulIndonesia: data.judulIndonesia,
+              captionIndonesia: data.captionIndonesia,
+              deskripsiIndonesia: data.deskripsiIndonesia,
+              tagKabupaten: data.tagKabupaten,
+              tagKampung: data.tagKampung,
+              tagDistrik: data.tagDistrik,
+              hideAuthor: data.hideAuthor,
+              jenisFile: data.jenisFile
+          )
+      );
       return true;
     }catch (error){
       return false;

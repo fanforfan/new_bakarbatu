@@ -115,4 +115,14 @@ class ContributionRepositoryImpl implements ContributionRepository {
     }
   }
 
+  @override
+  Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey}) async {
+    try{
+      final response = await submitLocalDatasources.saveUpdateToLocalArticle(data: data, collectionKey: collectionKey);
+      return response;
+    }catch (error){
+      return false;
+    }
+  }
+
 }

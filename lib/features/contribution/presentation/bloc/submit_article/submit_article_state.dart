@@ -13,6 +13,7 @@ class SubmitArticleState extends Equatable {
   final SubmitStateStatus status;
   final File? videoFile;
   final XFile? photoFile;
+  final XFile? photoFileEdited;
   final String? titleArticle;
   final String? descriptionArticle;
   final bool? hideAuthor;
@@ -47,6 +48,7 @@ class SubmitArticleState extends Equatable {
     this.status = SubmitStateStatus.initial,
     this.videoFile,
     this.photoFile,
+    this.photoFileEdited,
     this.titleArticle,
     this.descriptionArticle,
     this.hideAuthor,
@@ -77,6 +79,7 @@ class SubmitArticleState extends Equatable {
     status,
     videoFile,
     photoFile,
+    photoFileEdited,
     titleArticle,
     descriptionArticle,
     hideAuthor,
@@ -106,6 +109,7 @@ class SubmitArticleState extends Equatable {
     SubmitStateStatus? status,
     File? videoFile,
     XFile? photoFile,
+    XFile? photoFileEdited,
     String? titleArticle,
     String? descriptionArticle,
     bool? hideAuthor,
@@ -135,6 +139,7 @@ class SubmitArticleState extends Equatable {
         status: status ?? this.status,
         videoFile: videoFile ?? this.videoFile,
         photoFile: photoFile ?? this.photoFile,
+        photoFileEdited: photoFileEdited ?? this.photoFileEdited,
         titleArticle: titleArticle ?? this.titleArticle,
         descriptionArticle: descriptionArticle ?? this.descriptionArticle,
         hideAuthor: hideAuthor ?? this.hideAuthor,
