@@ -134,7 +134,10 @@ class _ArticleFotoState extends State<ArticleFoto> {
   }
 
   Widget _createFotoPlaceHolder(SubmitArticleState state) {
+    print('JANCOOK L ${state.photoFile?.path}');
     return state.photoFile != null
+        ?
+    state.photoFile!.path != ''
         ?
     MaterialButton(
       onPressed: (){
@@ -146,33 +149,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
       ),
     )
         :
-    MaterialButton(
-      onPressed: () {
-        _showDialogPickImage();
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-                width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
-            color: const Color.fromARGB(255, 250, 250, 250),
-            borderRadius: BorderRadius.circular(20)),
-        padding: const EdgeInsets.only(top: 40, bottom: 40),
-        width: double.infinity,
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/icons/ic_pick_video.png',
-              width: 50,
-            ),
-            const Text(
-              KeyLanguage.labelTakePhoto,
-              style: TextStyle(
-                  color: Color.fromARGB(255, 154, 0, 0), fontSize: 11),
-            ),
-          ],
-        ),
-      ),
-    );
+    _defaultButtonImage() : _defaultButtonImage();
   }
 
   Widget _createButtonSubmit(SubmitArticleState state) {
@@ -414,5 +391,35 @@ class _ArticleFotoState extends State<ArticleFoto> {
         ),
       );
     });
+  }
+
+  Widget _defaultButtonImage() {
+    return MaterialButton(
+      onPressed: () {
+        _showDialogPickImage();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
+            color: const Color.fromARGB(255, 250, 250, 250),
+            borderRadius: BorderRadius.circular(20)),
+        padding: const EdgeInsets.only(top: 40, bottom: 40),
+        width: double.infinity,
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/icons/ic_pick_video.png',
+              width: 50,
+            ),
+            const Text(
+              KeyLanguage.labelTakePhoto,
+              style: TextStyle(
+                  color: Color.fromARGB(255, 154, 0, 0), fontSize: 11),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

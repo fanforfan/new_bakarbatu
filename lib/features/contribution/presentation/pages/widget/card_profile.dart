@@ -73,26 +73,31 @@ class _CardProfileState extends State<CardProfile> {
                         ),
                       ),
                     ),
-                    MaterialButton(
-                      onPressed: (){
-                        BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
-                      },
+                    const SizedBox(height: 6),
+                    Align(
+                      alignment: Alignment.centerLeft,
                       child: Container(
+                        height: 30,
+                        width: 80,
                         padding: EdgeInsets.only(top: 6, bottom: 6),
-                        margin: EdgeInsets.only(right: 30),
+                        // margin: EdgeInsets.only(right: 30),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.deepOrange
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.red
                         ),
-                        child: Row(
-                          children: const [
-                            SizedBox(width: 20,),
-                            Icon(Icons.exit_to_app, size: 15, color: Colors.white,),
-                            SizedBox(width: 6,),
-                            Text('Logout', style: TextStyle(color: Colors.white, fontSize: 10),)
-                          ],
+                        child: MaterialButton(
+                          onPressed: (){
+                            BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
+                          },
+                          child: Row(
+                            children: const [
+                              Icon(Icons.exit_to_app, size: 15, color: Colors.white,),
+                              SizedBox(width: 6,),
+                              Text('Logout', style: TextStyle(color: Colors.white, fontSize: 10),)
+                            ],
+                          ),
                         ),
-                      ),
+                      )
                     )
                   ],
                 ),

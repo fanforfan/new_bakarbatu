@@ -5,36 +5,40 @@ part 'contribution_article_model.g.dart';
 @HiveType(typeId: 1)
 class ContributionArticle {
   @HiveField(0)
-  final String? filename;
+  final String? collectionKey;
 
   @HiveField(1)
-  final String? timeSchedule;
+  final String? filename;
 
   @HiveField(2)
-  final String? judulIndonesia;
+  final String? timeSchedule;
 
   @HiveField(3)
-  final String? captionIndonesia;
+  final String? judulIndonesia;
 
   @HiveField(4)
-  final String? deskripsiIndonesia;
+  final String? captionIndonesia;
 
   @HiveField(5)
-  final String? tagKabupaten;
+  final String? deskripsiIndonesia;
 
   @HiveField(6)
-  final String? tagKampung;
+  final String? tagKabupaten;
 
   @HiveField(7)
-  final String? tagDistrik;
+  final String? tagKampung;
 
   @HiveField(8)
-  final bool? hideAuthor;
+  final String? tagDistrik;
 
   @HiveField(9)
+  final bool? hideAuthor;
+
+  @HiveField(10)
   final int? jenisFile;
 
   ContributionArticle({
+    this.collectionKey,
     this.filename,
     this.timeSchedule,
     this.judulIndonesia,

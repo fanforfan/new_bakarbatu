@@ -8,6 +8,7 @@ import 'package:new_bakarbatu/features/contribution/data/datasources/submit_loca
 import 'package:new_bakarbatu/features/contribution/data/models/article_response.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
+import 'package:new_bakarbatu/shared/common/key_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../datasources/contribution_remote_datasources.dart';
@@ -71,8 +72,9 @@ class ContributionRepositoryImpl implements ContributionRepository {
     try{
       var listData = <DataNewsroom>[];
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      final response = await contributionRemoteDatasources.getArticleOnline(prefs.getInt('id'), prefs.getString('token'));
+      final response = await contributionRemoteDatasources.getArticleOnline(prefs.getInt(KeyPreferenches.idUser), prefs.getString(KeyPreferenches.token));
       if(response != null){
+        print('INI KANlll');
         if(response.rc == '0000'){
           if(response.dataNewsroom != null){
             for(var i=0; i<response.dataNewsroom!.length; i++){
@@ -111,6 +113,16 @@ class ContributionRepositoryImpl implements ContributionRepository {
       final response = await contributionRemoteDatasources.saveToServerArticle(data, prefs);
     }catch (error){
       debugPrint('$error');
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey}) async {
+    try{
+      final response = await submitLocalDatasources.saveUpdateToLocalArticle(data: data, collectionKey: collectionKey);
+      return response;
+    }catch (error){
       return false;
     }
   }

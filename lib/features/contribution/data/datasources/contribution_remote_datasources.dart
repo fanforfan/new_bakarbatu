@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:new_bakarbatu/features/contribution/data/models/article_response.dart';
 import 'package:http/http.dart' as http;
@@ -21,27 +23,34 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
   @override
   Future<ArticleResponse?> getArticleOnline(int? idUser, String? token) async {
     try{
+      Response response;
+      var dio = Dio();
       ArticleResponse? dataArticle;
       var headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
-      };
-      var request = http.Request('POST', Uri.parse('http://api.bakarbatu.id/api/list_newsroom'));
-      request.bodyFields = {
-        'id_user': '$idUser'
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token'
       };
 
-      request.headers.addAll(headers);
+      response = await dio.post(
+        'http://api.bakarbatu.id/api/list_newsroom',
+        data: {
+          'id_user': '$idUser'
+        },
+        options: Options(
+          headers: headers,
+        ),
+      );
 
-      http.StreamedResponse response = await request.send();
+      print('JALAN KAN YAK $idUser ${response.statusCode} ${response.data} $headers ');
 
       if (response.statusCode == 200) {
-        var data = await response.stream.bytesToString();
-        dataArticle = ArticleResponse.fromJson(json.decode(data));
+        dataArticle = ArticleResponse.fromJson(response.data);
       }
       else {
-        debugPrint(response.reasonPhrase);
+        debugPrint(response.statusMessage);
       }
+
+      print('DATAART : ${dataArticle?.dataNewsroom}');
 
       return dataArticle;
     }catch (error){
@@ -53,30 +62,41 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
   Future saveToServerArticle(ArticleRequestEntity data, SharedPreferences prefs) async {
     // TODO: implement saveToServerArticle
     try{
+      Response response;
+      var dio = Dio();
+
       var token = prefs.getString(KeyPreferenches.token);
 
       var headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token'
       };
-      var request = http.MultipartRequest('POST', Uri.parse('http://api.bakarbatu.id/api/list_newsroom'));
-      request.headers.addAll(headers);
-      request.fields['id_user'] = '${prefs.getString(KeyPreferenches.idUser)}';
-      request.fields['title'] = '${data.judulIndonesia}';
-      request.fields['caption'] = '${data.captionIndonesia}';
-      request.fields['description'] = '${data.deskripsiIndonesia}';
-      request.fields['open_public'] = '1';
-      request.fields['kabuten'] = '${data.tagKabupaten}';
-      request.fields['distrik'] = '${data.tagDistrik}';
-      request.fields['kampung'] = '${data.tagKampung}';
-      request.files.add(await http.MultipartFile.fromPath('file_upload', data.articleFile!.path));
-      request.fields['time_publish'] = '${data.timeSchedule}';
-      request.fields['hidden_article'] = '${data.hideAuthor! ? 1 : 0}';
 
-      http.StreamedResponse response = await request.send();
+      String fileName = data.articleFile!.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'id_user': '${prefs.getInt(KeyPreferenches.idUser)}',
+        'tittle': '${data.judulIndonesia}',
+        'caption': '${data.captionIndonesia}',
+        'description': '${data.deskripsiIndonesia}',
+        'open_public': '1',
+        'kabupaten': '${data.tagKabupaten}',
+        'distrik': '${data.tagDistrik}',
+        'kampung': '${data.tagKampung}',
+        'file_upload': await MultipartFile.fromFile(data.articleFile!.path, filename:fileName),
+        'time_publish': '${data.timeSchedule}',
+        'hidden_article': '${data.hideAuthor! ? 1 : 0}',
+        'komunitasid': '${prefs.getInt(KeyPreferenches.komunitasId)}'
+      });
 
-      print('DATA : $response');
-      // var response = await http.Response.fromStream(await request.send());
+      response = await dio.post(
+        'http://api.bakarbatu.id/api/newsroom/new_article',
+        data: formData,
+        options: Options(
+          headers: headers,
+        ),
+      );
+
+      print('INI LHOO : ${response.statusCode} ${response.data}');
 
     }catch (error){
       debugPrint('DATASOURCES : $error');

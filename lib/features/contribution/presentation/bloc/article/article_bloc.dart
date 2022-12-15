@@ -31,6 +31,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
         if(response != null){
           response.values.map((e) => listArticle.add(
             ContributionArticle(
+              collectionKey: e.collectionKey,
               filename: e.filename,
               timeSchedule: e.timeSchedule,
               judulIndonesia: e.judulIndonesia,

@@ -32,6 +32,7 @@ class _ArticleLocalState extends State<ArticleLocal> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: state.article!.length,
                   itemBuilder: (context, index){
+                    print('INI ITEMNYA : ${state.article![index].collectionKey}');
                     return ItemArticleLocal(contributionArticle: state.article![index]);
                   },
                 ),
