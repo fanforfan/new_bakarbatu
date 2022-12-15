@@ -9,6 +9,7 @@ class ItemArticleOnline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('URL IMAGE : ${dataNewsroom.articleUrl}');
     return Container(
       color: const Color(0xFF800000),
       padding: const EdgeInsets.only(left: 20, right: 20),

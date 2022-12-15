@@ -148,7 +148,6 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     ));
   }
 
-
   _submitArticleBasic(SubmitArticleBasic event, Emitter<SubmitArticleState> emit) async {
     emit(state.copyWith(
         status: SubmitStateStatus.loading
@@ -215,7 +214,7 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
         var date = DateTime.now();
         var mainDirectory = await getApplicationDocumentsDirectory();
         var path = mainDirectory.path;
-        var fileName = "Bakar_Batu_${state.judulIndonesiaIMG!.replaceAll(' ', '_')}_${date.toString().replaceAll(' ', '').replaceAll('.', '').replaceAll('-', '').replaceAll('/', '').replaceAll(':', '')}";
+        var fileName = "Bakar_Batu_${state.judulIndonesiaIMG!.replaceAll(' ', '_')}_${date.toString().replaceAll(' ', '').replaceAll('.', '').replaceAll('-', '').replaceAll('/', '').replaceAll(':', '')}.jpg";
         var newImage = await File(state.photoFile!.path).copy("$path/$fileName");
 
         var data = ArticleRequestEntity(
@@ -231,9 +230,9 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
             hideAuthor: state.hideAuthor ?? true
         );
 
-        // var connectivityResult = await (Connectivity().checkConnectivity());
-        //
-        // if(connectivityResult == ConnectivityResult.none){
+        var connectivityResult = await (Connectivity().checkConnectivity());
+
+        if(connectivityResult == ConnectivityResult.none){
           var response = await contributionUsecase.saveToLocalArticle(data: data);
           if(response!){
             emit(state.copyWith(
@@ -249,9 +248,10 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
                 status: SubmitStateStatus.error
             ));
           }
-        // }else{
-        //   var response = await contributionUsecase.saveToServerArticle(data: data);
-        // }
+        }else{
+          print('JALANKAN YANG INI');
+          var response = await contributionUsecase.saveToServerArticle(data: data);
+        }
       }
     }catch (error){
       debugPrint('ERROR PROSESS : $error');
