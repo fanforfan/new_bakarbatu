@@ -54,4 +54,8 @@ class ContributionUsecase implements UsecaseContribution {
     return await repository.saveUpdateToLocalArticle(data: data, collectionKey: collectionKey);
   }
 
+  Future<bool?> saveToServerArticleVideo({required ArticleRequestEntity data}) async {
+    return await repository.saveToServerArticleVideo(data);
+  }
+
 }

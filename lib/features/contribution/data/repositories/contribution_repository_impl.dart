@@ -111,6 +111,7 @@ class ContributionRepositoryImpl implements ContributionRepository {
     try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final response = await contributionRemoteDatasources.saveToServerArticle(data, prefs);
+      return response;
     }catch (error){
       debugPrint('$error');
       return false;
@@ -123,6 +124,19 @@ class ContributionRepositoryImpl implements ContributionRepository {
       final response = await submitLocalDatasources.saveUpdateToLocalArticle(data: data, collectionKey: collectionKey);
       return response;
     }catch (error){
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> saveToServerArticleVideo(ArticleRequestEntity data) async {
+    // TODO: implement saveToServerArticleVideo
+    try{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final response = await contributionRemoteDatasources.saveToServerArticleVideo(data, prefs);
+      return response;
+    }catch (error){
+      debugPrint('$error');
       return false;
     }
   }

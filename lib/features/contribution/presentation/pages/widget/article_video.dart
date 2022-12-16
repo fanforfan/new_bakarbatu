@@ -112,7 +112,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
                   ? const Center(child: CircularProgressIndicator())
                   : _createButtonSubmit(state),
               const SizedBox(
-                height: 16,
+                height: 100,
               ),
             ],
           ),

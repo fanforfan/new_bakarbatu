@@ -28,6 +28,12 @@ class _HomePageState extends State<HomePage> {
     setPrefs();
   }
 
+  @override
+  void dispose() {
+    _HomePageState();
+    super.dispose();
+  }
+
   void setPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
@@ -113,29 +119,6 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              // ButtonBar(
-              //   alignment: MainAxisAlignment.center,
-              //   children: <Widget>[
-              //     ElevatedButton(
-              //       child: Icon(Icons.arrow_back),
-              //       onPressed: () {
-              //         webViewController?.goBack();
-              //       },
-              //     ),
-              //     ElevatedButton(
-              //       child: Icon(Icons.arrow_forward),
-              //       onPressed: () {
-              //         webViewController?.goForward();
-              //       },
-              //     ),
-              //     ElevatedButton(
-              //       child: Icon(Icons.refresh),
-              //       onPressed: () {
-              //         webViewController?.reload();
-              //       },
-              //     ),
-              //   ],
-              // ),
             ])),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
