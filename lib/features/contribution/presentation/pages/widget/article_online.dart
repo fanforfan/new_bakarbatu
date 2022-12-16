@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/item_article_online.dart';
+import 'package:new_bakarbatu/shared/widgets/shimmer_loading_article.dart';
 
 import '../../bloc/article/article_bloc.dart';
 
@@ -18,10 +19,14 @@ class _ArticleOnlineState extends State<ArticleOnline> {
       bloc: BlocProvider.of<ArticleBloc>(context)..add(GetArticle(statusArticle: 1)),
       builder: (context, state){
         if(state.status.isLoading){
-          return const Center(
-            child: CircularProgressIndicator(),
+          return ListView.builder(
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return const ShimmerLoadingArticle();
+            },
           );
-        }else{
+        }
+        else{
           if(state.articleOnline != null && state.articleOnline!.isNotEmpty){
             return Container(
               color: const Color(0xFF800000),

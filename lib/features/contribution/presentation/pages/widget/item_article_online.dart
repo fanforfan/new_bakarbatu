@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_downloader/image_downloader.dart';
+import 'package:new_bakarbatu/shared/widgets/shimmer_loading_article.dart';
+import 'package:new_bakarbatu/shared/widgets/shimmer_loading_image.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../data/models/article_response.dart';
+import '../detail_video.dart';
 
 class ItemArticleOnline extends StatelessWidget {
   final DataNewsroom dataNewsroom;
@@ -9,16 +16,47 @@ class ItemArticleOnline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('URL IMAGE : ${dataNewsroom.articleUrl}');
     return Container(
       color: const Color(0xFF800000),
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          dataNewsroom.articleUrl.toString().contains('.mp4')
+              ?
+          Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
+            ),
+            child: MaterialButton(
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailVideo(fileName: dataNewsroom.articleUrl,)
+                    )
+                );
+              },
+              child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
+            ),
+          )
+              :
           ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
-              child: Image.network('${dataNewsroom.articleUrl}')
+              child: Image.network(
+                '${dataNewsroom.articleUrl}',
+                fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget image, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return image;
+                  return const SizedBox(
+                    child: Center(
+                      child: ShimmerLoadingImage()
+                    ),
+                  );
+                },
+              ),
           ),
           const SizedBox(height: 1),
           Container(

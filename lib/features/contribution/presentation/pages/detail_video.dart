@@ -21,7 +21,11 @@ class _DetailVideoState extends State<DetailVideo> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _videoPlayerController = VideoPlayerController.file(File('${widget.fileName}'));
+    if(widget.fileName.toString().contains('http')){
+      _videoPlayerController = VideoPlayerController.network('${widget.fileName}');
+    }else{
+      _videoPlayerController = VideoPlayerController.file(File('${widget.fileName}'));
+    }
   }
 
   @override

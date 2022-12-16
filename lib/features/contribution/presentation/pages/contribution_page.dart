@@ -109,6 +109,7 @@ class _ContributionPageState extends State<ContributionPage>
 
   Widget _buildTabPage() {
     return const TabBarView(
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         ArticleLocal(),
         ArticleOnline()
