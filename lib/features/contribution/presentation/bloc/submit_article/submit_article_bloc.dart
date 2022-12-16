@@ -249,8 +249,21 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
             ));
           }
         }else{
-          print('JALANKAN YANG INI');
           var response = await contributionUsecase.saveToServerArticle(data: data);
+          if(response!){
+            emit(state.copyWith(
+                status: SubmitStateStatus.success
+            ));
+            if(state.status.isSuccess){
+              emit(state.copyWith(
+                  status: SubmitStateStatus.initial
+              ));
+            }
+          }else{
+            emit(state.copyWith(
+                status: SubmitStateStatus.error
+            ));
+          }
         }
       }
     }catch (error){

@@ -164,7 +164,7 @@ class SubmitArtikelVideoBloc extends Bloc<SubmitArtikelVideoEvent, SubmitArticle
         var date = DateTime.now();
         var mainDirectory = await getApplicationDocumentsDirectory();
         var path = mainDirectory.path;
-        var fileName = "Bakar_Batu_${state.judulIndonesiaVid!.replaceAll(' ', '_')}_${date.toString().replaceAll(' ', '').replaceAll('.', '').replaceAll('-', '').replaceAll('/', '').replaceAll(':', '')}";
+        var fileName = "Bakar_Batu_${state.judulIndonesiaVid!.replaceAll(' ', '_')}_${date.toString().replaceAll(' ', '').replaceAll('.', '').replaceAll('-', '').replaceAll('/', '').replaceAll(':', '')}.mp4";
         var newVideo = await File(state.videoFile!.path).copy("$path/$fileName");
 
         var data = ArticleRequestEntity(
@@ -182,22 +182,41 @@ class SubmitArtikelVideoBloc extends Bloc<SubmitArtikelVideoEvent, SubmitArticle
 
         var connectivityResult = await (Connectivity().checkConnectivity());
 
-        // if(connectivityResult == ConnectivityResult.none){
+        if(connectivityResult == ConnectivityResult.none){
+          var response = await contributionUsecase.saveToLocalArticle(data: data);
 
-        var response = await contributionUsecase.saveToLocalArticle(data: data);
-        print('HALO : HALO $response');
-        if(response!){
-          emit(state.copyWith(
-              status: SubmitVideoStateStatus.success
-          ));
+          if(response!){
+            emit(state.copyWith(
+                status: SubmitVideoStateStatus.success
+            ));
+            if(state.status.isSuccess){
+              emit(state.copyWith(
+                  status: SubmitVideoStateStatus.initial
+              ));
+            }
+          }else{
+            emit(state.copyWith(
+                status: SubmitVideoStateStatus.error
+            ));
+          }
         }else{
-          emit(state.copyWith(
-              status: SubmitVideoStateStatus.error
-          ));
+          print('MASUKAN KE SERVER');
+          var response = await contributionUsecase.saveToServerArticleVideo(data: data);
+          if(response!){
+            emit(state.copyWith(
+                status: SubmitVideoStateStatus.success
+            ));
+            if(state.status.isSuccess){
+              emit(state.copyWith(
+                  status: SubmitVideoStateStatus.initial
+              ));
+            }
+          }else{
+            emit(state.copyWith(
+                status: SubmitVideoStateStatus.error
+            ));
+          }
         }
-        // }else{
-        //   print('MASUKAN KE SERVER');
-        // }
       }
     }catch (error){
       debugPrint('ERROR PROSESS : $error');

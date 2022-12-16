@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_downloader/image_downloader.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
 import 'package:new_bakarbatu/features/contribution/data/datasources/submit_local_datasources.dart';
@@ -10,7 +9,6 @@ import 'package:new_bakarbatu/features/contribution/data/models/article_response
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
 import 'package:new_bakarbatu/shared/common/key_preferences.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../datasources/contribution_remote_datasources.dart';
@@ -113,6 +111,7 @@ class ContributionRepositoryImpl implements ContributionRepository {
     try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final response = await contributionRemoteDatasources.saveToServerArticle(data, prefs);
+      return response;
     }catch (error){
       debugPrint('$error');
       return false;
@@ -125,6 +124,19 @@ class ContributionRepositoryImpl implements ContributionRepository {
       final response = await submitLocalDatasources.saveUpdateToLocalArticle(data: data, collectionKey: collectionKey);
       return response;
     }catch (error){
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> saveToServerArticleVideo(ArticleRequestEntity data) async {
+    // TODO: implement saveToServerArticleVideo
+    try{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final response = await contributionRemoteDatasources.saveToServerArticleVideo(data, prefs);
+      return response;
+    }catch (error){
+      debugPrint('$error');
       return false;
     }
   }

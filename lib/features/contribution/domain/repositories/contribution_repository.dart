@@ -19,4 +19,6 @@ abstract class ContributionRepository {
   Future<bool?> saveToServerArticle(ArticleRequestEntity data);
 
   Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey});
+
+  Future<bool?> saveToServerArticleVideo(ArticleRequestEntity data);
 }
