@@ -18,7 +18,7 @@ class ShimmerLoadingImage extends StatelessWidget {
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                 color: Colors.white,
               ),
-              height: 100.0,
+              height: 150.0,
               width: double.infinity,
             ),
           ],

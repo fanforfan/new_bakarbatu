@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:new_bakarbatu/shared/widgets/shimmer_loading_article.dart';
@@ -45,18 +46,18 @@ class ItemArticleOnline extends StatelessWidget {
               :
           ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
-              child: Image.network(
-                '${dataNewsroom.articleUrl}',
+              child: CachedNetworkImage(
+                imageUrl: '${dataNewsroom.articleUrl}',
                 fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget image, ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return image;
-                  return const SizedBox(
-                    child: Center(
-                      child: ShimmerLoadingImage()
-                    ),
+                alignment: Alignment.topCenter,
+                height: 150,
+                width: MediaQuery.of(context).size.width,
+                placeholder: (context, url){
+                  return const Center(
+                    child: ShimmerLoadingImage()
                   );
                 },
-              ),
+              )
           ),
           const SizedBox(height: 1),
           Container(
