@@ -80,7 +80,7 @@ class DataNewsroom {
     nameEditor = json['name_editor'];
     keywordId = json['keyword_id'];
     articleImageId = json['article_image_id'];
-    articleUrl = json['article_url'];
+    articleUrl = json['thumnail_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -99,7 +99,7 @@ class DataNewsroom {
     data['name_editor'] = this.nameEditor;
     data['keyword_id'] = this.keywordId;
     data['article_image_id'] = this.articleImageId;
-    data['article_url'] = this.articleUrl;
+    data['thumnail_url'] = this.articleUrl;
     return data;
   }
 }

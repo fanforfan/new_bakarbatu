@@ -13,14 +13,22 @@ class ArticleState extends Equatable {
   final ArticleStatus status;
   final String? message;
   final List<ContributionArticle>? article;
+  final List<DataNewsroom>? allArticleOnline;
   final List<DataNewsroom>? articleOnline;
+  final List<DataNewsroom>? articleSearchResult;
+  final bool? isSearch;
+  final int? page;
 
 
   const ArticleState({
     this.status = ArticleStatus.initial,
     this.message,
     this.article,
-    this.articleOnline
+    this.allArticleOnline,
+    this.articleOnline,
+    this.articleSearchResult,
+    this.isSearch,
+    this.page
   });
 
   @override
@@ -28,20 +36,32 @@ class ArticleState extends Equatable {
     status,
     message,
     article,
-    articleOnline
+    allArticleOnline,
+    articleOnline,
+    articleSearchResult,
+    isSearch,
+    page
   ];
 
   ArticleState copyWith({
     ArticleStatus? status,
     String? message,
     List<ContributionArticle>? article,
-    List<DataNewsroom>? articleOnline
+    List<DataNewsroom>? allArticleOnline,
+    List<DataNewsroom>? articleOnline,
+    List<DataNewsroom>? articleSearchResult,
+    bool? isSearch,
+    int? page
   }) {
     return ArticleState(
         status: status ?? this.status,
         message: message ?? this.message,
         article: article ?? this.article,
-        articleOnline: articleOnline ?? this.articleOnline
+        allArticleOnline: allArticleOnline ?? this.allArticleOnline,
+        articleOnline: articleOnline ?? this.articleOnline,
+        articleSearchResult: articleSearchResult ?? this.articleSearchResult,
+        isSearch: isSearch ?? this.isSearch,
+        page: page ?? this.page
     );
   }
 }

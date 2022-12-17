@@ -8,6 +8,7 @@ import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/aut
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/download%20_video/download_video_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article_video/submit_artikel_video_bloc.dart';
 import 'package:new_bakarbatu/features/home/presentation/bloc/home_bloc.dart';
@@ -48,10 +49,13 @@ class MyApp extends StatelessWidget {
             create: (context) => di.sl<BottomNavBloc>()
         ),
         BlocProvider<ObsecurePasswordCubit>(
-          create: (context) => di.sl<ObsecurePasswordCubit>(),
+            create: (context) => di.sl<ObsecurePasswordCubit>(),
         ),
         BlocProvider<ArticleBloc>(
-          create: (context) => di.sl<ArticleBloc>(),
+            create: (context) => di.sl<ArticleBloc>(),
+        ),
+        BlocProvider<DownloadVideoBloc>(
+            create: (context) => di.sl<DownloadVideoBloc>()
         )
       ], 
       child: MaterialApp(
