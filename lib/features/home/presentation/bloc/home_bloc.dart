@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:new_bakarbatu/features/home/domain/usecases/home_usecase.dart';
 
 part 'home_event.dart';
@@ -32,11 +31,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         status: HomeStateStatus.error
       ));
     }
-
-    // if(event.urlWebview.isEmpty){
-    //   debugPrint('URL GA ADA');
-    // }else{
-    //   debugPrint('URL ADA ${event.urlWebview}');
-    // }
   }
 }

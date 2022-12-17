@@ -40,10 +40,16 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           image: 'assets/icons/ic_article.png',
                           size: 19.0,
                           pressed: () {
-                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                                statusMenu: true,
-                                idMenu: 0
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Container(
+                                height: 70.0,
+                                child: Text('Future development'),
+                              ),
                             ));
+                            // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                            //     statusMenu: true,
+                            //     idMenu: 0
+                            // ));
                           }
                       ),
                       const SizedBox(width: 16,),
@@ -52,10 +58,16 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           image: 'assets/icons/ic_mic.png',
                           size: 20.0,
                           pressed: () {
-                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                                statusMenu: true,
-                                idMenu: 1
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Container(
+                                height: 70.0,
+                                child: Text('Future development'),
+                              ),
                             ));
+                            // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                            //     statusMenu: true,
+                            //     idMenu: 1
+                            // ));
                           }
                       ),
                       const SizedBox(width: 16,),
