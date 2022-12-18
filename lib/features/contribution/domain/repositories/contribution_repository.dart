@@ -21,4 +21,6 @@ abstract class ContributionRepository {
   Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey});
 
   Future<bool?> saveToServerArticleVideo(ArticleRequestEntity data);
+
+  Future<bool?> deleteLocalArticle({String? collectionKey});
 }

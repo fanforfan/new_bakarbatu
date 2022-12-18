@@ -11,6 +11,7 @@ extension SubmitStateStatusX on SubmitStateStatus {
 
 class SubmitArticleState extends Equatable {
   final SubmitStateStatus status;
+  final SubmitStateStatus statusDelete;
   final File? videoFile;
   final XFile? photoFile;
   final XFile? photoFileEdited;
@@ -46,6 +47,7 @@ class SubmitArticleState extends Equatable {
 
   const SubmitArticleState({
     this.status = SubmitStateStatus.initial,
+    this.statusDelete = SubmitStateStatus.initial,
     this.videoFile,
     this.photoFile,
     this.photoFileEdited,
@@ -77,6 +79,7 @@ class SubmitArticleState extends Equatable {
   @override
   List<Object?> get props => [
     status,
+    statusDelete,
     videoFile,
     photoFile,
     photoFileEdited,
@@ -107,6 +110,7 @@ class SubmitArticleState extends Equatable {
 
   SubmitArticleState copyWith({
     SubmitStateStatus? status,
+    SubmitStateStatus? statusDelete,
     File? videoFile,
     XFile? photoFile,
     XFile? photoFileEdited,
@@ -137,6 +141,7 @@ class SubmitArticleState extends Equatable {
   }) {
     return SubmitArticleState(
         status: status ?? this.status,
+        statusDelete: statusDelete ?? this.statusDelete,
         videoFile: videoFile ?? this.videoFile,
         photoFile: photoFile ?? this.photoFile,
         photoFileEdited: photoFileEdited ?? this.photoFileEdited,

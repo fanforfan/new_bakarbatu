@@ -85,14 +85,20 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
   _getNextArticle(GetNextArticle event, Emitter<ArticleState> emit) async {
     List<DataNewsroom> listData = [];
     var firstIndex = state.articleOnline!.length;
-    var lastIndex = state.articleOnline!.length+4;
-    var page;
+    int lastIndex;
+    int? page;
     if(state.allArticleOnline != null){
+
+      if((state.allArticleOnline!.length-state.articleOnline!.length) < 4){
+        lastIndex = state.articleOnline!.length+(state.allArticleOnline!.length-state.articleOnline!.length);
+      }else{
+        lastIndex = state.articleOnline!.length+4;
+      }
+
       if(state.articleOnline!.length != state.allArticleOnline!.length){
         page = state.page!+1;
         if(state.allArticleOnline!.isNotEmpty){
           for(int i=firstIndex; i<lastIndex; i++){
-            print('NO. $i');
             listData.add(state.allArticleOnline![i]);
           }
         }
@@ -100,8 +106,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
         page = state.page;
       }
     }
+    var summaryData = state.articleOnline!+listData;
     emit(state.copyWith(
-      articleOnline: state.articleOnline!+listData,
+      articleOnline: summaryData,
       page: page
     ));
   }

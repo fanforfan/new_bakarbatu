@@ -309,7 +309,6 @@ class ItemArticleLocal extends StatelessWidget {
     );
   }
 
-
   _showDialogPickImage(BuildContext context) {
     showDialog(context: context, builder: (_){
       return Dialog(
@@ -496,22 +495,35 @@ class ItemArticleLocal extends StatelessWidget {
   }
 
   _buttonUpToServer(BuildContext context) {
-    return Container(
-      height: 35,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.deepOrange
-      ),
-      child: MaterialButton(
-        onPressed: (){},
-        child: Row(
-          children: [
-            Text('Upload ke server', style: TextStyle(color: Colors.white),),
-            SizedBox(width: 6,),
-            Icon(Icons.upload, size: 16, color: Colors.white,)
-          ],
-        ),
-      ),
+    return BlocConsumer<SubmitArticleBloc, SubmitArticleState>(
+        builder: (context, state){
+          return state.statusDelete.isLoading
+              ? const CircularProgressIndicator()
+              : Container(
+            height: 35,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.deepOrange
+            ),
+            child: MaterialButton(
+              onPressed: (){
+                BlocProvider.of<SubmitArticleBloc>(context).add(LocalToServer(data: contributionArticle));
+              },
+              child: Row(
+                children: const [
+                  Text('Upload ke server', style: TextStyle(color: Colors.white),),
+                  SizedBox(width: 6,),
+                  Icon(Icons.upload, size: 16, color: Colors.white,)
+                ],
+              ),
+            ),
+          );
+        },
+        listener: (context, state){
+          if(state.statusDelete.isSuccess){
+            BlocProvider.of<ArticleBloc>(context).add(GetArticle(statusArticle: 0));
+          }
+        }
     );
   }
 

@@ -177,6 +177,16 @@ class SaveUpdateToLocalArticle extends SubmitArticleEvent {
   List<Object?> get props => [collectionKey, fileExisting];
 
 }
+
+class LocalToServer extends SubmitArticleEvent {
+  final ContributionArticle? data;
+
+  LocalToServer({this.data});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [data];
+
+}
 /// END FOR IMAGE
 
 

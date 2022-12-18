@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
+import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
 import 'package:new_bakarbatu/shared/common/key_language.dart';
@@ -104,6 +105,7 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     on<ValidateToSubmitArticle>(_submitArticle);
     on<SubmitArticleBasic>(_submitArticleBasic);
     on<SaveUpdateToLocalArticle>(_saveUpdateArticle);
+    on<LocalToServer>(_sendLocalToServer);
   }
 
   _getVideoCamera(PickVideo event, Emitter<SubmitArticleState> emit) async {
@@ -248,7 +250,8 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
                 status: SubmitStateStatus.error
             ));
           }
-        }else{
+        }
+        else{
           var response = await contributionUsecase.saveToServerArticle(data: data);
           if(response!){
             emit(state.copyWith(
@@ -326,6 +329,56 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
       debugPrint('ERROR PROSESS BLOC : $error');
       emit(state.copyWith(
           status: SubmitStateStatus.error
+      ));
+    }
+  }
+
+  _sendLocalToServer(LocalToServer event, Emitter<SubmitArticleState> emit) async {
+    print('SAMPAI GAK?');
+    try{
+      emit(state.copyWith(
+          statusDelete: SubmitStateStatus.loading
+      ));
+      var data = ArticleRequestEntity(
+          articleFile: File('${event.data?.filename}'),
+          jenisFile: 1,
+          timeSchedule: event.data?.timeSchedule,
+          judulIndonesia: event.data?.judulIndonesia,
+          captionIndonesia: event.data?.captionIndonesia,
+          deskripsiIndonesia: event.data?.deskripsiIndonesia,
+          tagKabupaten: event.data?.tagKabupaten,
+          tagKampung: event.data?.tagKampung,
+          tagDistrik: event.data?.tagDistrik,
+          hideAuthor: event.data?.hideAuthor ?? true
+      );
+      var response = await contributionUsecase.saveToServerArticle(data: data);
+      if(response!){
+        print('UPLOAD BERHASIL : ${event.data?.collectionKey}');
+        var deleted = await contributionUsecase.deleteLocalArticle(collectionKey: event.data?.collectionKey);
+        if(deleted!){
+          emit(state.copyWith(
+            statusDelete: SubmitStateStatus.success
+          ));
+          if(state.statusDelete.isSuccess){
+            emit(state.copyWith(
+                statusDelete: SubmitStateStatus.initial
+            ));
+          }
+        }else{
+          emit(state.copyWith(
+              statusDelete: SubmitStateStatus.error
+          ));
+        }
+      }else{
+        print('UPLOAD GAGAL : $response');
+        emit(state.copyWith(
+            statusDelete: SubmitStateStatus.error
+        ));
+      }
+    }catch (error){
+      print('BLOC : $error');
+      emit(state.copyWith(
+          statusDelete: SubmitStateStatus.error
       ));
     }
   }
