@@ -66,6 +66,7 @@ class SubmitArtikelVideoBloc extends Bloc<SubmitArtikelVideoEvent, SubmitArticle
       emit(
           state.copyWith(
               status: SubmitVideoStateStatus.initial,
+              videoFile: File(''),
               timeScheduleVid: '',
               judulIndonesiaVid: '',
               captionIndonesiaVid: '',
@@ -199,16 +200,19 @@ class SubmitArtikelVideoBloc extends Bloc<SubmitArtikelVideoEvent, SubmitArticle
                 status: SubmitVideoStateStatus.error
             ));
           }
-        }else{
+        }
+        else{
           print('MASUKAN KE SERVER');
           var response = await contributionUsecase.saveToServerArticleVideo(data: data);
-          if(response!){
-            emit(state.copyWith(
-                status: SubmitVideoStateStatus.success
-            ));
-            if(state.status.isSuccess){
+          print('ANJEENG ${response}');
+          if(response != null){
+            if(response){
               emit(state.copyWith(
-                  status: SubmitVideoStateStatus.initial
+                  status: SubmitVideoStateStatus.success
+              ));
+            }else{
+              emit(state.copyWith(
+                  status: SubmitVideoStateStatus.error
               ));
             }
           }else{

@@ -5,6 +5,8 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article_video/submit_artikel_video_bloc.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
@@ -37,7 +39,18 @@ class _ArticleVideoState extends State<ArticleVideo> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SubmitArtikelVideoBloc, SubmitArticleVideoState>(
+    return BlocConsumer<SubmitArtikelVideoBloc, SubmitArticleVideoState>(
+      listener: (context, state){
+        print('INI BUKAN SIH? ${state.status}');
+        if(state.status.isSuccess){
+          print('INI BUKAN SIH?');
+          BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+              statusMenu: true,
+              idMenu: 2
+          ));
+          BlocProvider.of<SubmitArtikelVideoBloc>(context).add(ClearFormVid());
+        }
+      },
       builder: (context, state){
         return Container(
           decoration: const BoxDecoration(
@@ -127,6 +140,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
         _getVideoFromCamera('First Pick');
       },
       child: state.videoFile != null
+          ? state.videoFile!.path != ''
           ? GestureDetector(
         onTap: (){
           _showDialogVideoPlay(context, state.chewieController, state.videoController);
@@ -136,28 +150,8 @@ class _ArticleVideoState extends State<ArticleVideo> {
           child: Image.file(File(state.thumbnailVideo!.path)),
         )
       )
-          : Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-                width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
-            color: const Color.fromARGB(255, 250, 250, 250),
-            borderRadius: BorderRadius.circular(20)),
-        padding: const EdgeInsets.only(top: 40, bottom: 40),
-        width: double.infinity,
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/icons/ic_video_rec.png',
-              width: 50,
-            ),
-            const Text(
-              'Take video',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 154, 0, 0), fontSize: 11),
-            )
-          ],
-        ),
-      ),
+          : defaultButtonVideo()
+          : defaultButtonVideo(),
     );
   }
 
@@ -412,5 +406,30 @@ class _ArticleVideoState extends State<ArticleVideo> {
     _videoPlayerController?.pause();
     _chewieController?.pause();
     Navigator.pop(_dialogContext);
+  }
+
+  Widget defaultButtonVideo() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+              width: 0.5, color: const Color.fromARGB(255, 154, 0, 0)),
+          color: const Color.fromARGB(255, 250, 250, 250),
+          borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.only(top: 40, bottom: 40),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Image.asset(
+            'assets/icons/ic_video_rec.png',
+            width: 50,
+          ),
+          const Text(
+            'Take video',
+            style: TextStyle(
+                color: Color.fromARGB(255, 154, 0, 0), fontSize: 11),
+          )
+        ],
+      ),
+    );
   }
 }
