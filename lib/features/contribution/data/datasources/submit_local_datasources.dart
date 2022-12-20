@@ -88,6 +88,8 @@ class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
     try{
       var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
 
+      print('SAMPAI LHO HARUSNYA : ${data.articleFile?.path}');
+
       await tblContributionBoxx.put(
           collectionKey,
           ContributionArticle(

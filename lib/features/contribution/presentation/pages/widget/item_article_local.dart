@@ -112,7 +112,7 @@ class ItemArticleLocal extends StatelessWidget {
     );
   }
 
-  void _showDialogEdit(BuildContext context, ContributionArticle contributionArticle) {
+  void _showDialogEdit(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -135,18 +135,18 @@ class ItemArticleLocal extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    _createFotoPlaceHolder(context, contributionArticle.filename, state.photoFileEdited),
+                    _createFotoPlaceHolder(context, state.editPhotoFile?.path),
                     const SizedBox(
                       height: 16,
                     ),
-                    _createDateField(context, contributionArticle.timeSchedule),
+                    _createDateField(context, state.editTimeSchedule),
                     const SizedBox(
                       height: 16,
                     ),
                     _createTitleFieldJudul(
                         context: context,
                         label: KeyLanguage.labelJudul,
-                        stateValidator: contributionArticle.judulIndonesia
+                        stateValidator: state.editJudulIndonesia
                     ),
                     const SizedBox(
                       height: 16,
@@ -155,7 +155,7 @@ class ItemArticleLocal extends StatelessWidget {
                         context: context,
                         label: KeyLanguage.labelCaptipn,
                         maxLines: 3,
-                        stateValidator: contributionArticle.captionIndonesia
+                        stateValidator: state.editDeskripsiIndonesia
                     ),
                     const SizedBox(
                       height: 16,
@@ -164,7 +164,7 @@ class ItemArticleLocal extends StatelessWidget {
                         context: context,
                         label: KeyLanguage.labelDeskripsi,
                         maxLines: 7,
-                        stateValidator: contributionArticle.deskripsiIndonesia
+                        stateValidator: state.editDeskripsiIndonesia
                     ),
                     const SizedBox(
                       height: 16,
@@ -179,7 +179,7 @@ class ItemArticleLocal extends StatelessWidget {
                     _createTitleFieldKabupaten(
                         context: context,
                         label: KeyLanguage.labelKabupaten,
-                        stateValidator: contributionArticle.tagKabupaten
+                        stateValidator: state.editTagKabupaten
                     ),
                     const SizedBox(
                       height: 10,
@@ -187,7 +187,7 @@ class ItemArticleLocal extends StatelessWidget {
                     _createTitleFieldKampung(
                         context: context,
                         label: KeyLanguage.labelKampung,
-                        stateValidator: contributionArticle.tagKampung
+                        stateValidator: state.editTagKampung
                     ),
                     const SizedBox(
                       height: 10,
@@ -195,13 +195,13 @@ class ItemArticleLocal extends StatelessWidget {
                     _createTitleFieldDistik(
                         context: context,
                         label: KeyLanguage.labelDistrik,
-                        stateValidator: contributionArticle.tagDistrik
+                        stateValidator: state.editTagDistrik
                     ),
-                    _createShowHideAuthor(context, contributionArticle.hideAuthor),
+                    _createShowHideAuthor(context, state.edithideAuthor),
                     const SizedBox(
                       height: 16,
                     ),
-                    _createButtonSubmit(context),
+                    _createButtonSubmit(context, state.editPhotoFile),
                     const SizedBox(
                       height: 20,
                     ),
@@ -215,30 +215,26 @@ class ItemArticleLocal extends StatelessWidget {
     );
   }
 
-  Widget _createFotoPlaceHolder(BuildContext context, String? filename, XFile? photoFileEdited) {
+  Widget _createFotoPlaceHolder(BuildContext context, String? filename) {
     return MaterialButton(
       onPressed: (){
         _showDialogPickImage(context);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: photoFileEdited != null
-            ? photoFileEdited.path != ''
-            ? Image.file(File(photoFileEdited.path ?? ''))
-            : Image.file(File(filename ?? ''))
-            : Image.file(File(filename ?? '')),
+        child: Image.file(File(filename ?? '')),
       ),
     );
   }
 
-  Widget _createButtonSubmit(BuildContext context) {
+  Widget _createButtonSubmit(BuildContext context, XFile? editPhotoFile) {
     return Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child:
         RegulerButton(
             childWidget: MaterialButton(
               onPressed: () {
-                updateArticleLocal(context, contributionArticle.collectionKey, contributionArticle.filename);
+                updateArticleLocal(context, contributionArticle.collectionKey, editPhotoFile?.path);
               },
               child: const Text(
                 KeyLanguage.labelButtonSubmit,
@@ -257,7 +253,7 @@ class ItemArticleLocal extends StatelessWidget {
         Switch(
           value: hideAuthor ?? false,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeHideAuthor(value: value));
+            BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeHideAuthor(value: value));
           },
           activeTrackColor: const Color.fromARGB(255, 188, 0, 0),
           activeColor: const Color.fromARGB(255, 133, 0, 0),
@@ -296,13 +292,13 @@ class ItemArticleLocal extends StatelessWidget {
             firstDate: DateTime(2000),
             lastDate: DateTime(2100),
             onChanged: (val){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeSchedule(value: val));
+              BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeTimeSchedule(value: val));
             },
             validator: (val){
               return null;
             },
             onSaved: (val){
-              BlocProvider.of<SubmitArticleBloc>(context).add(ChangeTimeSchedule(value: val));
+              BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeTimeSchedule(value: val));
             },
           )
       ),
@@ -388,7 +384,7 @@ class ItemArticleLocal extends StatelessWidget {
           obsecure: false,
           value: stateValidator,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeJudulIndonesia(value: value));
+            BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeJudulIndonesia(value: value));
           }),
     );
   }
@@ -406,7 +402,7 @@ class ItemArticleLocal extends StatelessWidget {
           obsecure: false,
           value: stateValidator,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKabutapen(value: value));
+            BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeKabutapen(value: value));
           }),
     );
   }
@@ -424,7 +420,7 @@ class ItemArticleLocal extends StatelessWidget {
           obsecure: false,
           value: stateValidator,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeKampung(value: value));
+            BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeKampung(value: value));
           }),
     );
   }
@@ -442,7 +438,7 @@ class ItemArticleLocal extends StatelessWidget {
           obsecure: false,
           value: stateValidator,
           onChanged: (value) {
-            BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDistrik(value: value));
+            BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeDistrik(value: value));
           }),
     );
   }
@@ -460,7 +456,7 @@ class ItemArticleLocal extends StatelessWidget {
         obsecure: false,
         value: stateValidator,
         onChanged: (value) {
-          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeCaptionIndonesia(value: value));
+          BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeCaptionIndonesia(value: value));
         },
         maxLines: maxLines,
       ),
@@ -480,7 +476,7 @@ class ItemArticleLocal extends StatelessWidget {
         obsecure: false,
         value: stateValidator,
         onChanged: (value) {
-          BlocProvider.of<SubmitArticleBloc>(context).add(ChangeDeskripsiIndonesia(value: value));
+          BlocProvider.of<SubmitArticleBloc>(context).add(EditChangeDeskripsiIndonesia(value: value));
         },
         maxLines: maxLines,
       ),
@@ -537,7 +533,8 @@ class ItemArticleLocal extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: MaterialButton(
         onPressed: (){
-          _showDialogEdit(context, contributionArticle);
+          BlocProvider.of<SubmitArticleBloc>(context).add(SetDetailArticleToEdit(data: contributionArticle));
+          _showDialogEdit(context);
         },
         child: Row(
           children: const [

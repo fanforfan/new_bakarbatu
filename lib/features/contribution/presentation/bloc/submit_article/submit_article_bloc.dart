@@ -42,7 +42,7 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     );
     on<GetImageArticleEdited>((event, emit) =>
         emit(state.copyWith(
-          photoFileEdited: event.imageFile,
+          editPhotoFile: event.imageFile,
         ))
     );
     on<ChangeTimeSchedule>((event, emit) => emit(
@@ -106,6 +106,62 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     on<SubmitArticleBasic>(_submitArticleBasic);
     on<SaveUpdateToLocalArticle>(_saveUpdateArticle);
     on<LocalToServer>(_sendLocalToServer);
+
+    on<SetDetailArticleToEdit>((event, emit) {
+      emit(state.copyWith(
+          editPhotoFile: XFile('${event.data?.filename}'),
+          editTimeSchedule: '${event.data?.timeSchedule}',
+          editJudulIndonesia: '${event.data?.judulIndonesia}',
+          editCaptionIndonesia: '${event.data?.captionIndonesia}',
+          editDeskripsiIndonesia: '${event.data?.deskripsiIndonesia}',
+          editTagKabupaten: '${event.data?.tagKabupaten}',
+          editTagKampung: '${event.data?.tagKampung}',
+          editTagDistrik: '${event.data?.tagDistrik}',
+          edithideAuthor: event.data?.hideAuthor
+      ));
+    });
+
+  ///UNTUK EDIT IMAGE
+    on<EditChangeTimeSchedule>((event, emit) => emit(
+        state.copyWith(
+          editTimeSchedule: event.value,
+        )
+    ));
+    on<EditChangeJudulIndonesia>((event, emit) => emit(
+        state.copyWith(
+          editJudulIndonesia: event.value,
+        )
+    ));
+    on<EditChangeCaptionIndonesia>((event, emit) => emit(
+        state.copyWith(
+          editCaptionIndonesia: event.value,
+        )
+    ));
+    on<EditChangeDeskripsiIndonesia>((event, emit) => emit(
+        state.copyWith(
+          editDeskripsiIndonesia: event.value,
+        )
+    ));
+    on<EditChangeKabutapen>((event, emit) => emit(
+        state.copyWith(
+          editTagKabupaten: event.value,
+        )
+    ));
+    on<EditChangeKampung>((event, emit) => emit(
+        state.copyWith(
+          editTagKampung: event.value,
+        )
+    ));
+    on<EditChangeDistrik>((event, emit) => emit(
+        state.copyWith(
+          editTagDistrik: event.value,
+        )
+    ));
+    on<EditChangeHideAuthor>((event, emit) => emit(
+        state.copyWith(
+          hideAuthor: event.value,
+        )
+    ));
   }
 
   _getVideoCamera(PickVideo event, Emitter<SubmitArticleState> emit) async {
@@ -284,29 +340,29 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
 
     try{
 
-      File fileArticle;
-
-      if(state.photoFileEdited != null){
-        if(state.photoFileEdited!.path != event.fileExisting){
-          fileArticle = File(state.photoFileEdited!.path);
-        }else{
-          fileArticle = File('${event.fileExisting}');
-        }
-      }else{
-        fileArticle = File('${event.fileExisting}');
-      }
+      // File fileArticle;
+      //
+      // if(state.photoFileEdited != null){
+      //   if(state.photoFileEdited!.path != event.fileExisting){
+      //     fileArticle = File(state.photoFileEdited!.path);
+      //   }else{
+      //     fileArticle = File('${event.fileExisting}');
+      //   }
+      // }else{
+      //   fileArticle = File('${event.fileExisting}');
+      // }
 
       var data = ArticleRequestEntity(
-          articleFile: fileArticle,
+          articleFile: File('${state.editPhotoFile?.path}'),
           jenisFile: 1,
-          timeSchedule: state.timeSchedule,
-          judulIndonesia: state.judulIndonesiaIMG,
-          captionIndonesia: state.captionIndonesiaIMG,
-          deskripsiIndonesia: state.deskripsiIndonesiaIMG,
-          tagKabupaten: state.tagKabupatenIMG,
-          tagKampung: state.tagKampungIMG,
-          tagDistrik: state.tagDistrikIMG,
-          hideAuthor: state.hideAuthor ?? true
+          timeSchedule: state.editTimeSchedule,
+          judulIndonesia: state.editJudulIndonesia,
+          captionIndonesia: state.editCaptionIndonesia,
+          deskripsiIndonesia: state.editDeskripsiIndonesia,
+          tagKabupaten: state.editTagKabupaten,
+          tagKampung: state.editTagKampung,
+          tagDistrik: state.editTagDistrik,
+          hideAuthor: state.edithideAuthor ?? true
       );
 
       var response = await contributionUsecase.saveUpdateToLocalArticle(data: data, collectionKey: event.collectionKey);

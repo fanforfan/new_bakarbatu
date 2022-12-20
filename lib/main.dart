@@ -22,7 +22,6 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ContributionArticleAdapter());
-  // await Hive.openBox('articleBakarbatu');
   runApp(const MyApp());
 }
 
@@ -59,6 +58,7 @@ class MyApp extends StatelessWidget {
         )
       ], 
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'BAKAR BATU',
         theme: ThemeData(
           primarySwatch: Colors.blue,

@@ -185,9 +185,91 @@ class LocalToServer extends SubmitArticleEvent {
   @override
   // TODO: implement props
   List<Object?> get props => [data];
+}
 
+class SetDetailArticleToEdit extends SubmitArticleEvent {
+  final ContributionArticle? data;
+
+  SetDetailArticleToEdit({this.data});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [data];
 }
 /// END FOR IMAGE
+
+/// FOR IMAGE EDIT
+class EditChangeTimeSchedule extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeTimeSchedule({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeJudulIndonesia extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeJudulIndonesia({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeCaptionIndonesia extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeCaptionIndonesia({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeDeskripsiIndonesia extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeDeskripsiIndonesia({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeKabutapen extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeKabutapen({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeKampung extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeKampung({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeDistrik extends SubmitArticleEvent {
+  final String? value;
+
+  EditChangeDistrik({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditChangeHideAuthor extends SubmitArticleEvent {
+  final bool? value;
+
+  EditChangeHideAuthor({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
 
 
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RegulerTextArea extends StatelessWidget {
+  final TextEditingController? controller;
   final InputDecoration inputDecoration;
   final bool obsecure;
   final Function(dynamic value) onChanged;
@@ -8,7 +9,8 @@ class RegulerTextArea extends StatelessWidget {
   final String? value;
 
   const RegulerTextArea({
-    super.key, 
+    super.key,
+    this.controller,
     required this.inputDecoration, 
     required this.obsecure, 
     required this.onChanged,
@@ -18,6 +20,7 @@ class RegulerTextArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       maxLines: maxLines,
       obscureText: obsecure,
       decoration: inputDecoration,
