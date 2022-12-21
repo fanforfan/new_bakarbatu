@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
+import 'package:new_bakarbatu/features/contribution/data/models/article_response.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
 import 'package:new_bakarbatu/shared/common/key_language.dart';
@@ -118,6 +119,16 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
           editTagKampung: '${event.data?.tagKampung}',
           editTagDistrik: '${event.data?.tagDistrik}',
           edithideAuthor: event.data?.hideAuthor
+      ));
+    });
+
+    on<SetDetailArticleOnline>((event, emit) {
+      emit(state.copyWith(
+          editPhotoFile: XFile('${event.data?.articleUrl}'),
+          editTimeSchedule: '${event.data?.publish}',
+          editJudulIndonesia: '${event.data?.title}',
+          editCaptionIndonesia: '${event.data?.keywordId}',
+          editDeskripsiIndonesia: '${event.data?.description}',
       ));
     });
 

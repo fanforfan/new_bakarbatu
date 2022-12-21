@@ -61,7 +61,6 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                       return (index == (state.articleOnline!.length))
                           ? MaterialButton(
                         onPressed: (){
-                          print('INI KAN? !!');
                           BlocProvider.of<ArticleBloc>(context).add(GetNextArticle());
                         },
                         child: Container(

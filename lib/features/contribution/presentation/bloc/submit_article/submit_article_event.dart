@@ -196,6 +196,16 @@ class SetDetailArticleToEdit extends SubmitArticleEvent {
   // TODO: implement props
   List<Object?> get props => [data];
 }
+
+class SetDetailArticleOnline extends SubmitArticleEvent {
+  final DataNewsroom? data;
+
+  SetDetailArticleOnline({this.data});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [data];
+}
 /// END FOR IMAGE
 
 /// FOR IMAGE EDIT
