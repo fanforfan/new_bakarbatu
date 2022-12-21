@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/item_article_local.dart';
 
 import '../../bloc/article/article_bloc.dart';
@@ -32,7 +33,6 @@ class _ArticleLocalState extends State<ArticleLocal> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: state.article!.length,
                   itemBuilder: (context, index){
-                    print('INI ITEMNYA : ${state.article![index].collectionKey}');
                     return ItemArticleLocal(contributionArticle: state.article![index]);
                   },
                 ),
@@ -41,8 +41,14 @@ class _ArticleLocalState extends State<ArticleLocal> {
           }else{
             return Container(
               color: const Color(0xFF800000),
-              child: const Center(
-                child: Text("Empty Data"),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/images/empty_image.svg', width: 80.0,),
+                    const Text("Empty Data", style: TextStyle(color: Colors.white),),
+                  ],
+                ),
               ),
             );
           }

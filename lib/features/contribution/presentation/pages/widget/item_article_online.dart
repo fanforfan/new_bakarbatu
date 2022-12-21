@@ -1,15 +1,10 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_downloader/image_downloader.dart';
-import 'package:new_bakarbatu/features/contribution/presentation/bloc/download%20_video/download_video_bloc.dart';
-import 'package:new_bakarbatu/shared/widgets/shimmer_loading_article.dart';
 import 'package:new_bakarbatu/shared/widgets/shimmer_loading_image.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../../data/models/article_response.dart';
+import '../../bloc/submit_article/submit_article_bloc.dart';
 import '../detail_video.dart';
 
 class ItemArticleOnline extends StatelessWidget {
@@ -34,50 +29,16 @@ class ItemArticleOnline extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
             ),
-            child: BlocConsumer<DownloadVideoBloc, DownloadVideoState>(
-                listener: (context, state){
-                  if(state.status.isSuccess) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DetailVideo(fileName: state.fileVideoPath)
-                        )
-                    );
-                  }
-                },
-                builder: (context, state){
-                  if('${state.idLoading}' == '${dataNewsroom.idNewsroom}'){
-                    if(state.status.isLoading){
-                      return Stack(
-                        children: [
-                          const Center(
-                            child: SizedBox(
-                              width: 70,
-                              height: 70,
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                          Center(
-                            child: Text(state.progress ?? '-'   ),
-                          )
-                        ],
-                      );
-                    }else {
-                      return MaterialButton(
-                        onPressed: (){
-                          BlocProvider.of<DownloadVideoBloc>(context).add(DownloadVideo(urlVideo: '${dataNewsroom.articleUrl}', idArticle: '${dataNewsroom.idNewsroom}'));
-                        },
-                        child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
-                      );
-                    }
-                  }
-                  return MaterialButton(
-                    onPressed: (){
-                      BlocProvider.of<DownloadVideoBloc>(context).add(DownloadVideo(urlVideo: '${dataNewsroom.articleUrl}', idArticle: '${dataNewsroom.idNewsroom}'));
-                    },
-                    child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
-                  );
-                }
+            child: MaterialButton(
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailVideo(articleUrl: '${dataNewsroom.articleUrl}', idArticle: '${dataNewsroom.idNewsroom}')
+                    )
+                );
+              },
+              child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
             )
           )
               :
@@ -120,6 +81,8 @@ class ItemArticleOnline extends StatelessWidget {
                         Text('${dataNewsroom.saved}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
                         const SizedBox(width: 8,),
                         Text('${dataNewsroom.categoryName}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                        const SizedBox(width: 8,),
+                        _buttonEdit(context)
                       ],
                     )
                 ),
@@ -134,6 +97,127 @@ class ItemArticleOnline extends StatelessWidget {
           const SizedBox(height: 20,)
         ],
       ),
+    );
+  }
+
+  Widget _buttonEdit(BuildContext context) {
+    return Container(
+      height: 35,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.green
+      ),
+      alignment: Alignment.centerRight,
+      child: MaterialButton(
+        onPressed: (){
+          BlocProvider.of<SubmitArticleBloc>(context).add(SetDetailArticleOnline(data: dataNewsroom));
+          _showDialogEdit(context);
+        },
+        child: Row(
+          children: const [
+            Text('Edit', style: TextStyle(color: Colors.white),),
+            SizedBox(width: 6,),
+            Icon(Icons.edit, size: 15, color: Colors.white,)
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDialogEdit(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 16,
+          child: BlocBuilder<SubmitArticleBloc, SubmitArticleState>(
+            builder: (context, state){
+              return SizedBox(
+                height: MediaQuery.of(context).size.height - 150,
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text('${state.editJudulIndonesia}'),
+                    // _createFotoPlaceHolder(context, state.editPhotoFile?.path),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // _createDateField(context, state.editTimeSchedule),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // _createTitleFieldJudul(
+                    //     context: context,
+                    //     label: KeyLanguage.labelJudul,
+                    //     stateValidator: state.editJudulIndonesia
+                    // ),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // _createDescriptionFieldCaption(
+                    //     context: context,
+                    //     label: KeyLanguage.labelCaptipn,
+                    //     maxLines: 3,
+                    //     stateValidator: state.editDeskripsiIndonesia
+                    // ),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // _createDescriptionFieldDeskripsi(
+                    //     context: context,
+                    //     label: KeyLanguage.labelDeskripsi,
+                    //     maxLines: 7,
+                    //     stateValidator: state.editDeskripsiIndonesia
+                    // ),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.only(left: 30),
+                    //   child: Text(KeyLanguage.labelLokasi, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
+                    // ),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // _createTitleFieldKabupaten(
+                    //     context: context,
+                    //     label: KeyLanguage.labelKabupaten,
+                    //     stateValidator: state.editTagKabupaten
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    // _createTitleFieldKampung(
+                    //     context: context,
+                    //     label: KeyLanguage.labelKampung,
+                    //     stateValidator: state.editTagKampung
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    // _createTitleFieldDistik(
+                    //     context: context,
+                    //     label: KeyLanguage.labelDistrik,
+                    //     stateValidator: state.editTagDistrik
+                    // ),
+                    // _createShowHideAuthor(context, state.edithideAuthor),
+                    // const SizedBox(
+                    //   height: 16,
+                    // ),
+                    // _createButtonSubmit(context, state.editPhotoFile),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

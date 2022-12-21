@@ -58,4 +58,8 @@ class ContributionUsecase implements UsecaseContribution {
     return await repository.saveToServerArticleVideo(data);
   }
 
+  Future<bool?> deleteLocalArticle({String? collectionKey}) async {
+    return await repository.deleteLocalArticle(collectionKey: collectionKey);
+  }
+
 }

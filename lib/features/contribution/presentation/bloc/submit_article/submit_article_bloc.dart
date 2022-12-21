@@ -8,6 +8,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
+import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
+import 'package:new_bakarbatu/features/contribution/data/models/article_response.dart';
 import 'package:new_bakarbatu/features/contribution/domain/entities/article_request_entity.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
 import 'package:new_bakarbatu/shared/common/key_language.dart';
@@ -41,7 +43,7 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     );
     on<GetImageArticleEdited>((event, emit) =>
         emit(state.copyWith(
-          photoFileEdited: event.imageFile,
+          editPhotoFile: event.imageFile,
         ))
     );
     on<ChangeTimeSchedule>((event, emit) => emit(
@@ -104,6 +106,73 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
     on<ValidateToSubmitArticle>(_submitArticle);
     on<SubmitArticleBasic>(_submitArticleBasic);
     on<SaveUpdateToLocalArticle>(_saveUpdateArticle);
+    on<LocalToServer>(_sendLocalToServer);
+
+    on<SetDetailArticleToEdit>((event, emit) {
+      emit(state.copyWith(
+          editPhotoFile: XFile('${event.data?.filename}'),
+          editTimeSchedule: '${event.data?.timeSchedule}',
+          editJudulIndonesia: '${event.data?.judulIndonesia}',
+          editCaptionIndonesia: '${event.data?.captionIndonesia}',
+          editDeskripsiIndonesia: '${event.data?.deskripsiIndonesia}',
+          editTagKabupaten: '${event.data?.tagKabupaten}',
+          editTagKampung: '${event.data?.tagKampung}',
+          editTagDistrik: '${event.data?.tagDistrik}',
+          edithideAuthor: event.data?.hideAuthor
+      ));
+    });
+
+    on<SetDetailArticleOnline>((event, emit) {
+      emit(state.copyWith(
+          editPhotoFile: XFile('${event.data?.articleUrl}'),
+          editTimeSchedule: '${event.data?.publish}',
+          editJudulIndonesia: '${event.data?.title}',
+          editCaptionIndonesia: '${event.data?.keywordId}',
+          editDeskripsiIndonesia: '${event.data?.description}',
+      ));
+    });
+
+  ///UNTUK EDIT IMAGE
+    on<EditChangeTimeSchedule>((event, emit) => emit(
+        state.copyWith(
+          editTimeSchedule: event.value,
+        )
+    ));
+    on<EditChangeJudulIndonesia>((event, emit) => emit(
+        state.copyWith(
+          editJudulIndonesia: event.value,
+        )
+    ));
+    on<EditChangeCaptionIndonesia>((event, emit) => emit(
+        state.copyWith(
+          editCaptionIndonesia: event.value,
+        )
+    ));
+    on<EditChangeDeskripsiIndonesia>((event, emit) => emit(
+        state.copyWith(
+          editDeskripsiIndonesia: event.value,
+        )
+    ));
+    on<EditChangeKabutapen>((event, emit) => emit(
+        state.copyWith(
+          editTagKabupaten: event.value,
+        )
+    ));
+    on<EditChangeKampung>((event, emit) => emit(
+        state.copyWith(
+          editTagKampung: event.value,
+        )
+    ));
+    on<EditChangeDistrik>((event, emit) => emit(
+        state.copyWith(
+          editTagDistrik: event.value,
+        )
+    ));
+    on<EditChangeHideAuthor>((event, emit) => emit(
+        state.copyWith(
+          hideAuthor: event.value,
+        )
+    ));
   }
 
   _getVideoCamera(PickVideo event, Emitter<SubmitArticleState> emit) async {
@@ -248,7 +317,8 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
                 status: SubmitStateStatus.error
             ));
           }
-        }else{
+        }
+        else{
           var response = await contributionUsecase.saveToServerArticle(data: data);
           if(response!){
             emit(state.copyWith(
@@ -281,29 +351,29 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
 
     try{
 
-      File fileArticle;
-
-      if(state.photoFileEdited != null){
-        if(state.photoFileEdited!.path != event.fileExisting){
-          fileArticle = File(state.photoFileEdited!.path);
-        }else{
-          fileArticle = File('${event.fileExisting}');
-        }
-      }else{
-        fileArticle = File('${event.fileExisting}');
-      }
+      // File fileArticle;
+      //
+      // if(state.photoFileEdited != null){
+      //   if(state.photoFileEdited!.path != event.fileExisting){
+      //     fileArticle = File(state.photoFileEdited!.path);
+      //   }else{
+      //     fileArticle = File('${event.fileExisting}');
+      //   }
+      // }else{
+      //   fileArticle = File('${event.fileExisting}');
+      // }
 
       var data = ArticleRequestEntity(
-          articleFile: fileArticle,
+          articleFile: File('${state.editPhotoFile?.path}'),
           jenisFile: 1,
-          timeSchedule: state.timeSchedule,
-          judulIndonesia: state.judulIndonesiaIMG,
-          captionIndonesia: state.captionIndonesiaIMG,
-          deskripsiIndonesia: state.deskripsiIndonesiaIMG,
-          tagKabupaten: state.tagKabupatenIMG,
-          tagKampung: state.tagKampungIMG,
-          tagDistrik: state.tagDistrikIMG,
-          hideAuthor: state.hideAuthor ?? true
+          timeSchedule: state.editTimeSchedule,
+          judulIndonesia: state.editJudulIndonesia,
+          captionIndonesia: state.editCaptionIndonesia,
+          deskripsiIndonesia: state.editDeskripsiIndonesia,
+          tagKabupaten: state.editTagKabupaten,
+          tagKampung: state.editTagKampung,
+          tagDistrik: state.editTagDistrik,
+          hideAuthor: state.edithideAuthor ?? true
       );
 
       var response = await contributionUsecase.saveUpdateToLocalArticle(data: data, collectionKey: event.collectionKey);
@@ -326,6 +396,56 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
       debugPrint('ERROR PROSESS BLOC : $error');
       emit(state.copyWith(
           status: SubmitStateStatus.error
+      ));
+    }
+  }
+
+  _sendLocalToServer(LocalToServer event, Emitter<SubmitArticleState> emit) async {
+    print('SAMPAI GAK?');
+    try{
+      emit(state.copyWith(
+          statusDelete: SubmitStateStatus.loading
+      ));
+      var data = ArticleRequestEntity(
+          articleFile: File('${event.data?.filename}'),
+          jenisFile: 1,
+          timeSchedule: event.data?.timeSchedule,
+          judulIndonesia: event.data?.judulIndonesia,
+          captionIndonesia: event.data?.captionIndonesia,
+          deskripsiIndonesia: event.data?.deskripsiIndonesia,
+          tagKabupaten: event.data?.tagKabupaten,
+          tagKampung: event.data?.tagKampung,
+          tagDistrik: event.data?.tagDistrik,
+          hideAuthor: event.data?.hideAuthor ?? true
+      );
+      var response = await contributionUsecase.saveToServerArticle(data: data);
+      if(response!){
+        print('UPLOAD BERHASIL : ${event.data?.collectionKey}');
+        var deleted = await contributionUsecase.deleteLocalArticle(collectionKey: event.data?.collectionKey);
+        if(deleted!){
+          emit(state.copyWith(
+            statusDelete: SubmitStateStatus.success
+          ));
+          if(state.statusDelete.isSuccess){
+            emit(state.copyWith(
+                statusDelete: SubmitStateStatus.initial
+            ));
+          }
+        }else{
+          emit(state.copyWith(
+              statusDelete: SubmitStateStatus.error
+          ));
+        }
+      }else{
+        print('UPLOAD GAGAL : $response');
+        emit(state.copyWith(
+            statusDelete: SubmitStateStatus.error
+        ));
+      }
+    }catch (error){
+      print('BLOC : $error');
+      emit(state.copyWith(
+          statusDelete: SubmitStateStatus.error
       ));
     }
   }

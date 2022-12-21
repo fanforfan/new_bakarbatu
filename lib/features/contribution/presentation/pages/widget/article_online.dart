@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/item_article_online.dart';
 import 'package:new_bakarbatu/shared/widgets/shimmer_loading_article.dart';
 
@@ -60,7 +61,6 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                       return (index == (state.articleOnline!.length))
                           ? MaterialButton(
                         onPressed: (){
-                          print('INI KAN? !!');
                           BlocProvider.of<ArticleBloc>(context).add(GetNextArticle());
                         },
                         child: Container(
@@ -99,7 +99,6 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                       return (index == (state.articleOnline!.length))
                           ? MaterialButton(
                         onPressed: (){
-                          print('INI KAN? ${state.page}');
                           BlocProvider.of<ArticleBloc>(context).add(GetNextArticle());
                         },
                         child: Container(
@@ -152,8 +151,14 @@ class _ArticleOnlineState extends State<ArticleOnline> {
           }else{
             return Container(
               color: const Color(0xFF800000),
-              child: const Center(
-                child: Text("Empty Data"),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/images/empty_image.svg', width: 80.0,),
+                    const Text("Empty Data", style: TextStyle(color: Colors.white),),
+                  ],
+                ),
               ),
             );
           }

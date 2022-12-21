@@ -41,14 +41,14 @@ class _CardProfileState extends State<CardProfile> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            offset: Offset(0, 0.5),
-            blurRadius: 0.1,
-            spreadRadius: 0.1,
-            color: Color(0xFF454544),
-          ),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(
+        //     offset: Offset(0, 0.5),
+        //     blurRadius: 0.1,
+        //     spreadRadius: 0.1,
+        //     color: Color(0xFF454544),
+        //   ),
+        // ],
       ),
       child: Column(
         children: [
@@ -56,6 +56,7 @@ class _CardProfileState extends State<CardProfile> {
             children: [
               const SizedBox(width: 10,),
               Expanded(
+                flex: 3,
                 child: Column(
                   children: [
                     Align(
@@ -103,12 +104,13 @@ class _CardProfileState extends State<CardProfile> {
                 ),
               ),
               const SizedBox(width: 20,),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Image.asset(
-                  'assets/images/profile.jpeg',
-                  height: 100.0,
-                  width: 100.0,
+              Expanded(
+                flex: 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Image.asset(
+                    'assets/images/profile.jpeg',
+                  ),
                 ),
               ),
               const SizedBox(width: 10,),

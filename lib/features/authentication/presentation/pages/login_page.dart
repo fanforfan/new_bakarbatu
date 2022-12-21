@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     BlocProvider.of<AuthenticationBloc>(context).stream.listen((state) {
       if (state.status.isSuccess) {
-        print('BERAPA');
         Navigator.pushReplacementNamed(context, Routes.contributionRoute);
       }
     });
@@ -34,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: buildBoddy(context)
     );
   }
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 18),
                   _createButtonLogin(state),
                   const SizedBox(height: 18),
-                  _createRegisterTextButton()
+                  // _createRegisterTextButton()
                 ],
               ),
             ),

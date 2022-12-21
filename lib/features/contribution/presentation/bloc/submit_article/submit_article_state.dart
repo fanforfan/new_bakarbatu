@@ -11,6 +11,7 @@ extension SubmitStateStatusX on SubmitStateStatus {
 
 class SubmitArticleState extends Equatable {
   final SubmitStateStatus status;
+  final SubmitStateStatus statusDelete;
   final File? videoFile;
   final XFile? photoFile;
   final XFile? photoFileEdited;
@@ -42,10 +43,21 @@ class SubmitArticleState extends Equatable {
   final String? tagDistrikVid;
   /// FOR WARNING IMAGE
   final String? warningMessageVid;
+  /// FOR EDIT
+  final XFile? editPhotoFile;
+  final String? editTimeSchedule;
+  final String? editJudulIndonesia;
+  final String? editCaptionIndonesia;
+  final String? editDeskripsiIndonesia;
+  final String? editTagKabupaten;
+  final String? editTagKampung;
+  final String? editTagDistrik;
+  final bool? edithideAuthor;
 
 
   const SubmitArticleState({
     this.status = SubmitStateStatus.initial,
+    this.statusDelete = SubmitStateStatus.initial,
     this.videoFile,
     this.photoFile,
     this.photoFileEdited,
@@ -72,11 +84,21 @@ class SubmitArticleState extends Equatable {
     this.tagKampungVid,
     this.tagDistrikVid,
     this.warningMessageVid,
+    this.editPhotoFile,
+    this.editTimeSchedule,
+    this.editJudulIndonesia,
+    this.editCaptionIndonesia,
+    this.editDeskripsiIndonesia,
+    this.editTagKabupaten,
+    this.editTagKampung,
+    this.editTagDistrik,
+    this.edithideAuthor
   });
 
   @override
   List<Object?> get props => [
     status,
+    statusDelete,
     videoFile,
     photoFile,
     photoFileEdited,
@@ -103,10 +125,20 @@ class SubmitArticleState extends Equatable {
     tagKampungVid,
     tagDistrikVid,
     warningMessageVid,
+    editPhotoFile,
+    editTimeSchedule,
+    editJudulIndonesia,
+    editCaptionIndonesia,
+    editDeskripsiIndonesia,
+    editTagKabupaten,
+    editTagKampung,
+    editTagDistrik,
+    edithideAuthor
   ];
 
   SubmitArticleState copyWith({
     SubmitStateStatus? status,
+    SubmitStateStatus? statusDelete,
     File? videoFile,
     XFile? photoFile,
     XFile? photoFileEdited,
@@ -133,10 +165,21 @@ class SubmitArticleState extends Equatable {
     String? tagKampungVid,
     String? tagDistrikVid,
     /// FOR WARNING IMAGE
-    String? warningMessageVid
+    String? warningMessageVid,
+    /// UNTUK EDIT
+     XFile? editPhotoFile,
+     String? editTimeSchedule,
+     String? editJudulIndonesia,
+     String? editCaptionIndonesia,
+     String? editDeskripsiIndonesia,
+     String? editTagKabupaten,
+     String? editTagKampung,
+     String? editTagDistrik,
+    bool? edithideAuthor
   }) {
     return SubmitArticleState(
         status: status ?? this.status,
+        statusDelete: statusDelete ?? this.statusDelete,
         videoFile: videoFile ?? this.videoFile,
         photoFile: photoFile ?? this.photoFile,
         photoFileEdited: photoFileEdited ?? this.photoFileEdited,
@@ -163,6 +206,15 @@ class SubmitArticleState extends Equatable {
         tagKampungVid: tagKampungVid ?? this.tagKampungVid,
         tagDistrikVid: tagDistrikVid ?? this.tagDistrikVid,
         warningMessageVid: warningMessageVid ?? this.warningMessageVid,
+        editPhotoFile: editPhotoFile ?? this.editPhotoFile,
+        editTimeSchedule: editTimeSchedule ?? this.editTimeSchedule,
+        editJudulIndonesia: editJudulIndonesia ?? this.editJudulIndonesia,
+        editCaptionIndonesia: editCaptionIndonesia ?? this.editCaptionIndonesia,
+        editDeskripsiIndonesia: editDeskripsiIndonesia ?? this.editDeskripsiIndonesia,
+        editTagKabupaten: editTagKabupaten ?? this.editTagKabupaten,
+        editTagKampung: editTagKampung ?? this.editTagKampung,
+        editTagDistrik: editTagDistrik ?? this.editTagDistrik,
+        edithideAuthor: edithideAuthor ?? this.edithideAuthor
     );
   }
 }

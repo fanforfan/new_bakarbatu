@@ -158,7 +158,7 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
       print('INI LHOO : ${response.statusCode} ${response.data}');
 
       if(response.statusCode == 200){
-        if(response.data['message'] == 'Success Saved Data on!'){
+        if(response.data['message'] == 'Success Saved Data!'){
           return true;
         }else{
           return false;

@@ -14,6 +14,8 @@ abstract class SubmitLocalDatasources {
   Future<Box<ContributionArticle>?> getArticleLocal();
 
   Future<bool?> saveUpdateToLocalArticle({required ArticleRequestEntity data, String? collectionKey});
+
+  Future<bool?> deleteLocalArticle({String? collectionKey});
 }
 
 class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
@@ -86,6 +88,8 @@ class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
     try{
       var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
 
+      print('SAMPAI LHO HARUSNYA : ${data.articleFile?.path}');
+
       await tblContributionBoxx.put(
           collectionKey,
           ContributionArticle(
@@ -113,6 +117,18 @@ class SubmitLocalDatasourcesImpl extends SubmitLocalDatasources {
     try{
       var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
       return tblContributionBoxx;
+    }catch (error){
+      return null;
+    }
+  }
+
+  @override
+  Future<bool?> deleteLocalArticle({String? collectionKey}) async {
+    // TODO: implement deleteLocalArticle
+    try{
+      var tblContributionBoxx = await Hive.openBox<ContributionArticle>('ContributionArticle');
+      await tblContributionBoxx.delete('$collectionKey');
+      return true;
     }catch (error){
       return null;
     }

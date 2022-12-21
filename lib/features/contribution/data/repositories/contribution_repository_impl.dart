@@ -141,4 +141,15 @@ class ContributionRepositoryImpl implements ContributionRepository {
     }
   }
 
+  @override
+  Future<bool?> deleteLocalArticle({String? collectionKey}) async {
+    // TODO: implement deleteLocalArticle
+    try{
+      final response = await submitLocalDatasources.deleteLocalArticle(collectionKey: collectionKey);
+      return response;
+    }catch (error){
+      return null;
+    }
+  }
+
 }

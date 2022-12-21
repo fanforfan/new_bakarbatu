@@ -40,12 +40,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           image: 'assets/icons/ic_article.png',
                           size: 19.0,
                           pressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Container(
-                                height: 70.0,
-                                child: Text('Future development'),
-                              ),
-                            ));
+                            Navigator.pop(context);
                             // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
                             //     statusMenu: true,
                             //     idMenu: 0
@@ -58,12 +53,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           image: 'assets/icons/ic_mic.png',
                           size: 20.0,
                           pressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Container(
-                                height: 70.0,
-                                child: Text('Future development'),
-                              ),
-                            ));
+                            Navigator.pop(context);
                             // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
                             //     statusMenu: true,
                             //     idMenu: 1
