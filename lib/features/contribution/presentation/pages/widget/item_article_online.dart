@@ -1,16 +1,50 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/pages/detail_article_online.dart';
 import 'package:new_bakarbatu/shared/widgets/shimmer_loading_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/models/article_response.dart';
 import '../../bloc/submit_article/submit_article_bloc.dart';
-import '../detail_video.dart';
 
-class ItemArticleOnline extends StatelessWidget {
+class ItemArticleOnline extends StatefulWidget {
   final DataNewsroom dataNewsroom;
 
   const ItemArticleOnline({Key? key, required this.dataNewsroom}) : super(key: key);
+
+  @override
+  State<ItemArticleOnline> createState() => _ItemArticleOnlineState();
+}
+
+class _ItemArticleOnlineState extends State<ItemArticleOnline> {
+
+  InAppWebViewController? webViewController;
+  String url = '';
+  double progress = 0;
+  final urlController = TextEditingController();
+
+  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+      crossPlatform: InAppWebViewOptions(
+        useShouldOverrideUrlLoading: true,
+        mediaPlaybackRequiresUserGesture: true,
+        javaScriptCanOpenWindowsAutomatically: true,
+        javaScriptEnabled: true,
+      ),
+      android: AndroidInAppWebViewOptions(
+        useHybridComposition: true,
+      ),
+      ios: IOSInAppWebViewOptions(
+        allowsInlineMediaPlayback: true,
+      ));
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +54,86 @@ class ItemArticleOnline extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          dataNewsroom.articleUrl.toString().contains('.mp4')
+          widget.dataNewsroom.articleUrl.toString().contains('.mp4')
               ?
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 150,
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
-            ),
-            child: MaterialButton(
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailVideo(articleUrl: '${dataNewsroom.articleUrl}', idArticle: '${dataNewsroom.idNewsroom}')
-                    )
-                );
-              },
-              child: const Icon(Icons.play_circle_outline_outlined, color: Colors.red,),
+            height: 200,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              child: Stack(
+                children: [
+                  InAppWebView(
+                    initialOptions: options,
+                    initialUrlRequest: URLRequest(url: Uri.parse('${widget.dataNewsroom.articleUrl}')),
+                    onWebViewCreated: (controller) {
+                      webViewController = controller;
+                    },
+                    onLoadStart: (controller, url) {
+                      setState(() {
+                        this.url = url.toString();
+                        urlController.text = this.url;
+                      });
+                    },
+                    shouldOverrideUrlLoading:
+                        (controller, navigationAction) async {
+                      var uri = navigationAction.request.url!;
+
+                      if (![
+                        "http",
+                        "https",
+                        "file",
+                        "chrome",
+                        "data",
+                        "javascript",
+                        "about"
+                      ].contains(uri.scheme)) {
+                        if (await canLaunchUrl(uri)) {
+                          // Launch the App
+                          await launchUrl(
+                            uri,
+                          );
+                          // and cancel the request
+                          return NavigationActionPolicy.CANCEL;
+                        }
+                      }
+
+                      return NavigationActionPolicy.ALLOW;
+                    },
+                    onLoadStop: (controller, url) async {
+                      setState(() {
+                        this.url = url.toString();
+                        urlController.text = this.url;
+                      });
+                    },
+                    onProgressChanged: (controller, progress) {
+                      setState(() {
+                        this.progress = progress / 100;
+                        urlController.text = this.url;
+                      });
+                    },
+                    onUpdateVisitedHistory: (controller, url, androidIsReload) {
+                      setState(() {
+                        this.url = url.toString();
+                        urlController.text = this.url;
+                      });
+                    },
+                    onConsoleMessage: (controller, consoleMessage) {
+                      print(consoleMessage);
+                    },
+                  ),
+                  progress < 1.0
+                      ? LinearProgressIndicator(value: progress)
+                      : Container(),
+                ],
+              ),
             )
           )
               :
           ClipRRect(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
                 child: CachedNetworkImage(
-                imageUrl: '${dataNewsroom.articleUrl}',
+                imageUrl: '${widget.dataNewsroom.articleUrl}',
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
                 height: 150,
@@ -68,19 +156,19 @@ class ItemArticleOnline extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 8),
-                  child: Text('${dataNewsroom.title}', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                  child: Text(widget.dataNewsroom.title ?? '', style: const TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                  child: Text(dataNewsroom.nameEditor ?? 'Private Author', style: const TextStyle(color: Colors.black54),),
+                  child: Text(widget.dataNewsroom.nameEditor ?? 'Private Author', style: const TextStyle(color: Colors.black54),),
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
                     child: Row(
                       children: [
-                        Text('${dataNewsroom.saved}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                        Text(widget.dataNewsroom.saved ?? '', style: const TextStyle(color: Color(0xFFC7C7C7)),),
                         const SizedBox(width: 8,),
-                        Text('${dataNewsroom.categoryName}', style: const TextStyle(color: Color(0xFFC7C7C7)),),
+                        Text(widget.dataNewsroom.categoryName ?? '', style: const TextStyle(color: Color(0xFFC7C7C7)),),
                         const SizedBox(width: 8,),
                         _buttonEdit(context)
                       ],
@@ -88,7 +176,7 @@ class ItemArticleOnline extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                  child: Text('${dataNewsroom.description}', style: const TextStyle(color: Colors.black54)),
+                  child: Text(widget.dataNewsroom.description ?? '', style: const TextStyle(color: Colors.black54)),
                 ),
                 const SizedBox(height: 8,),
               ],
@@ -109,13 +197,13 @@ class ItemArticleOnline extends StatelessWidget {
       ),
       alignment: Alignment.centerRight,
       child: MaterialButton(
-        onPressed: (){
-          BlocProvider.of<SubmitArticleBloc>(context).add(SetDetailArticleOnline(data: dataNewsroom));
-          _showDialogEdit(context);
+        onPressed: () async {
+          BlocProvider.of<SubmitArticleBloc>(context).add(SetDetailArticleOnline(data: widget.dataNewsroom));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailArticleOnline()));
         },
         child: Row(
           children: const [
-            Text('Edit', style: TextStyle(color: Colors.white),),
+            Text('Detail', style: TextStyle(color: Colors.white),),
             SizedBox(width: 6,),
             Icon(Icons.edit, size: 15, color: Colors.white,)
           ],
@@ -124,100 +212,4 @@ class ItemArticleOnline extends StatelessWidget {
     );
   }
 
-  void _showDialogEdit(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 16,
-          child: BlocBuilder<SubmitArticleBloc, SubmitArticleState>(
-            builder: (context, state){
-              return SizedBox(
-                height: MediaQuery.of(context).size.height - 150,
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text('${state.editJudulIndonesia}'),
-                    // _createFotoPlaceHolder(context, state.editPhotoFile?.path),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // _createDateField(context, state.editTimeSchedule),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // _createTitleFieldJudul(
-                    //     context: context,
-                    //     label: KeyLanguage.labelJudul,
-                    //     stateValidator: state.editJudulIndonesia
-                    // ),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // _createDescriptionFieldCaption(
-                    //     context: context,
-                    //     label: KeyLanguage.labelCaptipn,
-                    //     maxLines: 3,
-                    //     stateValidator: state.editDeskripsiIndonesia
-                    // ),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // _createDescriptionFieldDeskripsi(
-                    //     context: context,
-                    //     label: KeyLanguage.labelDeskripsi,
-                    //     maxLines: 7,
-                    //     stateValidator: state.editDeskripsiIndonesia
-                    // ),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // const Padding(
-                    //   padding: EdgeInsets.only(left: 30),
-                    //   child: Text(KeyLanguage.labelLokasi, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),),
-                    // ),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // _createTitleFieldKabupaten(
-                    //     context: context,
-                    //     label: KeyLanguage.labelKabupaten,
-                    //     stateValidator: state.editTagKabupaten
-                    // ),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
-                    // _createTitleFieldKampung(
-                    //     context: context,
-                    //     label: KeyLanguage.labelKampung,
-                    //     stateValidator: state.editTagKampung
-                    // ),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
-                    // _createTitleFieldDistik(
-                    //     context: context,
-                    //     label: KeyLanguage.labelDistrik,
-                    //     stateValidator: state.editTagDistrik
-                    // ),
-                    // _createShowHideAuthor(context, state.edithideAuthor),
-                    // const SizedBox(
-                    //   height: 16,
-                    // ),
-                    // _createButtonSubmit(context, state.editPhotoFile),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
 }

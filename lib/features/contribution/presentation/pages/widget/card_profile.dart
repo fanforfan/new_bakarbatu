@@ -75,31 +75,49 @@ class _CardProfileState extends State<CardProfile> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        height: 30,
-                        width: 80,
-                        padding: EdgeInsets.only(top: 6, bottom: 6),
-                        // margin: EdgeInsets.only(right: 30),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.red
-                        ),
-                        child: MaterialButton(
-                          onPressed: (){
-                            BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
-                          },
-                          child: Row(
-                            children: const [
-                              Icon(Icons.exit_to_app, size: 15, color: Colors.white,),
-                              SizedBox(width: 6,),
-                              Text('Logout', style: TextStyle(color: Colors.white, fontSize: 10),)
-                            ],
+                    MaterialButton(
+                      onPressed: (){
+                        BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.red
+                            ),
+                            child: Icon(Icons.power_off, size: 20, color: Colors.white,),
                           ),
-                        ),
-                      )
+                          SizedBox(width: 6,),
+                          Text('Logout', style: TextStyle(color: Colors.deepOrange, fontSize: 10),)
+                        ],
+                      ),
                     )
+                    // Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Container(
+                    //     height: 30,
+                    //     padding: EdgeInsets.only(top: 6, bottom: 6),
+                    //     decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         color: Colors.red
+                    //     ),
+                    //     child: MaterialButton(
+                    //       onPressed: (){
+                    //         BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
+                    //       },
+                    //       child: Row(
+                    //         children: const [
+                    //           Icon(Icons.exit_to_app, size: 15, color: Colors.white,),
+                    //           SizedBox(width: 6,),
+                    //           Text('Logout', style: TextStyle(color: Colors.white, fontSize: 10),)
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   )
+                    // )
                   ],
                 ),
               ),

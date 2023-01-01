@@ -66,6 +66,8 @@ dependencies:
   cached_network_image: ^3.2.3
   image_downloader: ^0.31.0
   flutter_svg: ^1.1.6
+#  FONT GOOGLE
+  google_fonts: ^3.0.1
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"

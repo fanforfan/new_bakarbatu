@@ -54,6 +54,12 @@ class SubmitArticleState extends Equatable {
   final String? editTagDistrik;
   final bool? edithideAuthor;
 
+  final String? detailPathUrl;
+  final String? detailTimeSchedule;
+  final String? detailJudul;
+  final String? detailCaption;
+  final String? detailDeskripsi;
+
 
   const SubmitArticleState({
     this.status = SubmitStateStatus.initial,
@@ -92,7 +98,13 @@ class SubmitArticleState extends Equatable {
     this.editTagKabupaten,
     this.editTagKampung,
     this.editTagDistrik,
-    this.edithideAuthor
+    this.edithideAuthor,
+
+    this.detailPathUrl,
+    this.detailTimeSchedule,
+    this.detailJudul,
+    this.detailCaption,
+    this.detailDeskripsi,
   });
 
   @override
@@ -133,7 +145,13 @@ class SubmitArticleState extends Equatable {
     editTagKabupaten,
     editTagKampung,
     editTagDistrik,
-    edithideAuthor
+    edithideAuthor,
+
+    detailPathUrl,
+    detailTimeSchedule,
+    detailJudul,
+    detailCaption,
+    detailDeskripsi,
   ];
 
   SubmitArticleState copyWith({
@@ -175,7 +193,13 @@ class SubmitArticleState extends Equatable {
      String? editTagKabupaten,
      String? editTagKampung,
      String? editTagDistrik,
-    bool? edithideAuthor
+    bool? edithideAuthor,
+
+    String? detailPathUrl,
+    String? detailTimeSchedule,
+    String? detailJudul,
+    String? detailCaption,
+    String? detailDeskripsi,
   }) {
     return SubmitArticleState(
         status: status ?? this.status,
@@ -214,7 +238,12 @@ class SubmitArticleState extends Equatable {
         editTagKabupaten: editTagKabupaten ?? this.editTagKabupaten,
         editTagKampung: editTagKampung ?? this.editTagKampung,
         editTagDistrik: editTagDistrik ?? this.editTagDistrik,
-        edithideAuthor: edithideAuthor ?? this.edithideAuthor
+        edithideAuthor: edithideAuthor ?? this.edithideAuthor,
+        detailPathUrl: detailPathUrl ?? this.detailPathUrl,
+        detailTimeSchedule: detailTimeSchedule ?? this.detailTimeSchedule,
+        detailJudul: detailJudul ?? this.detailJudul,
+        detailCaption: detailCaption ?? this.detailCaption,
+        detailDeskripsi: detailDeskripsi ?? this.detailDeskripsi,
     );
   }
 }

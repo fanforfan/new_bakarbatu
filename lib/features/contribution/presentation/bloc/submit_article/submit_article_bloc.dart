@@ -124,11 +124,11 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
 
     on<SetDetailArticleOnline>((event, emit) {
       emit(state.copyWith(
-          editPhotoFile: XFile('${event.data?.articleUrl}'),
-          editTimeSchedule: '${event.data?.publish}',
-          editJudulIndonesia: '${event.data?.title}',
-          editCaptionIndonesia: '${event.data?.keywordId}',
-          editDeskripsiIndonesia: '${event.data?.description}',
+        detailPathUrl: event.data?.articleUrl ?? '',
+        detailTimeSchedule: event.data?.saved ?? '',
+        detailJudul: event.data?.title ?? '',
+        detailCaption: event.data?.categoryName ?? '',
+        detailDeskripsi: event.data?.description ?? '',
       ));
     });
 

@@ -75,6 +75,20 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
       };
 
       String fileName = data.articleFile!.path.split('/').last;
+      print('''
+      'id_user': '${prefs.getInt(KeyPreferenches.idUser)}',
+        'tittle': '${data.judulIndonesia}',
+        'caption': '${data.captionIndonesia}',
+        'description': '${data.deskripsiIndonesia}',
+        'open_public': '1',
+        'kabupaten': '${data.tagKabupaten}',
+        'distrik': '${data.tagDistrik}',
+        'kampung': '${data.tagKampung}',
+        'file_upload': await MultipartFile.fromFile(data.articleFile!.path, filename:fileName),
+        'time_publish': '${data.timeSchedule}',
+        'hidden_article': '${data.hideAuthor! ? 1 : 0}',
+        'komunitasid': '${prefs.getInt(KeyPreferenches.komunitasId)}'
+      ''');
       FormData formData = FormData.fromMap({
         'id_user': '${prefs.getInt(KeyPreferenches.idUser)}',
         'tittle': '${data.judulIndonesia}',
