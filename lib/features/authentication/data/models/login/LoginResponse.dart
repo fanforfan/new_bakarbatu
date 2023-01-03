@@ -3,16 +3,21 @@ class LoginResponse {
   String? token;
   String? message;
   String? rc;
+  DataError? dataError;
 
-  LoginResponse({this.dataUser, this.token, this.message, this.rc});
+
+  LoginResponse({this.dataUser, this.token, this.message, this.rc, this.dataError});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     dataUser = json['data_user'] != null
-        ? new DataUser.fromJson(json['data_user'])
+        ? DataUser.fromJson(json['data_user'])
         : null;
     token = json['token'];
     message = json['message'];
     rc = json['rc'];
+    dataError = json['errors'] != null
+        ? DataError.fromJson(json['errors'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -24,6 +29,18 @@ class LoginResponse {
     data['message'] = this.message;
     data['rc'] = this.rc;
     return data;
+  }
+}
+
+class DataError {
+  String? errorEmail;
+  String? errorPassword;
+
+  DataError({this.errorEmail, this.errorPassword});
+
+  DataError.fromJson(Map<String, dynamic> json) {
+    errorEmail = json['email'][0];
+    errorPassword = json['password'];
   }
 }
 

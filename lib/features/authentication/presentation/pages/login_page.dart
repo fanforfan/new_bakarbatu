@@ -59,6 +59,8 @@ class _LoginPageState extends State<LoginPage> {
                   _ctreatePasswordField(),
                   _createForgotPasswordAction(),
                   const SizedBox(height: 18),
+                  _createErrorMessage(state),
+                  const SizedBox(height: 8),
                   _createButtonLogin(state),
                   const SizedBox(height: 18),
                   // _createRegisterTextButton()
@@ -155,6 +157,10 @@ class _LoginPageState extends State<LoginPage> {
         )
       ],
     );
+  }
+
+  Widget _createErrorMessage(AuthenticationState state) {
+    return state.message != null ? Text('${state.message}', style: const TextStyle(color: Colors.red),) : SizedBox();
   }
 
   // Widget _createStatementError() {

@@ -31,18 +31,30 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       ));
       var response = await authenticationUsecase.validateLogin(loginRequest);
       if(response != null){
-        emit(state.copyWith(
-          message: response.message,
-          status: AuthenticationStateStatus.success,
-        ));
-        // Set value state to default
-        if(state.message == 'Login Berhasil'){
+        if(response.responseCode == '0500'){
           emit(state.copyWith(
-            message: '',
-            status: AuthenticationStateStatus.initial,
-            username: '',
-            password: ''
+            message: response.message,
+            status: AuthenticationStateStatus.error
           ));
+        }else if(response.responseCode == '0555'){
+          emit(state.copyWith(
+              message: response.message,
+              status: AuthenticationStateStatus.error
+          ));
+        }else{
+          emit(state.copyWith(
+            message: response.message,
+            status: AuthenticationStateStatus.success,
+          ));
+          // Set value state to default
+          if(state.message == 'Login Berhasil'){
+            emit(state.copyWith(
+                message: '',
+                status: AuthenticationStateStatus.initial,
+                username: '',
+                password: ''
+            ));
+          }
         }
       }
     } catch(error) {

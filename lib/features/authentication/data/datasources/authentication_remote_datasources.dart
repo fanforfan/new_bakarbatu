@@ -37,6 +37,8 @@ class AuthenticationRemoteDatasourcesImpl implements AuthenticationRemoteDatasou
 
     var response = LoginResponse.fromJson(json.decode(request.body));
 
+    print('RESPONSE : ${request.body} ${response.message}');
+
     return response;
   }
 
