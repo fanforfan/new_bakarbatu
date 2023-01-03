@@ -6,6 +6,7 @@ import 'package:new_bakarbatu/features/authentication/data/repositories/authenti
 import 'package:new_bakarbatu/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:new_bakarbatu/features/authentication/domain/usecases/authentication_usecase.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_email/email_cubit.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/data/datasources/contribution_remote_datasources.dart';
 import 'package:new_bakarbatu/features/contribution/data/datasources/submit_local_datasources.dart';
@@ -52,6 +53,8 @@ Future<void> init() async {
   sl.registerFactory(() => DownloadVideoBloc());
 //  cubit obsecure
   sl.registerFactory(() => ObsecurePasswordCubit());
+//  cubit obsecure
+  sl.registerFactory(() => EmailCubit());
 
 //  ! Use cases
   sl.registerLazySingleton(() => AuthenticationUsecase(sl()));
