@@ -5,6 +5,7 @@ import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_email/email_cubit.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
@@ -55,7 +56,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DownloadVideoBloc>(
             create: (context) => di.sl<DownloadVideoBloc>()
-        )
+        ),
+        BlocProvider<EmailCubit>(
+          create: (context) => di.sl<EmailCubit>(),
+        ),
       ], 
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

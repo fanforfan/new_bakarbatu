@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_bakarbatu/core/util/routes.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/authentication_bloc.dart';
+import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_email/email_cubit.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/pages/contribution_page.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_button.dart';
@@ -55,6 +56,8 @@ class _LoginPageState extends State<LoginPage> {
                   // _createStatementError(),
                   const SizedBox(height: 16),
                   _createUsernameField(),
+                  const SizedBox(height: 10),
+                  _createErrorMessageEmail(),
                   const SizedBox(height: 16),
                   _ctreatePasswordField(),
                   _createForgotPasswordAction(),
@@ -83,7 +86,10 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        onChanged: (value) {});
+        onChanged: (value) {
+          BlocProvider.of<EmailCubit>(context).validateEmail(val: '$value');
+        },
+    );
   }
 
   Widget _ctreatePasswordField() {
@@ -161,6 +167,24 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _createErrorMessage(AuthenticationState state) {
     return state.message != null ? Text('${state.message}', style: const TextStyle(color: Colors.red),) : SizedBox();
+  }
+
+  Widget _createErrorMessageEmail() {
+    
+    return BlocBuilder<EmailCubit, EmailState>(
+        builder: (context, state){
+          if(state is ValidateEmail){
+            return (state.message != '')
+                ?
+            Container(
+              padding: const EdgeInsets.only(left: 20),
+              alignment: Alignment.centerLeft,
+              child:  Text(state.message, style: const TextStyle(color: Colors.red, fontSize: 12),),
+            )
+                : const SizedBox();
+          }
+          return const SizedBox();
+        });
   }
 
   // Widget _createStatementError() {
