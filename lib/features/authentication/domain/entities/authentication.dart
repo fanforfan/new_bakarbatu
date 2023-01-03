@@ -19,6 +19,7 @@ class AuthenticationDataEntity {
   int? komunitasId;
   String? nameKomunitas;
   String? token;
+  String? responseCode;
 
   AuthenticationDataEntity(
       {this.message,
@@ -40,7 +41,8 @@ class AuthenticationDataEntity {
         this.lastLogin,
         this.komunitasId,
         this.nameKomunitas,
-        this.token});
+        this.token,
+        this.responseCode});
 
   AuthenticationDataEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -61,6 +63,7 @@ class AuthenticationDataEntity {
     lastLogin = json['last_login'];
     komunitasId = json['komunitas_id'];
     nameKomunitas = json['name_komunitas'];
+    responseCode = json['rc'];
   }
   //
   // Map<String, dynamic> toJson() {

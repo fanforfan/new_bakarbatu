@@ -25,50 +25,71 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       try{
         SharedPreferences prefs = await SharedPreferences.getInstance();
         final remoteValidateLogin = await remoteDatasource.validateLogin(paramLogin);
-        var data = AuthenticationDataEntity(
-            message: remoteValidateLogin?.message,
-            id: remoteValidateLogin?.dataUser?.id,
-            username: remoteValidateLogin?.dataUser?.username,
-            email: remoteValidateLogin?.dataUser?.email,
-            photo: remoteValidateLogin?.dataUser?.photo,
-            phone: remoteValidateLogin?.dataUser?.phone,
-            ttl: remoteValidateLogin?.dataUser?.ttl,
-            gender: remoteValidateLogin?.dataUser?.gender,
-            provinsi: remoteValidateLogin?.dataUser?.provinsi,
-            kabupaten: remoteValidateLogin?.dataUser?.kabupaten,
-            kecamatan: remoteValidateLogin?.dataUser?.kecamatan,
-            kelurahan: remoteValidateLogin?.dataUser?.kelurahan,
-            alamat: remoteValidateLogin?.dataUser?.alamat,
-            savedDate: remoteValidateLogin?.dataUser?.savedDate,
-            userRegisterBy: remoteValidateLogin?.dataUser?.userRegisterBy,
-            status: remoteValidateLogin?.dataUser?.status,
-            lastLogin: remoteValidateLogin?.dataUser?.lastLogin,
-            komunitasId: remoteValidateLogin?.dataUser?.komunitasId,
-            nameKomunitas: remoteValidateLogin?.dataUser?.nameKomunitas,
-            token: remoteValidateLogin?.token
-        );
 
-        await prefs.setInt(KeyPreferenches.idUser, data.id!);
-        await prefs.setString(KeyPreferenches.username, data.username!);
-        await prefs.setString(KeyPreferenches.email, data.email!);
-        await prefs.setString(KeyPreferenches.phone, data.phone!);
-        await prefs.setString(KeyPreferenches.ttl, data.ttl!);
-        await prefs.setString(KeyPreferenches.gender, data.gender!);
-        await prefs.setString(KeyPreferenches.provinsi, data.provinsi!);
-        await prefs.setString(KeyPreferenches.kabupaten, data.kabupaten!);
-        await prefs.setString(KeyPreferenches.kecamatan, data.kecamatan!);
-        await prefs.setString(KeyPreferenches.kelurahan, data.kelurahan!);
-        await prefs.setString(KeyPreferenches.alamat, data.alamat!);
-        await prefs.setString(KeyPreferenches.savedData, data.savedDate!);
-        await prefs.setInt(KeyPreferenches.userRergisterBy, data.userRegisterBy!);
-        await prefs.setInt(KeyPreferenches.status, data.status!);
-        await prefs.setString(KeyPreferenches.lastLogin, data.lastLogin!);
-        await prefs.setInt(KeyPreferenches.komunitasId, data.komunitasId!);
-        await prefs.setString(KeyPreferenches.nameKomunitas, data.nameKomunitas!);
-        await prefs.setString(KeyPreferenches.token, data.token!);
-        await prefs.setBool(KeyPreferenches.isLogin, true);
+        if(remoteValidateLogin != null){
+          if(remoteValidateLogin.rc != '0500'){
+            if(remoteValidateLogin.dataError != null){
+              var data = AuthenticationDataEntity(
+                  message: remoteValidateLogin.dataError?.errorEmail,
+                  responseCode: '0555'
+              );
 
-        return data;
+              return data;
+            }else{
+              var data = AuthenticationDataEntity(
+                  message: remoteValidateLogin.message,
+                  id: remoteValidateLogin.dataUser?.id,
+                  username: remoteValidateLogin.dataUser?.username,
+                  email: remoteValidateLogin.dataUser?.email,
+                  photo: remoteValidateLogin.dataUser?.photo,
+                  phone: remoteValidateLogin.dataUser?.phone,
+                  ttl: remoteValidateLogin.dataUser?.ttl,
+                  gender: remoteValidateLogin.dataUser?.gender,
+                  provinsi: remoteValidateLogin.dataUser?.provinsi,
+                  kabupaten: remoteValidateLogin.dataUser?.kabupaten,
+                  kecamatan: remoteValidateLogin.dataUser?.kecamatan,
+                  kelurahan: remoteValidateLogin.dataUser?.kelurahan,
+                  alamat: remoteValidateLogin.dataUser?.alamat,
+                  savedDate: remoteValidateLogin.dataUser?.savedDate,
+                  userRegisterBy: remoteValidateLogin.dataUser?.userRegisterBy,
+                  status: remoteValidateLogin.dataUser?.status,
+                  lastLogin: remoteValidateLogin.dataUser?.lastLogin,
+                  komunitasId: remoteValidateLogin.dataUser?.komunitasId,
+                  nameKomunitas: remoteValidateLogin.dataUser?.nameKomunitas,
+                  token: remoteValidateLogin.token
+              );
+              await prefs.setInt(KeyPreferenches.idUser, data.id!);
+              await prefs.setString(KeyPreferenches.username, data.username!);
+              await prefs.setString(KeyPreferenches.email, data.email!);
+              await prefs.setString(KeyPreferenches.phone, data.phone!);
+              await prefs.setString(KeyPreferenches.ttl, data.ttl!);
+              await prefs.setString(KeyPreferenches.gender, data.gender!);
+              await prefs.setString(KeyPreferenches.provinsi, data.provinsi!);
+              await prefs.setString(KeyPreferenches.kabupaten, data.kabupaten!);
+              await prefs.setString(KeyPreferenches.kecamatan, data.kecamatan!);
+              await prefs.setString(KeyPreferenches.kelurahan, data.kelurahan!);
+              await prefs.setString(KeyPreferenches.alamat, data.alamat!);
+              await prefs.setString(KeyPreferenches.savedData, data.savedDate!);
+              await prefs.setInt(KeyPreferenches.userRergisterBy, data.userRegisterBy!);
+              await prefs.setInt(KeyPreferenches.status, data.status!);
+              await prefs.setString(KeyPreferenches.lastLogin, data.lastLogin!);
+              await prefs.setInt(KeyPreferenches.komunitasId, data.komunitasId!);
+              await prefs.setString(KeyPreferenches.nameKomunitas, data.nameKomunitas!);
+              await prefs.setString(KeyPreferenches.token, data.token!);
+              await prefs.setBool(KeyPreferenches.isLogin, true);
+
+              return data;
+            }
+
+          }else{
+            var data = AuthenticationDataEntity(
+              message: 'Your password is incorrect.',
+              responseCode: remoteValidateLogin.rc
+            );
+
+            return data;
+          }
+        }
       } on ServerException {
         return null;
       }
