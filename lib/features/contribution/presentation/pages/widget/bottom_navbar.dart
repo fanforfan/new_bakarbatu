@@ -35,18 +35,19 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _itemMenus(
-                          colors: widget.state.idMenu == 0 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                          image: 'assets/icons/ic_article.png',
-                          size: 19.0,
-                          pressed: () {
-                            Navigator.pop(context);
-                            // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                            //     statusMenu: true,
-                            //     idMenu: 0
-                            // ));
-                          }
-                      ),
+                      SizedBox(width: 50,),
+                      // _itemMenus(
+                      //     colors: widget.state.idMenu == 0 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                      //     image: 'assets/icons/ic_article.png',
+                      //     size: 19.0,
+                      //     pressed: () {
+                      //       Navigator.pop(context);
+                      //       // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                      //       //     statusMenu: true,
+                      //       //     idMenu: 0
+                      //       // ));
+                      //     }
+                      // ),
                       const SizedBox(width: 16,),
                       _itemMenus(
                           colors: widget.state.idMenu == 1 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
