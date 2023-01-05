@@ -92,7 +92,8 @@ class _ContributionPageState extends State<ContributionPage>
                             : state.idMenu == 3 ? const ArticleFoto()
                             : const ArticleVideo(),
                       ),
-                      Container(color: state.idMenu == 2 ? const Color(0xFF800000) : Colors.white, height: 60,)
+                      // Container(color: Colors.transparent, height: 60,)
+                      // Container(color: state.idMenu == 2 ? const Color(0xFF800000) : Colors.white, height: 60,)
                     ]),
                     Align(
                       alignment: Alignment.bottomCenter,

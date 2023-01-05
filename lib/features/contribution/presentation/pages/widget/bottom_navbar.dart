@@ -28,14 +28,25 @@ class _BottomNavbarState extends State<BottomNavbar> {
                 height: 66,
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                    color: Colors.grey
+                    color: Colors.transparent
                 ),
                 child: Container(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(width: 50,),
+                      _itemMenus(
+                          colors: widget.state.idMenu == 3 ? const Color(
+                              0xFF888888) : const Color(0xFFD0D0D0),
+                          image: 'assets/icons/ic_fotoimage.png',
+                          size: 20.0,
+                          pressed: () {
+                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                                statusMenu: true,
+                                idMenu: 3
+                            ));
+                          }
+                      ),
                       // _itemMenus(
                       //     colors: widget.state.idMenu == 0 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
                       //     image: 'assets/icons/ic_article.png',
@@ -48,36 +59,63 @@ class _BottomNavbarState extends State<BottomNavbar> {
                       //       // ));
                       //     }
                       // ),
-                      const SizedBox(width: 16,),
-                      _itemMenus(
-                          colors: widget.state.idMenu == 1 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                          image: 'assets/icons/ic_mic.png',
-                          size: 20.0,
-                          pressed: () {
-                            Navigator.pop(context);
-                            // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                            //     statusMenu: true,
-                            //     idMenu: 1
-                            // ));
-                          }
+                      // const SizedBox(width: 16,),
+                      // _itemMenus(
+                      //     colors: widget.state.idMenu == 1 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                      //     image: 'assets/icons/ic_mic.png',
+                      //     size: 20.0,
+                      //     pressed: () {
+                      //       Navigator.pop(context);
+                      //       // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                      //       //     statusMenu: true,
+                      //       //     idMenu: 1
+                      //       // ));
+                      //     }
+                      // ),
+
+                      // const SizedBox(width: 26,),
+                      // const SizedBox(width: 50,),
+                      // const SizedBox(width: 26,),
+                      const SizedBox(width: 26,),
+                      GestureDetector(
+                        onTap: (){
+                          BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                              statusMenu: true,
+                              idMenu: 2
+                          ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: widget.state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                              // border: Border.all(width: 5, color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
+                          ),
+                          width: 50,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/icons/ic_home.png',
+                              width: 25,
+                              color: const Color(0xFF800000),
+                            ),
+                          ),
+                        ),
                       ),
-                      const SizedBox(width: 16,),
-                      const SizedBox(width: 50,),
-                      const SizedBox(width: 16,),
+                      const SizedBox(width: 26,),
+
+                      // _itemMenus(
+                      //     colors: widget.state.idMenu == 3 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                      //     image: 'assets/icons/ic_fotoimage.png',
+                      //     size: 20.0,
+                      //     pressed: () {
+                      //       BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                      //           statusMenu: true,
+                      //           idMenu: 3
+                      //       ));
+                      //     }
+                      // ),
+                      // const SizedBox(width: 16,),
                       _itemMenus(
-                          colors: widget.state.idMenu == 3 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                          image: 'assets/icons/ic_fotoimage.png',
-                          size: 20.0,
-                          pressed: () {
-                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                                statusMenu: true,
-                                idMenu: 3
-                            ));
-                          }
-                      ),
-                      const SizedBox(width: 16,),
-                      _itemMenus(
-                          colors: widget.state.idMenu == 4 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                          colors: widget.state.idMenu == 4 ? const Color(0xFF888888) : const Color(0xFFD0D0D0),
                           image: 'assets/icons/ic_video.png',
                           size: 20.0,
                           pressed: () {
@@ -94,33 +132,33 @@ class _BottomNavbarState extends State<BottomNavbar> {
             ],
           ),
           /// ACTIVE MENU
-          Container(
-              padding: const EdgeInsets.only(bottom: 26),
-              alignment: Alignment.center,
-              child: GestureDetector(
-                onTap: (){
-                  BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                      statusMenu: true,
-                      idMenu: 2
-                  ));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: widget.state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                      border: Border.all(width: 5, color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
-                  ),
-                  width: 70,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/icons/ic_home.png',
-                      width: 40,
-                      color: const Color(0xFF800000),
-                    ),
-                  ),
-                ),
-              )
-          )
+          // Container(
+          //     padding: const EdgeInsets.only(bottom: 26),
+          //     alignment: Alignment.center,
+          //     child: GestureDetector(
+          //       onTap: (){
+          //         BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+          //             statusMenu: true,
+          //             idMenu: 2
+          //         ));
+          //       },
+          //       child: Container(
+          //         decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(50),
+          //             color: widget.state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+          //             border: Border.all(width: 5, color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
+          //         ),
+          //         width: 70,
+          //         child: Center(
+          //           child: Image.asset(
+          //             'assets/icons/ic_home.png',
+          //             width: 40,
+          //             color: const Color(0xFF800000),
+          //           ),
+          //         ),
+          //       ),
+          //     )
+          // )
         ],
       ),
     );

@@ -51,7 +51,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                 )
                     /// DEFAULT LIST
                     : Container(
-                  padding: const EdgeInsets.only(top: 77),
+                  padding: const EdgeInsets.only(top: 20),
                   color: const Color(0xFF800000),
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -83,13 +83,14 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                         ),
                       )
                           : ItemArticleOnline(
+                        index: index,
                         dataNewsroom: state.articleOnline![index],
                       );
                     },
                   ),
                 )
                     : Container(
-                  padding: const EdgeInsets.only(top: 77),
+                  padding: const EdgeInsets.only(top: 20),
                   color: const Color(0xFF800000),
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -121,6 +122,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                         ),
                       )
                           : ItemArticleOnline(
+                        index: index,
                         dataNewsroom: state.articleOnline![index],
                       );
                     },
@@ -135,8 +137,11 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                         fillColor: Colors.black12,
                         prefixIcon: const Icon(Icons.search, size: 18, color: Colors.white,),
                         labelText: 'Cari',
-                        border: OutlineInputBorder(
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Colors.white
+                          )
                         ),
                         labelStyle: const TextStyle(color: Colors.white, fontSize: 12)
                     ),
