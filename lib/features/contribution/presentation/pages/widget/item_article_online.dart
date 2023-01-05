@@ -10,9 +10,10 @@ import '../../../data/models/article_response.dart';
 import '../../bloc/submit_article/submit_article_bloc.dart';
 
 class ItemArticleOnline extends StatefulWidget {
+  final int? index;
   final DataNewsroom dataNewsroom;
 
-  const ItemArticleOnline({Key? key, required this.dataNewsroom}) : super(key: key);
+  const ItemArticleOnline({Key? key, this.index, required this.dataNewsroom}) : super(key: key);
 
   @override
   State<ItemArticleOnline> createState() => _ItemArticleOnlineState();
@@ -50,7 +51,7 @@ class _ItemArticleOnlineState extends State<ItemArticleOnline> {
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF800000),
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: EdgeInsets.only(left: 20, right: 20, top: (widget.index != null) ? widget.index == 0 ? 50 : 0 : 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

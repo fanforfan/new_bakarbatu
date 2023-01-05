@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "320022550609",
+    "project_id": "bakarbatu-5f20a",
+    "storage_bucket": "bakarbatu-5f20a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320022550609:android:3322e7536e20d3ea084070",
+        "android_client_info": {
+          "package_name": "com.example.new_bakarbatu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320022550609-bknd8e4osqgu662tofinm1tbcfl148qq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLVCtiL80hNNEhgMZVY2z_1cQqSKSPo0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320022550609-bknd8e4osqgu662tofinm1tbcfl148qq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

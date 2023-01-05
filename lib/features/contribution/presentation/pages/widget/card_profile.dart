@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:new_bakarbatu/shared/common/key_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,7 @@ class _CardProfileState extends State<CardProfile> {
   SharedPreferences? prefs;
   var nama;
   var alamat;
+  var gender;
 
   @override
   void initState() {
@@ -29,7 +31,9 @@ class _CardProfileState extends State<CardProfile> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       nama = prefs?.getString(KeyPreferenches.username);
-      alamat = '${prefs?.getString(KeyPreferenches.kelurahan)}-${prefs?.getString(KeyPreferenches.kecamatan)}-${prefs?.getString(KeyPreferenches.kabupaten)}-${prefs?.getString(KeyPreferenches.provinsi)}';
+      alamat = '${prefs?.getString(KeyPreferenches.nameKomunitas)}';
+      gender = prefs?.getString(KeyPreferenches.gender);
+      // '${prefs?.getString(KeyPreferenches.kelurahan)}-${prefs?.getString(KeyPreferenches.kecamatan)}-${prefs?.getString(KeyPreferenches.kabupaten)}-${prefs?.getString(KeyPreferenches.provinsi)}';
     });
   }
 
@@ -56,12 +60,31 @@ class _CardProfileState extends State<CardProfile> {
             children: [
               const SizedBox(width: 10,),
               Expanded(
+                flex: 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: gender == '1' ? Image.asset(
+                    'assets/icons/ic_male.png',
+                  ) : gender == '2' ? Image.asset(
+                    'assets/icons/ic_female.png',
+                  ) : Image.asset(
+                    'assets/icons/ic_transgender.png',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20,),
+              Expanded(
                 flex: 3,
                 child: Column(
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('$nama'),
+                      child: Text(
+                        '$nama',
+                        style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        // color: Colors.grey
+                      ),),
                     ),
                     const SizedBox(height: 6),
                     Align(
@@ -69,8 +92,9 @@ class _CardProfileState extends State<CardProfile> {
                       child: Text(
                         '$alamat',
                         style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            // color: Colors.grey
                         ),
                       ),
                     ),
@@ -95,40 +119,60 @@ class _CardProfileState extends State<CardProfile> {
                         ],
                       ),
                     )
-                    // Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Container(
-                    //     height: 30,
-                    //     padding: EdgeInsets.only(top: 6, bottom: 6),
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //         color: Colors.red
-                    //     ),
-                    //     child: MaterialButton(
-                    //       onPressed: (){
-                    //         BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
-                    //       },
-                    //       child: Row(
-                    //         children: const [
-                    //           Icon(Icons.exit_to_app, size: 15, color: Colors.white,),
-                    //           SizedBox(width: 6,),
-                    //           Text('Logout', style: TextStyle(color: Colors.white, fontSize: 10),)
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   )
-                    // )
                   ],
                 ),
               ),
-              const SizedBox(width: 20,),
+              const SizedBox(width: 10,),
+            ],
+          ),
+          SizedBox(height: 20,),
+          Row(
+            children: [
+              const SizedBox(width: 10,),
               Expanded(
-                flex: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image.asset(
-                    'assets/images/profile.jpeg',
-                  ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('25'),
+                ),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('17'),
+                ),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('8'),
+                ),
+              ),
+              const SizedBox(width: 10,),
+            ],
+          ),
+          Row(
+            children: [
+              const SizedBox(width: 10,),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('Total Konten', style: TextStyle(color: Colors.black54, fontSize: 10),),
+                ),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('Approve', style: TextStyle(color: Colors.black54, fontSize: 10),),
+                ),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('Waiting Editor', style: TextStyle(color: Colors.black54, fontSize: 10),),
                 ),
               ),
               const SizedBox(width: 10,),
