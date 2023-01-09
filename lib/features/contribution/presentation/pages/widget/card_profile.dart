@@ -46,146 +46,151 @@ class _CardProfileState extends State<CardProfile> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        // boxShadow: const [
-        //   BoxShadow(
-        //     offset: Offset(0, 0.5),
-        //     blurRadius: 0.1,
-        //     spreadRadius: 0.1,
-        //     color: Color(0xFF454544),
-        //   ),
-        // ],
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              const SizedBox(width: 10,),
-              Expanded(
-                flex: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: gender == '1' ? Image.asset(
-                    'assets/icons/ic_male.png',
-                  ) : gender == '2' ? Image.asset(
-                    'assets/icons/ic_female.png',
-                  ) : Image.asset(
-                    'assets/icons/ic_transgender.png',
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20,),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '$nama',
-                        style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        // color: Colors.grey
-                      ),),
-                    ),
-                    const SizedBox(height: 6),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '$alamat',
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            // color: Colors.grey
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    MaterialButton(
-                      onPressed: (){
-                        BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.red
-                            ),
-                            child: Icon(Icons.power_off, size: 20, color: Colors.white,),
-                          ),
-                          SizedBox(width: 6,),
-                          Text('Logout', style: TextStyle(color: Colors.deepOrange, fontSize: 10),)
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10,),
-            ],
-          ),
+          _boxIdentityUser(),
           const SizedBox(height: 20,),
-          BlocBuilder<CountCubit, CountState>(
-            bloc: BlocProvider.of<CountCubit>(context)..getCount(),
-            builder: (context, state){
-              return state.status.isLoading ? const CircularProgressIndicator() : Row(
-                children: [
-                  const SizedBox(width: 10,),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text('${state.totalDataSubmit}'),
-                    ),
-                  ),
-                  const SizedBox(width: 10,),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text('${state.approved}'),
-                    ),
-                  ),
-                  const SizedBox(width: 10,),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text('${state.waiting}'),
-                    ),
-                  ),
-                  const SizedBox(width: 10,),
-                ],
-              );
-            },
-          ),
-          Row(
-            children: const [
-              SizedBox(width: 10,),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('Total Konten', style: TextStyle(color: Colors.black54, fontSize: 10),),
-                ),
-              ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('Approve', style: TextStyle(color: Colors.black54, fontSize: 10),),
-                ),
-              ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('Waiting Editor', style: TextStyle(color: Colors.black54, fontSize: 10),),
-                ),
-              ),
-              SizedBox(width: 10,),
-            ],
-          )
+          _boxValueSummarySubmit(),
+          _boxLabelSummarySubmit()
         ],
       ),
+    );
+  }
+
+  Widget _boxLabelSummarySubmit() {
+    return Row(
+      children: const [
+        SizedBox(width: 10,),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text('Total Konten', style: TextStyle(color: Colors.blue, fontSize: 11, fontWeight: FontWeight.bold),),
+          ),
+        ),
+        SizedBox(width: 10,),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text('Approve', style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold),),
+          ),
+        ),
+        SizedBox(width: 10,),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: Text('Waiting Editor', style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.bold),),
+          ),
+        ),
+        SizedBox(width: 10,),
+      ],
+    );
+  }
+
+  Widget _boxValueSummarySubmit() {
+    return BlocBuilder<CountCubit, CountState>(
+      bloc: BlocProvider.of<CountCubit>(context)..getCount(),
+      builder: (context, state){
+        return state.status.isLoading ? const CircularProgressIndicator() : Row(
+          children: [
+            const SizedBox(width: 10,),
+            Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text('${state.totalDataSubmit}',style: const TextStyle(color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            const SizedBox(width: 10,),
+            Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text('${state.approved}', style: const TextStyle(color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            const SizedBox(width: 10,),
+            Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text('${state.waiting}', style: const TextStyle(color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            const SizedBox(width: 10,),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _boxIdentityUser() {
+    return Row(
+      children: [
+        const SizedBox(width: 10,),
+        Expanded(
+          flex: 2,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: gender == '1' ? Image.asset(
+              'assets/icons/ic_male.png',
+            ) : gender == '2' ? Image.asset(
+              'assets/icons/ic_female.png',
+            ) : Image.asset(
+              'assets/icons/ic_transgender.png',
+            ),
+          ),
+        ),
+        const SizedBox(width: 20,),
+        Expanded(
+          flex: 3,
+          child: Column(
+            children: [
+              const SizedBox(height: 20,),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '$nama',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.grey
+                  ),),
+              ),
+              const SizedBox(height: 6),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '$alamat',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.grey
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              // MaterialButton(
+              //   onPressed: (){
+              //     BlocProvider.of<AuthenticationBloc>(context).add(AuthLogout());
+              //   },
+              //   child: Row(
+              //     children: [
+              //       Container(
+              //         height: 30,
+              //         width: 30,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(15),
+              //             color: Colors.red
+              //         ),
+              //         child: Icon(Icons.power_off, size: 20, color: Colors.white,),
+              //       ),
+              //       SizedBox(width: 6,),
+              //       Text('Logout', style: TextStyle(color: Colors.deepOrange, fontSize: 10),)
+              //     ],
+              //   ),
+              // )
+            ],
+          ),
+        ),
+        const SizedBox(width: 10,),
+      ],
     );
   }
 }
