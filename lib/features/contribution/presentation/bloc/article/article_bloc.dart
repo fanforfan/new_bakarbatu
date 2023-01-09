@@ -57,12 +57,20 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
         }
       }else{
         List<DataNewsroom> listData = [];
+        List<DataNewsroom> listDataAll = [];
         var response = await contributionUsecase.getArticleOnline();
         if(response != null){
           if(response.isNotEmpty){
-            for(int i=0; i<4; i++){
-              print('NO. $i');
-              listData.add(response[i]);
+            if(response.length < 4){
+              for(int i=0; i<response.length; i++){
+                print('NO. $i');
+                listData.add(response[i]);
+              }
+            }else{
+              for(int i=0; i<4; i++){
+                print('NO. $i');
+                listData.add(response[i]);
+              }
             }
           }
         }

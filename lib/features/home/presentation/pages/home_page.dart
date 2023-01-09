@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -35,7 +36,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   void setPrefs() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
     prefs = await SharedPreferences.getInstance();
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: false,
+      announcement: false,
+      badge: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: false,
+    );
+    debugPrint('SETTINGNYA : ${settings.authorizationStatus}');
+    await messaging.subscribeToTopic('weather');
+    var token = await messaging.getToken();
+
+    debugPrint('Bearer : $token');
+    // fLh64rhkR5WqEUzyoSnuFx:APA91bEXRUcr7g8Ga6klk1wuxHR9gAkVQNVIg-t-LXjUPePLiz9bsZx7qhF5w1mqZGJnYzT0MkqJPqslrfvi_FbnYv0NxXuBWqUdyBV1EPAWs3y7XB4KEX6olvOzqT1wJY2bIcbxe36M
+
   }
 
   @override

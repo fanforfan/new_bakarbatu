@@ -11,6 +11,7 @@ import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/bottom_nav/bottom_nav_bloc.dart';
+import '../../bloc/count_cubit/count_cubit.dart';
 
 class ArticleFoto extends StatefulWidget {
   const ArticleFoto({super.key});
@@ -43,6 +44,7 @@ class _ArticleFotoState extends State<ArticleFoto> {
     return BlocConsumer<SubmitArticleBloc, SubmitArticleState>(
         listener: (context, state){
           if(state.status.isSuccess){
+            BlocProvider.of<CountCubit>(context).getCount();
             BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
                 statusMenu: true,
                 idMenu: 2

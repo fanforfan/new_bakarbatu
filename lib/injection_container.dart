@@ -15,6 +15,7 @@ import 'package:new_bakarbatu/features/contribution/domain/repositories/contribu
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/count_cubit/count_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/download%20_video/download_video_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article_video/submit_artikel_video_bloc.dart';
@@ -55,6 +56,10 @@ Future<void> init() async {
   sl.registerFactory(() => ObsecurePasswordCubit());
 //  cubit obsecure
   sl.registerFactory(() => EmailCubit());
+//  cubit Count
+  sl.registerFactory(() => CountCubit(
+      contributionUsecase: sl()
+  ));
 
 //  ! Use cases
   sl.registerLazySingleton(() => AuthenticationUsecase(sl()));
