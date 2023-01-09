@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_bakarbatu/core/usecases/usecase_contribution.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
@@ -60,6 +61,10 @@ class ContributionUsecase implements UsecaseContribution {
 
   Future<bool?> deleteLocalArticle({String? collectionKey}) async {
     return await repository.deleteLocalArticle(collectionKey: collectionKey);
+  }
+
+  Future<Response?> getCountArticle() async {
+    return await repository.getCountArticle();
   }
 
 }

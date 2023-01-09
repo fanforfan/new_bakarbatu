@@ -15,6 +15,8 @@ abstract class ContributuionRemoteDatasources {
   Future saveToServerArticle(ArticleRequestEntity data, SharedPreferences prefs);
 
   Future saveToServerArticleVideo(ArticleRequestEntity data, SharedPreferences prefs);
+
+  Future<Response?> getCountArticle(int? idUser, String? token);
 }
 
 class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
@@ -184,6 +186,32 @@ class ContributuionRemoteRepositoryImpl extends ContributuionRemoteDatasources {
     }catch (error){
       debugPrint('DATASOURCES : $error');
       return false;
+    }
+  }
+
+  @override
+  Future<Response?> getCountArticle(int? idUser, String? token) async {
+    try{
+      Response response;
+      var dio = Dio();
+      var headers = {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      };
+
+      response = await dio.post(
+        'http://api.bakarbatu.id/api/list_newsroom',
+        data: {
+          'id_user': '$idUser'
+        },
+        options: Options(
+          headers: headers,
+        ),
+      );
+
+      return response;
+    }catch (error){
+      return null;
     }
   }
 }

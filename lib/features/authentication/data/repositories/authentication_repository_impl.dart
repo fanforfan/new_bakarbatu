@@ -133,7 +133,28 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     final logout = await remoteDatasource.authLogout(prefs.getString('token'));
     if(logout != null){
       if(logout){
+        print('INI LOGOUT : ${prefs.getInt(KeyPreferenches.idUser)}');
+        await prefs.remove(KeyPreferenches.idUser);
+        await prefs.remove(KeyPreferenches.username);
+        await prefs.remove(KeyPreferenches.email);
+        await prefs.remove(KeyPreferenches.phone);
+        await prefs.remove(KeyPreferenches.ttl);
+        await prefs.remove(KeyPreferenches.gender);
+        await prefs.remove(KeyPreferenches.provinsi);
+        await prefs.remove(KeyPreferenches.kabupaten);
+        await prefs.remove(KeyPreferenches.kecamatan);
+        await prefs.remove(KeyPreferenches.kelurahan);
+        await prefs.remove(KeyPreferenches.alamat);
+        await prefs.remove(KeyPreferenches.savedData);
+        await prefs.remove(KeyPreferenches.userRergisterBy);
+        await prefs.remove(KeyPreferenches.status);
+        await prefs.remove(KeyPreferenches.lastLogin);
+        await prefs.remove(KeyPreferenches.komunitasId);
+        await prefs.remove(KeyPreferenches.nameKomunitas);
+        await prefs.remove(KeyPreferenches.token);
+        await prefs.remove(KeyPreferenches.isLogin);
         await prefs.clear();
+        print('INI LOGOUT : ${prefs.getInt(KeyPreferenches.idUser)}');
       }
     }
     return logout;

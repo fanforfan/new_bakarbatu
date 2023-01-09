@@ -13,6 +13,8 @@ import 'package:new_bakarbatu/shared/widgets/reguler_text_area.dart';
 import 'package:new_bakarbatu/shared/widgets/reguler_text_form_field.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../bloc/count_cubit/count_cubit.dart';
+
 class ArticleVideo extends StatefulWidget {
   const ArticleVideo({super.key});
 
@@ -44,6 +46,7 @@ class _ArticleVideoState extends State<ArticleVideo> {
         print('INI BUKAN SIH? ${state.status}');
         if(state.status.isSuccess){
           print('INI BUKAN SIH?');
+          BlocProvider.of<CountCubit>(context).getCount();
           BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
               statusMenu: true,
               idMenu: 2
@@ -120,7 +123,13 @@ class _ArticleVideoState extends State<ArticleVideo> {
               const SizedBox(
                 height: 16,
               ),
-              state.status.isError ? Text('${state.warningMessageVid}') : const SizedBox(),
+              state.status.isError
+                  ?
+              Padding(
+                  padding: const EdgeInsets.only(left: 50, bottom: 10),
+                  child: Text('${state.warningMessageVid}', style: TextStyle(color: Colors.red),)
+              )
+                  : const SizedBox(),
               state.status.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : _createButtonSubmit(state),

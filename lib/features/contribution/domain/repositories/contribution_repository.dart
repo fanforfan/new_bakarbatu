@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
 import 'package:new_bakarbatu/db/models/contribution_article_model.dart';
@@ -23,4 +24,6 @@ abstract class ContributionRepository {
   Future<bool?> saveToServerArticleVideo(ArticleRequestEntity data);
 
   Future<bool?> deleteLocalArticle({String? collectionKey});
+
+  Future<Response?> getCountArticle();
 }

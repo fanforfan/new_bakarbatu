@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/src/response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_bakarbatu/db/models/article_model.dart';
@@ -72,9 +73,9 @@ class ContributionRepositoryImpl implements ContributionRepository {
     try{
       var listData = <DataNewsroom>[];
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      print('INI BUKAN SIH : ${prefs.getInt(KeyPreferenches.idUser)}');
       final response = await contributionRemoteDatasources.getArticleOnline(prefs.getInt(KeyPreferenches.idUser), prefs.getString(KeyPreferenches.token));
       if(response != null){
-        print('INI KANlll');
         if(response.rc == '0000'){
           if(response.dataNewsroom != null){
             for(var i=0; i<response.dataNewsroom!.length; i++){
@@ -146,6 +147,17 @@ class ContributionRepositoryImpl implements ContributionRepository {
     // TODO: implement deleteLocalArticle
     try{
       final response = await submitLocalDatasources.deleteLocalArticle(collectionKey: collectionKey);
+      return response;
+    }catch (error){
+      return null;
+    }
+  }
+
+  @override
+  Future<Response?> getCountArticle() async {
+    try{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final response = await contributionRemoteDatasources.getCountArticle(prefs.getInt(KeyPreferenches.idUser), prefs.getString(KeyPreferenches.token));
       return response;
     }catch (error){
       return null;

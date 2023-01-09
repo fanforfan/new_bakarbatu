@@ -68,6 +68,8 @@ dependencies:
   flutter_svg: ^1.1.6
 #  FONT GOOGLE
   google_fonts: ^3.0.1
+  firebase_core: ^2.4.1
+  firebase_messaging: ^14.2.1
 
 flutter_icons:
   #  image_path: "assets/images/icon-128x128.png"

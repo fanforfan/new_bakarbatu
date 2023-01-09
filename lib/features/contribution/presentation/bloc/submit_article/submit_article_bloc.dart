@@ -98,7 +98,8 @@ class SubmitArticleBloc extends Bloc<SubmitArticleEvent, SubmitArticleState> {
               deskripsiIndonesiaIMG: '',
               tagKabupatenIMG: '',
               tagKampungIMG: '',
-              tagDistrikIMG: ''
+              tagDistrikIMG: '',
+              hideAuthor: false
           )
       );
     });

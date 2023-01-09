@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/count_cubit/count_cubit.dart';
 import 'package:new_bakarbatu/shared/common/key_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -125,57 +126,62 @@ class _CardProfileState extends State<CardProfile> {
               const SizedBox(width: 10,),
             ],
           ),
-          SizedBox(height: 20,),
-          Row(
-            children: [
-              const SizedBox(width: 10,),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('25'),
-                ),
-              ),
-              const SizedBox(width: 10,),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('17'),
-                ),
-              ),
-              const SizedBox(width: 10,),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('8'),
-                ),
-              ),
-              const SizedBox(width: 10,),
-            ],
+          const SizedBox(height: 20,),
+          BlocBuilder<CountCubit, CountState>(
+            bloc: BlocProvider.of<CountCubit>(context)..getCount(),
+            builder: (context, state){
+              return state.status.isLoading ? const CircularProgressIndicator() : Row(
+                children: [
+                  const SizedBox(width: 10,),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text('${state.totalDataSubmit}'),
+                    ),
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text('${state.approved}'),
+                    ),
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text('${state.waiting}'),
+                    ),
+                  ),
+                  const SizedBox(width: 10,),
+                ],
+              );
+            },
           ),
           Row(
-            children: [
-              const SizedBox(width: 10,),
+            children: const [
+              SizedBox(width: 10,),
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('Total Konten', style: TextStyle(color: Colors.black54, fontSize: 10),),
                 ),
               ),
-              const SizedBox(width: 10,),
+              SizedBox(width: 10,),
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('Approve', style: TextStyle(color: Colors.black54, fontSize: 10),),
                 ),
               ),
-              const SizedBox(width: 10,),
+              SizedBox(width: 10,),
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('Waiting Editor', style: TextStyle(color: Colors.black54, fontSize: 10),),
                 ),
               ),
-              const SizedBox(width: 10,),
+              SizedBox(width: 10,),
             ],
           )
         ],

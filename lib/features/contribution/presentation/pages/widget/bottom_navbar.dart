@@ -17,149 +17,85 @@ class _BottomNavbarState extends State<BottomNavbar> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      height: 96,
-      child: Stack(
+      height: widget.state.idMenu == 2 ? 96 : 40,
+      child: widget.state.idMenu == 2
+          ? Column(
         children: [
-          /// UNACTIVE MENU
-          Column(
-            children: [
-              const SizedBox(height: 30,),
-              Container(
-                height: 66,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                    color: Colors.transparent
-                ),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _itemMenus(
-                          colors: widget.state.idMenu == 3 ? const Color(
-                              0xFF888888) : const Color(0xFFD0D0D0),
-                          image: 'assets/icons/ic_fotoimage.png',
-                          size: 20.0,
-                          pressed: () {
-                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                                statusMenu: true,
-                                idMenu: 3
-                            ));
-                          }
+          const SizedBox(height: 30,),
+          Container(
+            height: 66,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                color: Colors.transparent
+            ),
+            child: Container(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _itemMenus(
+                      colors: widget.state.idMenu == 3 ? const Color(
+                          0xFF888888) : const Color(0xFFD0D0D0),
+                      image: 'assets/icons/ic_fotoimage.png',
+                      size: 20.0,
+                      pressed: () {
+                        BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                            statusMenu: true,
+                            idMenu: 3
+                        ));
+                      }
+                  ),
+                  const SizedBox(width: 26,),
+                  GestureDetector(
+                    onTap: (){
+                      BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                          statusMenu: true,
+                          idMenu: 2
+                      ));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: widget.state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
+                        // border: Border.all(width: 5, color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
                       ),
-                      // _itemMenus(
-                      //     colors: widget.state.idMenu == 0 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                      //     image: 'assets/icons/ic_article.png',
-                      //     size: 19.0,
-                      //     pressed: () {
-                      //       Navigator.pop(context);
-                      //       // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                      //       //     statusMenu: true,
-                      //       //     idMenu: 0
-                      //       // ));
-                      //     }
-                      // ),
-                      // const SizedBox(width: 16,),
-                      // _itemMenus(
-                      //     colors: widget.state.idMenu == 1 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                      //     image: 'assets/icons/ic_mic.png',
-                      //     size: 20.0,
-                      //     pressed: () {
-                      //       Navigator.pop(context);
-                      //       // BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                      //       //     statusMenu: true,
-                      //       //     idMenu: 1
-                      //       // ));
-                      //     }
-                      // ),
-
-                      // const SizedBox(width: 26,),
-                      // const SizedBox(width: 50,),
-                      // const SizedBox(width: 26,),
-                      const SizedBox(width: 26,),
-                      GestureDetector(
-                        onTap: (){
-                          BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                              statusMenu: true,
-                              idMenu: 2
-                          ));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: widget.state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                              // border: Border.all(width: 5, color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
-                          ),
-                          width: 50,
-                          child: Center(
-                            child: Image.asset(
-                              'assets/icons/ic_home.png',
-                              width: 25,
-                              color: const Color(0xFF800000),
-                            ),
-                          ),
+                      width: 50,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/icons/ic_home.png',
+                          width: 25,
+                          color: const Color(0xFF800000),
                         ),
                       ),
-                      const SizedBox(width: 26,),
-
-                      // _itemMenus(
-                      //     colors: widget.state.idMenu == 3 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-                      //     image: 'assets/icons/ic_fotoimage.png',
-                      //     size: 20.0,
-                      //     pressed: () {
-                      //       BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                      //           statusMenu: true,
-                      //           idMenu: 3
-                      //       ));
-                      //     }
-                      // ),
-                      // const SizedBox(width: 16,),
-                      _itemMenus(
-                          colors: widget.state.idMenu == 4 ? const Color(0xFF888888) : const Color(0xFFD0D0D0),
-                          image: 'assets/icons/ic_video.png',
-                          size: 20.0,
-                          pressed: () {
-                            BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-                                statusMenu: true,
-                                idMenu: 4
-                            ));
-                          }
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-          /// ACTIVE MENU
-          // Container(
-          //     padding: const EdgeInsets.only(bottom: 26),
-          //     alignment: Alignment.center,
-          //     child: GestureDetector(
-          //       onTap: (){
-          //         BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
-          //             statusMenu: true,
-          //             idMenu: 2
-          //         ));
-          //       },
-          //       child: Container(
-          //         decoration: BoxDecoration(
-          //             borderRadius: BorderRadius.circular(50),
-          //             color: widget.state.idMenu == 2 ? const Color(0xFFFFFFFF) : const Color(0xFFD0D0D0),
-          //             border: Border.all(width: 5, color: widget.state.idMenu == 2 ? const Color(0xFF800000) : Colors.white)
-          //         ),
-          //         width: 70,
-          //         child: Center(
-          //           child: Image.asset(
-          //             'assets/icons/ic_home.png',
-          //             width: 40,
-          //             color: const Color(0xFF800000),
-          //           ),
-          //         ),
-          //       ),
-          //     )
-          // )
+                  const SizedBox(width: 26,),
+                  _itemMenus(
+                      colors: widget.state.idMenu == 4 ? const Color(0xFF888888) : const Color(0xFFD0D0D0),
+                      image: 'assets/icons/ic_video.png',
+                      size: 20.0,
+                      pressed: () {
+                        BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+                            statusMenu: true,
+                            idMenu: 4
+                        ));
+                      }
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
+      )
+          :
+      MaterialButton(
+        onPressed: (){
+          BlocProvider.of<BottomNavBloc>(context).add(ChangeBottomNav(
+              statusMenu: true,
+              idMenu: 2
+          ));
+        },
+        child: const Icon(Icons.menu_rounded, color: Colors.red,),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -9,18 +10,19 @@ import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_em
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/count_cubit/count_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/download%20_video/download_video_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article/submit_article_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/submit_article_video/submit_artikel_video_bloc.dart';
 import 'package:new_bakarbatu/features/home/presentation/bloc/home_bloc.dart';
 import 'package:new_bakarbatu/features/home/presentation/pages/home_page.dart';
-import 'package:path_provider/path_provider.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   await Hive.initFlutter();
+  await Firebase.initializeApp();
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ContributionArticleAdapter());
   runApp(const MyApp());
@@ -59,6 +61,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<EmailCubit>(
           create: (context) => di.sl<EmailCubit>(),
+        ),
+        BlocProvider<CountCubit>(
+          create: (context) => di.sl<CountCubit>(),
         ),
       ], 
       child: MaterialApp(

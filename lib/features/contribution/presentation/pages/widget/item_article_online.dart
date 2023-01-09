@@ -161,7 +161,7 @@ class _ItemArticleOnlineState extends State<ItemArticleOnline> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
-                  child: Text(widget.dataNewsroom.nameEditor ?? 'Private Author', style: const TextStyle(color: Colors.black54),),
+                  child: Text('${widget.dataNewsroom.status}', style: const TextStyle(color: Colors.black54),),
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
