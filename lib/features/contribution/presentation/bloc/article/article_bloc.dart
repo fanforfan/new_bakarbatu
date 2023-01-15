@@ -19,6 +19,8 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     on<GetArticle>(_getArticle);
     on<GetNextArticle>(_getNextArticle);
     on<SearchArticle>(_seacrhArticle);
+    on<SearchArticleLocal>(_seacrhArticleLocal);
+    on<GetNextArticleLocal>(_getNextArticleLocal);
     // on<GetArticleOnline>(_getArticleOnline);
   }
 
@@ -27,48 +29,61 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
       status: ArticleStatus.loading
     ));
     var listArticle = <ContributionArticle>[];
+    var listArticleLocal = <ContributionArticle>[];
     try{
       if(event.statusArticle == 0){
         var response = await contributionUsecase.getArticleLocal();
         if(response != null){
           response.values.map((e) => listArticle.add(
-            ContributionArticle(
-              collectionKey: e.collectionKey,
-              filename: e.filename,
-              timeSchedule: e.timeSchedule,
-              judulIndonesia: e.judulIndonesia,
-              captionIndonesia: e.captionIndonesia,
-              deskripsiIndonesia: e.deskripsiIndonesia,
-              tagKabupaten: e.tagKabupaten,
-              tagKampung: e.tagKampung,
-              tagDistrik: e.tagDistrik,
-              hideAuthor: e.hideAuthor,
-              jenisFile: e.jenisFile
-            ))).toList();
+              ContributionArticle(
+                  collectionKey: e.collectionKey,
+                  filename: e.filename,
+                  timeSchedule: e.timeSchedule,
+                  judulIndonesia: e.judulIndonesia,
+                  captionIndonesia: e.captionIndonesia,
+                  deskripsiIndonesia: e.deskripsiIndonesia,
+                  tagKabupaten: e.tagKabupaten,
+                  tagKampung: e.tagKampung,
+                  tagDistrik: e.tagDistrik,
+                  hideAuthor: e.hideAuthor,
+                  jenisFile: e.jenisFile
+              ))).toList();
+
+          if(listArticle.length < 4){
+            for(int i=0; i<response.length; i++){
+              listArticleLocal.add(listArticle[i]);
+            }
+          }else{
+            for(int i=0; i<4; i++){
+              listArticleLocal.add(listArticle[i]);
+            }
+          }
+
           emit(state.copyWith(
-              article: listArticle,
+              pageLocal: 1,
+              allArticleLocal: listArticle,
+              article: listArticleLocal,
               status: ArticleStatus.success
           ));
         }else{
           emit(state.copyWith(
-              article: listArticle,
+              pageLocal: 1,
+              article: listArticleLocal,
               status: ArticleStatus.error
           ));
         }
-      }else{
+      }
+      else{
         List<DataNewsroom> listData = [];
-        List<DataNewsroom> listDataAll = [];
         var response = await contributionUsecase.getArticleOnline();
         if(response != null){
           if(response.isNotEmpty){
             if(response.length < 4){
               for(int i=0; i<response.length; i++){
-                print('NO. $i');
                 listData.add(response[i]);
               }
             }else{
               for(int i=0; i<4; i++){
-                print('NO. $i');
                 listData.add(response[i]);
               }
             }
@@ -137,6 +152,59 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     }
     emit(state.copyWith(
       articleSearchResult: listData
+    ));
+  }
+
+  _getNextArticleLocal(GetNextArticleLocal event, Emitter<ArticleState> emit) async {
+    List<ContributionArticle> listData = [];
+    var firstIndex = state.article!.length;
+    int lastIndex;
+    int? page;
+    if(state.article != null){
+
+      if((state.allArticleLocal!.length-state.article!.length) < 4){
+        lastIndex = state.article!.length+(state.allArticleLocal!.length-state.article!.length);
+      }else{
+        lastIndex = state.article!.length+4;
+      }
+
+      if(state.article!.length != state.allArticleLocal!.length){
+        page = state.pageLocal!+1;
+        if(state.allArticleLocal!.isNotEmpty){
+          for(int i=firstIndex; i<lastIndex; i++){
+            listData.add(state.allArticleLocal![i]);
+          }
+        }
+      }else{
+        page = state.pageLocal;
+      }
+    }
+    var summaryData = state.article!+listData;
+    emit(state.copyWith(
+        article: summaryData,
+        pageLocal: page
+    ));
+  }
+
+  _seacrhArticleLocal(SearchArticleLocal event, Emitter<ArticleState> emit) async {
+    List<ContributionArticle> listData = [];
+    if (event.keySearch != null && event.keySearch!.length > 2) {
+      emit(state.copyWith(
+          isSearchLocal: true
+      ));
+
+      listData = state.article!.where((articleSearch) =>
+          articleSearch.judulIndonesia!.toLowerCase().contains(event.keySearch!.toLowerCase()))
+          .toList();
+
+    } else {
+      emit(state.copyWith(
+          isSearchLocal: false
+      ));
+    }
+
+    emit(state.copyWith(
+        articleSearchResultLocal: listData
     ));
   }
 }

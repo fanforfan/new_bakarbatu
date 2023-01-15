@@ -21,7 +21,6 @@ class _ArticleOnlineState extends State<ArticleOnline> {
     return BlocBuilder<ArticleBloc, ArticleState>(
       bloc: BlocProvider.of<ArticleBloc>(context)..add(GetArticle(statusArticle: 1)),
       builder: (context, state){
-        print('anjeeng : ${state.allArticleOnline?.length}');
         if(state.status.isLoading){
           return ListView.builder(
             itemCount: 4,
@@ -52,7 +51,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                       },
                     ),
                   )
-                  /// DEFAULT LIST
+                  /// RESET SEARCH
                       : Container(
                     padding: const EdgeInsets.only(top: 20),
                     color: const Color(0xFF800000),
@@ -95,6 +94,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                     )
                         : _emptyData(),
                   )
+                  /// DEFAULT LIST
                       : Container(
                     padding: const EdgeInsets.only(top: 20),
                     color: const Color(0xFF800000),

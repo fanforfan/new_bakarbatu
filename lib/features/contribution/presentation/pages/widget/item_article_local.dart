@@ -16,15 +16,16 @@ import '../../bloc/submit_article/submit_article_bloc.dart';
 import '../detail_video.dart';
 
 class ItemArticleLocal extends StatelessWidget {
+  final int? index;
   final ContributionArticle contributionArticle;
 
-  const ItemArticleLocal({Key? key, required this.contributionArticle}) : super(key: key);
+  const ItemArticleLocal({Key? key, required this.contributionArticle, this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF800000),
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+      padding: EdgeInsets.only(left: 20, right: 20, top: (index != null) ? index == 0 ? 85 : 0 : 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
