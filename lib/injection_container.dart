@@ -14,6 +14,7 @@ import 'package:new_bakarbatu/features/contribution/data/repositories/contributi
 import 'package:new_bakarbatu/features/contribution/domain/repositories/contribution_repository.dart';
 import 'package:new_bakarbatu/features/contribution/domain/usecases/contribution_usecase.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article_category/article_category_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/count_cubit/count_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/download%20_video/download_video_bloc.dart';
@@ -52,6 +53,9 @@ Future<void> init() async {
       contributionUsecase: sl()
   ));
   sl.registerFactory(() => DownloadVideoBloc());
+  sl.registerFactory(() => ArticleCategoryBloc(
+      contributionUsecase: sl()
+  ));
 //  cubit obsecure
   sl.registerFactory(() => ObsecurePasswordCubit());
 //  cubit obsecure

@@ -9,6 +9,7 @@ import 'package:new_bakarbatu/features/authentication/presentation/bloc/bloc/aut
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_email/email_cubit.dart';
 import 'package:new_bakarbatu/features/authentication/presentation/bloc/cubit_password/obsecure_password_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/article/article_bloc.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article_category/article_category_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/bottom_nav/bottom_nav_bloc.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/count_cubit/count_cubit.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/download%20_video/download_video_bloc.dart';
@@ -64,6 +65,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CountCubit>(
           create: (context) => di.sl<CountCubit>(),
+        ),
+        BlocProvider<ArticleCategoryBloc>(
+          create: (context) => di.sl<ArticleCategoryBloc>(),
         ),
       ], 
       child: MaterialApp(

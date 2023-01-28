@@ -7,7 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../bloc/submit_article/submit_article_bloc.dart';
 
 class DetailArticleOnline extends StatefulWidget {
-  const DetailArticleOnline({Key? key}) : super(key: key);
+  final String title;
+  const DetailArticleOnline({Key? key, required this.title}) : super(key: key);
 
   @override
   _DetailArticleOnlineState createState() => _DetailArticleOnlineState();
@@ -38,6 +39,9 @@ class _DetailArticleOnlineState extends State<DetailArticleOnline> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
         body: BlocBuilder<SubmitArticleBloc, SubmitArticleState>(
           builder: (context, state){
             return SingleChildScrollView(

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:new_bakarbatu/features/contribution/presentation/bloc/count_cubit/count_cubit.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/pages/article_by_category.dart';
 import 'package:new_bakarbatu/shared/common/key_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../authentication/presentation/bloc/bloc/authentication_bloc.dart';
 
 class CardProfile extends StatefulWidget {
   const CardProfile({Key? key}) : super(key: key);
@@ -97,21 +95,36 @@ class _CardProfileState extends State<CardProfile> {
             Expanded(
               child: Align(
                 alignment: Alignment.center,
-                child: Text('${state.totalDataSubmit}',style: const TextStyle(color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold)),
+                child: MaterialButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ArticleByCategory(category: 0)));
+                  },
+                  child: Text('${state.totalDataSubmit}',style: const TextStyle(color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold)),
+                ),
               ),
             ),
             const SizedBox(width: 10,),
             Expanded(
               child: Align(
                 alignment: Alignment.center,
-                child: Text('${state.approved}', style: const TextStyle(color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold)),
+                child: MaterialButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ArticleByCategory(category: 1)));
+                  },
+                  child: Text('${state.approved}', style: const TextStyle(color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold)),
+                )
               ),
             ),
             const SizedBox(width: 10,),
             Expanded(
               child: Align(
                 alignment: Alignment.center,
-                child: Text('${state.waiting}', style: const TextStyle(color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold)),
+                child: MaterialButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ArticleByCategory(category: 2)));
+                  },
+                  child: Text('${state.waiting}', style: const TextStyle(color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold)),
+                )
               ),
             ),
             const SizedBox(width: 10,),

@@ -1,36 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:new_bakarbatu/features/contribution/presentation/pages/widget/item_article_online.dart';
-import 'package:new_bakarbatu/shared/widgets/shimmer_loading_article.dart';
+import 'package:new_bakarbatu/features/contribution/presentation/bloc/article_category/article_category_bloc.dart';
 
-import '../../../../../shared/widgets/reguler_text_form_field.dart';
-import '../../bloc/article/article_bloc.dart';
+import 'widget/item_article_online.dart';
 
-class ArticleOnline extends StatefulWidget {
-  const ArticleOnline({Key? key}) : super(key: key);
+class ArticleByCategory extends StatefulWidget {
+  final int category;
+
+  const ArticleByCategory({Key? key, required this.category}) : super(key: key);
 
   @override
-  State<ArticleOnline> createState() => _ArticleOnlineState();
+  State<ArticleByCategory> createState() => _ArticleByCategoryState();
 }
 
-class _ArticleOnlineState extends State<ArticleOnline> {
+class _ArticleByCategoryState extends State<ArticleByCategory> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.category == 0){
+      BlocProvider.of<ArticleCategoryBloc>(context).add(const GetArticleOnline(category: 0));
+    }else if(widget.category == 1){
+      BlocProvider.of<ArticleCategoryBloc>(context).add(const GetArticleOnline(category: 1));
+    }else{
+      BlocProvider.of<ArticleCategoryBloc>(context).add(const GetArticleOnline(category: 2));
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ArticleBloc, ArticleState>(
-      bloc: BlocProvider.of<ArticleBloc>(context)..add(GetArticle(statusArticle: 1)),
-      builder: (context, state){
-        if(state.status.isLoading){
-          return ListView.builder(
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              return const ShimmerLoadingArticle();
-            },
-          );
-        }
-        else{
-          /// DATA SUCCEESS
+    return Scaffold(
+      backgroundColor: const Color(0xFF800000),
+      appBar: AppBar(
+        title: Text(widget.category == 0 ? 'Total Konten' : widget.category == 1 ? 'Approve' : 'Waiting Editor'),
+      ),
+      body: BlocBuilder<ArticleCategoryBloc, ArticleCategoryState>(
+        builder: (context, state){
           if(state.allArticleOnline != null){
             if(state.articleOnline != null && state.articleOnline!.isNotEmpty){
               return Stack(
@@ -47,14 +55,14 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                       itemBuilder: (context, index){
                         return ItemArticleOnline(
                           dataNewsroom: state.articleSearchResult![index],
-                            fromCategory: false
+                          fromCategory: true
                         );
                       },
                     ),
                   )
                   /// RESET SEARCH
                       : Container(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 50),
                     color: const Color(0xFF800000),
                     child: state.articleOnline != null
                         ? ListView.builder(
@@ -66,7 +74,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                             ?
                         (((state.allArticleOnline!.length) != index) ? MaterialButton(
                           onPressed: (){
-                            BlocProvider.of<ArticleBloc>(context).add(GetNextArticle());
+                            BlocProvider.of<ArticleCategoryBloc>(context).add(const GetNextArticle());
                           },
                           child: Container(
                             width: 100.0,
@@ -90,7 +98,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                             : ItemArticleOnline(
                           index: index,
                           dataNewsroom: state.articleOnline![index],
-                          fromCategory: false
+                          fromCategory: true
                         );
                       },
                     )
@@ -98,7 +106,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                   )
                   /// DEFAULT LIST
                       : Container(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 10),
                     color: const Color(0xFF800000),
                     child: state.articleOnline != null
                         ? ListView.builder(
@@ -110,7 +118,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                             ?
                         (((state.allArticleOnline!.length) != index) ? MaterialButton(
                           onPressed: (){
-                            BlocProvider.of<ArticleBloc>(context).add(GetNextArticle());
+                            BlocProvider.of<ArticleCategoryBloc>(context).add(const GetNextArticle());
                           },
                           child: Container(
                             width: 100.0,
@@ -135,7 +143,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                         ItemArticleOnline(
                           index: index,
                           dataNewsroom: state.articleOnline![index],
-                          fromCategory: false
+                          fromCategory: true
                         );
                       },
                     )
@@ -143,7 +151,7 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                   ),
                   /// SEARCH WIDGET
                   Container(
-                      padding: const EdgeInsets.only(left: 23, right: 23, top: 20),
+                      padding: const EdgeInsets.only(left: 23, right: 23, top: 10),
                       child: TextFormField(
                         decoration: InputDecoration(
                             filled: true,
@@ -160,32 +168,20 @@ class _ArticleOnlineState extends State<ArticleOnline> {
                         ),
                         style: const TextStyle(color: Colors.white),
                         onChanged: (value){
-                          BlocProvider.of<ArticleBloc>(context).add(SearchArticle(keySearch: value));
+                          BlocProvider.of<ArticleCategoryBloc>(context).add(SearchArticleCategory(keySearch: value));
                         },
                       )
                   )
                 ],
               );
+            }else{
+              return _emptyData();
             }
           }
-          /// EMPTY DATA
-          else{
-            return Container(
-              color: const Color(0xFF800000),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/empty_image.svg', width: 80.0,),
-                    const Text("Empty Data", style: TextStyle(color: Colors.white),),
-                  ],
-                ),
-              ),
-            );
-          }
-        }
-        return _emptyData();
-      },
+
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 
