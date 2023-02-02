@@ -12,8 +12,9 @@ import '../../bloc/submit_article/submit_article_bloc.dart';
 class ItemArticleOnline extends StatefulWidget {
   final int? index;
   final DataNewsroom dataNewsroom;
+  final bool fromCategory;
 
-  const ItemArticleOnline({Key? key, this.index, required this.dataNewsroom}) : super(key: key);
+  const ItemArticleOnline({Key? key, this.index, required this.dataNewsroom, required this.fromCategory}) : super(key: key);
 
   @override
   State<ItemArticleOnline> createState() => _ItemArticleOnlineState();
@@ -51,7 +52,7 @@ class _ItemArticleOnlineState extends State<ItemArticleOnline> {
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF800000),
-      padding: EdgeInsets.only(left: 20, right: 20, top: (widget.index != null) ? widget.index == 0 ? 50 : 0 : 0),
+      padding: EdgeInsets.only(left: 20, right: 20, top: (widget.index != null) ? widget.index == 0 ? widget.fromCategory ? 70 : 50 : 0 : 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -200,7 +201,7 @@ class _ItemArticleOnlineState extends State<ItemArticleOnline> {
       child: MaterialButton(
         onPressed: () async {
           BlocProvider.of<SubmitArticleBloc>(context).add(SetDetailArticleOnline(data: widget.dataNewsroom));
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailArticleOnline()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DetailArticleOnline(title: widget.dataNewsroom.title ?? '')));
         },
         child: Row(
           children: const [

@@ -1,4 +1,4 @@
-package com.example.new_bakarbatu
+package com.fandis.new_bakarbatu
 
 import io.flutter.embedding.android.FlutterActivity
 
